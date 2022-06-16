@@ -1,6 +1,14 @@
 import { GestureResponderEvent, StyleSheet, View } from "react-native";
-import React, { useContext } from "react";
-import { Button, Center, Container, Heading, Stack, Text } from "native-base";
+import React, { useContext, useState } from "react";
+import {
+    Button,
+    Center,
+    Container,
+    Heading,
+    Radio,
+    Stack,
+    Text,
+} from "native-base";
 import QuestionContainer from "./QuestionContainer";
 import { customTheme } from "../papillon-design-system/custom-theme";
 import { NavigationProp, RouteProp } from "@react-navigation/native";
@@ -15,11 +23,13 @@ type Props = {
     navigation: StackNavigationProp<QuestionStackParams, "Question">;
 };
 
-const YesOrNoQuestion = ({ route, navigation }: Props) => {
+const MultipleChoiceQuestion = ({ route, navigation }: Props) => {
+    const [value, setValue] = useState<string>("");
     const { card, group } = route.params;
     const { setFinishedCardGroups } = useContext(QuestionContext);
-    const handleResponse = (response: "yes" | "no") => {
-        if (response == "yes") {
+
+    const handleResponse = () => {
+        if (card.question.pass.includes(value)) {
             if (card.on_true == null) {
                 setFinishedCardGroups((finishedCardGroups) => [
                     ...finishedCardGroups,
@@ -39,7 +49,9 @@ const YesOrNoQuestion = ({ route, navigation }: Props) => {
             });
         } else {
             navigation.push("Ineligible", {
-                message: `Because you answered no on the previous question: \n${card.question.prompt}`,
+                message: `Because the only correct answers to the question: \n${
+                    card.question.prompt
+                }\nAre: ${card.question.pass.join(", ")}`,
             });
         }
     };
@@ -53,26 +65,30 @@ const YesOrNoQuestion = ({ route, navigation }: Props) => {
             >
                 {card.question.prompt}
             </Text>
-            <Stack direction={"row"} space="2.5" mt="2" px="8">
+            <Stack space="2.5" mt="2" px="8">
+                <Radio.Group
+                    name={card.question.prompt as string}
+                    value={value}
+                    onChange={(nextValue) => setValue(nextValue)}
+                >
+                    {card.question.options.map((option) => (
+                        <Radio value={option} my={1}>
+                            {option}
+                        </Radio>
+                    ))}
+                </Radio.Group>
                 <Button
                     bgColor={customTheme.colors["button-surface"]}
                     color={customTheme.colors["on-button-surface"]}
-                    onPress={() => handleResponse("yes")}
+                    onPress={() => handleResponse()}
                 >
-                    Yes
-                </Button>
-                <Button
-                    bgColor={customTheme.colors["button-surface"]}
-                    color={customTheme.colors["on-button-surface"]}
-                    onPress={() => handleResponse("no")}
-                >
-                    No
+                    Submit
                 </Button>
             </Stack>
         </QuestionContainer>
     );
 };
 
-export default YesOrNoQuestion;
+export default MultipleChoiceQuestion;
 
 const styles = StyleSheet.create({});

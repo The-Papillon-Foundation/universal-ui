@@ -1,6 +1,14 @@
 import { GestureResponderEvent, StyleSheet, View } from "react-native";
-import React, { useContext } from "react";
-import { Button, Center, Container, Heading, Stack, Text } from "native-base";
+import React, { useContext, useState } from "react";
+import {
+    Button,
+    Center,
+    Container,
+    Heading,
+    Input,
+    Stack,
+    Text,
+} from "native-base";
 import QuestionContainer from "./QuestionContainer";
 import { customTheme } from "../papillon-design-system/custom-theme";
 import { NavigationProp, RouteProp } from "@react-navigation/native";
@@ -15,11 +23,17 @@ type Props = {
     navigation: StackNavigationProp<QuestionStackParams, "Question">;
 };
 
-const YesOrNoQuestion = ({ route, navigation }: Props) => {
+const AddressQuestion = ({ route, navigation }: Props) => {
+    const [value, setValue] = useState("");
     const { card, group } = route.params;
     const { setFinishedCardGroups } = useContext(QuestionContext);
-    const handleResponse = (response: "yes" | "no") => {
-        if (response == "yes") {
+
+    const handleChange = (text: string) => {
+        setValue(text);
+    };
+
+    const handleResponse = () => {
+        if (card.question.pass.includes(value.trim())) {
             if (card.on_true == null) {
                 setFinishedCardGroups((finishedCardGroups) => [
                     ...finishedCardGroups,
@@ -39,7 +53,9 @@ const YesOrNoQuestion = ({ route, navigation }: Props) => {
             });
         } else {
             navigation.push("Ineligible", {
-                message: `Because you answered no on the previous question: \n${card.question.prompt}`,
+                message: `You must live in one of the follow states to use this program: ${card.question.pass.join(
+                    ", "
+                )}`,
             });
         }
     };
@@ -54,25 +70,26 @@ const YesOrNoQuestion = ({ route, navigation }: Props) => {
                 {card.question.prompt}
             </Text>
             <Stack direction={"row"} space="2.5" mt="2" px="8">
+                <Input
+                    value={value}
+                    w="75%"
+                    maxW="300px"
+                    onChangeText={handleChange}
+                    placeholder="Value Controlled Input"
+                    onSubmitEditing={() => handleResponse()}
+                />
                 <Button
                     bgColor={customTheme.colors["button-surface"]}
                     color={customTheme.colors["on-button-surface"]}
-                    onPress={() => handleResponse("yes")}
+                    onPress={() => handleResponse()}
                 >
-                    Yes
-                </Button>
-                <Button
-                    bgColor={customTheme.colors["button-surface"]}
-                    color={customTheme.colors["on-button-surface"]}
-                    onPress={() => handleResponse("no")}
-                >
-                    No
+                    Submit
                 </Button>
             </Stack>
         </QuestionContainer>
     );
 };
 
-export default YesOrNoQuestion;
+export default AddressQuestion;
 
 const styles = StyleSheet.create({});

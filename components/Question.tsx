@@ -1,6 +1,11 @@
 import { NativeEventEmitter, StyleSheet, Text, View } from "react-native";
 import React, { useContext } from "react";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import {
+    NavigationProp,
+    RouteProp,
+    useNavigation,
+    useRoute,
+} from "@react-navigation/native";
 import {
     QuestionContext,
     QuestionStackParams,
@@ -9,47 +14,44 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import YesOrNoQuestion from "./YesOrNoQuestion";
 import DateQuestion from "./DateQuestion";
 import MultiSelectQuestion from "./MultiSelectQuestion";
-import { useQuestions } from "../hooks/useQuestions";
+import { StackNavigationProp } from "@react-navigation/stack";
+import AddressQuestion from "./AddressQuestion";
+import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 
 type Props = {};
 
 const Question = (props: Props) => {
-    const { params } = useRoute<RouteProp<QuestionStackParams, "Question">>();
-    const questionContext = useContext(QuestionContext);
+    const route = useRoute<RouteProp<QuestionStackParams, "Question">>();
+    const navigation =
+        useNavigation<StackNavigationProp<QuestionStackParams, "Question">>();
+    const { params } = route;
 
-    const _handleResponse = () => {
-        questionContext.nextStep!();
-    };
+    const _handleResponse = () => {};
 
-    switch (params.type) {
-        case "YesOrNo":
+    switch (params.card.question.type) {
+        case "TrueOrFalse":
+            return <YesOrNoQuestion route={route} navigation={navigation} />;
+        case "Address":
+            return <AddressQuestion route={route} navigation={navigation} />;
+        case "MultipleChoice":
             return (
-                <YesOrNoQuestion
-                    place={params.place}
-                    prompt={params.prompt}
-                    handleResponse={_handleResponse}
-                />
+                <MultipleChoiceQuestion route={route} navigation={navigation} />
             );
-        case "DateSelection":
-            return (
-                <DateQuestion
-                    place={params.place}
-                    prompt={params.prompt}
-                    handleResponse={_handleResponse}
-                />
-            );
-        case "MultiSelectQuestion":
-            return (
-                <MultiSelectQuestion
-                    place={params.place}
-                    prompt={params.prompt}
-                    options={params.options!}
-                    handleResponse={_handleResponse}
-                />
-            );
+        // case "MultiSelectQuestion":
+        //     return (
+        //         <MultiSelectQuestion
+        //             place={params.place}
+        //             prompt={params.prompt}
+        //             options={params.options!}
+        //             handleResponse={_handleResponse}
+        //         />
+        //     );
         default:
             return (
-                <Text>Unable to find this type of question: {params.type}</Text>
+                <Text>
+                    Unable to find this type of question:{" "}
+                    {params.card.question.type}
+                </Text>
             );
     }
 };

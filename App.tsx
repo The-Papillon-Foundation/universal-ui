@@ -7,21 +7,25 @@ import Navigation from "./navigation";
 
 import { NativeBaseProvider } from "native-base";
 import { customTheme } from "./papillon-design-system/custom-theme";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 export default function App() {
     const isLoadingComplete = useCachedResources();
     const colorScheme = useColorScheme();
+    const queryClient = new QueryClient();
 
     if (!isLoadingComplete) {
         return null;
     } else {
         return (
-            <NativeBaseProvider theme={customTheme}>
-                <SafeAreaProvider>
-                    <Navigation colorScheme={colorScheme} />
-                    <StatusBar />
-                </SafeAreaProvider>
-            </NativeBaseProvider>
+            <QueryClientProvider client={queryClient}>
+                <NativeBaseProvider theme={customTheme}>
+                    <SafeAreaProvider>
+                        <Navigation colorScheme={colorScheme} />
+                        <StatusBar />
+                    </SafeAreaProvider>
+                </NativeBaseProvider>
+            </QueryClientProvider>
         );
     }
 }

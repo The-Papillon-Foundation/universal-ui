@@ -18,7 +18,7 @@ declare global {
 }
 
 export type RootStackParamList = {
-    Questions: NavigatorScreenParams<QuestionStackParams> | undefined;
+    Questions: undefined;
     Modal: undefined;
     NotFound: undefined;
 };
@@ -36,3 +36,24 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
         BottomTabScreenProps<RootTabParamList, Screen>,
         NativeStackScreenProps<RootStackParamList>
     >;
+
+export interface Question {
+    type: "TrueOrFalse" | "Address" | "MultipleChoice";
+    prompt: string;
+    pass: string[];
+    options: string[];
+    fail: null;
+}
+
+export type QuestionCard = {
+    id: string;
+    question: Question;
+    on_true: string | null;
+    on_false: "exit";
+};
+
+export interface QuestionGroup {
+    cards: QuestionCard[];
+    id: string;
+    name: "string";
+}
