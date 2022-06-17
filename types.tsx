@@ -59,3 +59,16 @@ export interface QuestionGroup {
     id: string;
     name: "string";
 }
+
+export interface Module {
+    name: string;
+    id: string;
+    card_groups: QuestionGroup[];
+}
+
+export interface WorkflowPayload {
+    name: string;
+    id: string;
+    eligibility_module: Module;
+    process_module: Module;
+}

@@ -17,6 +17,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import WorkflowLoading from "./WorkflowLoading";
 import { IneligibleScreen } from "./IneligibleScreen";
 import { QuestionContext } from "../contexts/QuestionContext";
+import ForceLoginScreen from "./ForceLoginScreen";
 
 type Props = {
     route: RouteProp<RootStackParamList, "Questions">;
@@ -30,10 +31,16 @@ const QuestionStack = createNativeStackNavigator<QuestionStackParams>();
 
 const QuestionScreen = ({ route }: Props) => {
     const [finishedCardGroups, setFinishedCardGroups] = useState<string[]>([]);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     return (
         <QuestionContext.Provider
-            value={{ finishedCardGroups, setFinishedCardGroups }}
+            value={{
+                finishedCardGroups,
+                setFinishedCardGroups,
+                isLoggedIn,
+                setIsLoggedIn,
+            }}
         >
             <QuestionStack.Navigator
                 initialRouteName="WorkflowLoading"
@@ -49,6 +56,11 @@ const QuestionScreen = ({ route }: Props) => {
                 <QuestionStack.Screen
                     name="WorkflowLoading"
                     component={WorkflowLoading}
+                    options={{ headerShown: false }}
+                />
+                <QuestionStack.Screen
+                    name="ForceLogin"
+                    component={ForceLoginScreen}
                     options={{ headerShown: false }}
                 />
                 <QuestionStack.Screen

@@ -19,6 +19,8 @@ const linking: LinkingOptions<RootStackParamList> = {
                 path: "workflow",
                 screens: {
                     Question: "question",
+                    ForceLogin: "force-login",
+                    Ineligibility: "ineligibility",
                     WorkflowLoading: "/",
                 },
             },

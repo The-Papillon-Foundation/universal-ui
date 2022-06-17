@@ -9,10 +9,10 @@ export default function NotFoundScreen({
         <View style={styles.container}>
             <Text style={styles.title}>This screen doesn't exist.</Text>
             <TouchableOpacity
-                onPress={() => navigation.replace("Questions")}
+                onPress={() => navigation.replace("Landing")}
                 style={styles.link}
             >
-                <Text style={styles.linkText}>Go to questions screen!</Text>
+                <Text style={styles.linkText}>Go to the landing screen!</Text>
             </TouchableOpacity>
         </View>
     );

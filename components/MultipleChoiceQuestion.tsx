@@ -1,22 +1,7 @@
-import { GestureResponderEvent, StyleSheet, View } from "react-native";
-import React, { useContext, useState } from "react";
-import {
-    Button,
-    Center,
-    Container,
-    Heading,
-    Radio,
-    Stack,
-    Text,
-} from "native-base";
-import QuestionContainer from "./QuestionContainer";
+import { StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { Button, Radio, Stack, Text } from "native-base";
 import { customTheme } from "../papillon-design-system/custom-theme";
-import { NavigationProp, RouteProp } from "@react-navigation/native";
-import {
-    QuestionContext,
-    QuestionStackParams,
-} from "../screens/QuestionScreen";
-import { StackNavigationProp } from "@react-navigation/stack";
 
 type Props = {
     prompt: string;
@@ -26,7 +11,6 @@ type Props = {
 
 const MultipleChoiceQuestion = ({ prompt, options, handleResponse }: Props) => {
     const [value, setValue] = useState<string>("");
-    const { setFinishedCardGroups } = useContext(QuestionContext);
 
     return (
         <>
@@ -40,12 +24,18 @@ const MultipleChoiceQuestion = ({ prompt, options, handleResponse }: Props) => {
             </Text>
             <Stack space="2.5" mt="2" px="8">
                 <Radio.Group
-                    name={prompt as string}
+                    name={prompt}
+                    accessibilityLabel={prompt}
                     value={value}
                     onChange={(nextValue) => setValue(nextValue)}
                 >
                     {options.map((option, index) => (
-                        <Radio key={option + index} value={option} my={1}>
+                        <Radio
+                            accessibilityLabel={option}
+                            key={option + index}
+                            value={option}
+                            my={1}
+                        >
                             {option}
                         </Radio>
                     ))}
