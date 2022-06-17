@@ -14,11 +14,12 @@ const linking: LinkingOptions<RootStackParamList> = {
     config: {
         screens: {
             Landing: "",
-            DetermineWorkFlow: "/determine-workflow",
+            DetermineWorkflow: "/determine-workflow",
             Questions: {
+                path: "workflow",
                 screens: {
-                    Question: "questions/question",
-                    Start: "questions/start",
+                    Question: "question",
+                    Start: "/",
                 },
             },
             Modal: "modal",

@@ -2,6 +2,7 @@ import { extendTheme, theme } from "native-base";
 
 export const customTheme = extendTheme({
     colors: {
+        primary: theme.colors.blueGray,
         surface: theme.colors.blueGray[200],
         "surface-secondary": theme.colors.blueGray[500],
         "on-surface": {
@@ -15,6 +16,7 @@ export const customTheme = extendTheme({
         "multi-select-active": theme.colors.emerald,
     },
     fonts: {
+        default: "space-mono",
         "question-heading": "Arial",
         "question-text": "space-mono",
     },
