@@ -14,7 +14,7 @@ const LandingScreen = () => {
     };
 
     const navigateToDetermineWorkflowScreen = () => {
-        navigation.push("Questions");
+        navigation.push("DetermineWorkflow");
     };
     return (
         <Center flex={1}>
