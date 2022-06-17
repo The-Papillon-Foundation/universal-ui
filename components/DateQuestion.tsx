@@ -16,7 +16,7 @@ const DateQuestion = ({ place, prompt, handleResponse }: Props) => {
         undefined
     );
     return (
-        <QuestionContainer>
+        <>
             <Heading
                 color={customTheme.colors["on-surface"].heading}
                 fontFamily={"question-heading"}
@@ -59,7 +59,7 @@ const DateQuestion = ({ place, prompt, handleResponse }: Props) => {
             >
                 Submit
             </Button>
-        </QuestionContainer>
+        </>
     );
 };
 

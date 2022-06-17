@@ -4,7 +4,7 @@ import { Center, Container } from "native-base";
 import { customTheme } from "../papillon-design-system/custom-theme";
 
 type Props = {
-    children: JSX.Element[];
+    children: JSX.Element;
 };
 
 const QuestionContainer: React.FC<Props> = ({ children }) => {

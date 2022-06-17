@@ -9,6 +9,7 @@ import YesOrNoQuestion from "./YesOrNoQuestion";
 import { StackNavigationProp } from "@react-navigation/stack";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 import TextInputQuestion from "./TextInputQuestion";
+import QuestionContainer from "./QuestionContainer";
 
 const Question = () => {
     const route = useRoute<RouteProp<QuestionStackParams, "Question">>();
@@ -102,45 +103,49 @@ const Question = () => {
         }
     };
 
-    switch (card.question.type) {
-        case "TrueOrFalse":
-            return (
-                <YesOrNoQuestion
-                    prompt={card.question.prompt}
-                    handleResponse={handleYesOrNoResponse}
-                />
-            );
-        case "Address":
-            return (
-                <TextInputQuestion
-                    prompt={card.question.prompt}
-                    handleResponse={handleTextInputResponse}
-                />
-            );
-        case "MultipleChoice":
-            return (
-                <MultipleChoiceQuestion
-                    prompt={card.question.prompt}
-                    options={card.question.options}
-                    handleResponse={handleMultipleChoiceResponse}
-                />
-            );
-        // case "MultiSelectQuestion":
-        //     return (
-        //         <MultiSelectQuestion
-        //             place={params.place}
-        //             prompt={params.prompt}
-        //             options={params.options!}
-        //             handleResponse={_handleResponse}
-        //         />
-        //     );
-        default:
-            return (
-                <Text>
-                    Unable to find this type of question: {card.question.type}
-                </Text>
-            );
-    }
+    const renderSwitch = () => {
+        switch (card.question.type) {
+            case "TrueOrFalse":
+                return (
+                    <YesOrNoQuestion
+                        prompt={card.question.prompt}
+                        handleResponse={handleYesOrNoResponse}
+                    />
+                );
+            case "Address":
+                return (
+                    <TextInputQuestion
+                        prompt={card.question.prompt}
+                        handleResponse={handleTextInputResponse}
+                    />
+                );
+            case "MultipleChoice":
+                return (
+                    <MultipleChoiceQuestion
+                        prompt={card.question.prompt}
+                        options={card.question.options}
+                        handleResponse={handleMultipleChoiceResponse}
+                    />
+                );
+            // case "MultiSelectQuestion":
+            //     return (
+            //         <MultiSelectQuestion
+            //             place={params.place}
+            //             prompt={params.prompt}
+            //             options={params.options!}
+            //             handleResponse={_handleResponse}
+            //         />
+            //     );
+            default:
+                return (
+                    <Text>
+                        Unable to find this type of question:{" "}
+                        {card.question.type}
+                    </Text>
+                );
+        }
+    };
+    return <QuestionContainer>{renderSwitch()}</QuestionContainer>;
 };
 
 export default Question;

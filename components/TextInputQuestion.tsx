@@ -1,22 +1,7 @@
-import { GestureResponderEvent, StyleSheet, View } from "react-native";
-import React, { useContext, useState } from "react";
-import {
-    Button,
-    Center,
-    Container,
-    Heading,
-    Input,
-    Stack,
-    Text,
-} from "native-base";
-import QuestionContainer from "./QuestionContainer";
+import { StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { Button, Input, Stack, Text } from "native-base";
 import { customTheme } from "../papillon-design-system/custom-theme";
-import { NavigationProp, RouteProp } from "@react-navigation/native";
-import {
-    QuestionContext,
-    QuestionStackParams,
-} from "../screens/QuestionScreen";
-import { StackNavigationProp } from "@react-navigation/stack";
 
 type Props = {
     prompt: string;
@@ -31,7 +16,7 @@ const TextInputQuestion = ({ prompt, handleResponse }: Props) => {
     };
 
     return (
-        <QuestionContainer>
+        <>
             <Text
                 color={customTheme.colors["on-surface"].text}
                 fontFamily={"question-text"}
@@ -57,7 +42,7 @@ const TextInputQuestion = ({ prompt, handleResponse }: Props) => {
                     Submit
                 </Button>
             </Stack>
-        </QuestionContainer>
+        </>
     );
 };
 

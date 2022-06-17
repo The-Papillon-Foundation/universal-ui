@@ -29,7 +29,7 @@ const MultipleChoiceQuestion = ({ prompt, options, handleResponse }: Props) => {
     const { setFinishedCardGroups } = useContext(QuestionContext);
 
     return (
-        <QuestionContainer>
+        <>
             <Text
                 color={customTheme.colors["on-surface"].text}
                 fontFamily={"question-text"}
@@ -58,7 +58,7 @@ const MultipleChoiceQuestion = ({ prompt, options, handleResponse }: Props) => {
                     Submit
                 </Button>
             </Stack>
-        </QuestionContainer>
+        </>
     );
 };
 
