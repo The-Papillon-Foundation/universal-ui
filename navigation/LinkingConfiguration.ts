@@ -19,7 +19,7 @@ const linking: LinkingOptions<RootStackParamList> = {
                 path: "workflow",
                 screens: {
                     Question: "question",
-                    Start: "/",
+                    WorkflowLoading: "/",
                 },
             },
             Modal: "modal",
