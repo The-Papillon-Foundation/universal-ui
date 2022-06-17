@@ -13,6 +13,8 @@ const linking: LinkingOptions<RootStackParamList> = {
     prefixes: [Linking.makeUrl("/")],
     config: {
         screens: {
+            Landing: "",
+            DetermineWorkFlow: "/determine-workflow",
             Questions: {
                 screens: {
                     Question: "questions/question",

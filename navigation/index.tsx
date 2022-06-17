@@ -13,6 +13,8 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
+import DetermineWorkFlow from "../screens/DetermineWorkFlow";
+import LandingScreen from "../screens/LandingScreen";
 
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
@@ -43,7 +45,17 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
     return (
-        <Stack.Navigator initialRouteName="Questions">
+        <Stack.Navigator initialRouteName="Landing">
+            <Stack.Screen
+                name="Landing"
+                component={LandingScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="DetermineWorkFlow"
+                component={DetermineWorkFlow}
+                options={{ headerShown: false }}
+            />
             <Stack.Screen
                 name="Questions"
                 component={QuestionScreen}
