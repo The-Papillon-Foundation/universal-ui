@@ -1,41 +1,129 @@
-import { NativeEventEmitter, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import React, { useContext } from "react";
-import {
-    NavigationProp,
-    RouteProp,
-    useNavigation,
-    useRoute,
-} from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import {
     QuestionContext,
     QuestionStackParams,
 } from "../screens/QuestionScreen";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import YesOrNoQuestion from "./YesOrNoQuestion";
-import DateQuestion from "./DateQuestion";
-import MultiSelectQuestion from "./MultiSelectQuestion";
 import { StackNavigationProp } from "@react-navigation/stack";
-import AddressQuestion from "./AddressQuestion";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
+import TextInputQuestion from "./TextInputQuestion";
 
-type Props = {};
-
-const Question = (props: Props) => {
+const Question = () => {
     const route = useRoute<RouteProp<QuestionStackParams, "Question">>();
     const navigation =
         useNavigation<StackNavigationProp<QuestionStackParams, "Question">>();
-    const { params } = route;
+    const {
+        params: { group, card },
+    } = route;
+    const { setFinishedCardGroups } = useContext(QuestionContext);
 
-    const _handleResponse = () => {};
+    const handleYesOrNoResponse = (response: "yes" | "no") => {
+        if (response == "yes") {
+            if (card.on_true == null) {
+                setFinishedCardGroups((finishedCardGroups) => [
+                    ...finishedCardGroups,
+                    group.id,
+                ]);
+                navigation.navigate("Start");
+                return;
+            }
+            const nextCardIndex = group.cards.findIndex(
+                (c) => c.id == card.on_true
+            );
+            if (nextCardIndex == -1)
+                throw new Error("Next card index out of scope.");
+            navigation.push("Question", {
+                card: group.cards[nextCardIndex],
+                group,
+            });
+        } else {
+            navigation.push("Ineligible", {
+                message: `Because you answered no on the previous question: \n${card.question.prompt}`,
+            });
+        }
+    };
 
-    switch (params.card.question.type) {
+    const handleTextInputResponse = (value: string) => {
+        if (value == "") return;
+        if (card.question.pass.includes(value.trim())) {
+            if (card.on_true == null) {
+                setFinishedCardGroups((finishedCardGroups) => [
+                    ...finishedCardGroups,
+                    group.id,
+                ]);
+                navigation.navigate("Start");
+                return;
+            }
+            const nextCardIndex = group.cards.findIndex(
+                (c) => c.id == card.on_true
+            );
+            if (nextCardIndex == -1)
+                throw new Error("Next card index out of scope.");
+            navigation.push("Question", {
+                card: group.cards[nextCardIndex],
+                group,
+            });
+        } else {
+            navigation.push("Ineligible", {
+                message: `You must live in one of the follow states to use this program: ${card.question.pass.join(
+                    ", "
+                )}`,
+            });
+        }
+    };
+
+    const handleMultipleChoiceResponse = (value: string) => {
+        if (card.question.pass.includes(value)) {
+            if (card.on_true == null) {
+                setFinishedCardGroups((finishedCardGroups) => [
+                    ...finishedCardGroups,
+                    group.id,
+                ]);
+                navigation.navigate("Start");
+                return;
+            }
+            const nextCardIndex = group.cards.findIndex(
+                (c) => c.id == card.on_true
+            );
+            if (nextCardIndex == -1)
+                throw new Error("Next card index out of scope.");
+            navigation.push("Question", {
+                card: group.cards[nextCardIndex],
+                group,
+            });
+        } else {
+            navigation.push("Ineligible", {
+                message: `Because the only correct answers to the question: \n${
+                    card.question.prompt
+                }\nAre: ${card.question.pass.join(", ")}`,
+            });
+        }
+    };
+
+    switch (card.question.type) {
         case "TrueOrFalse":
-            return <YesOrNoQuestion route={route} navigation={navigation} />;
+            return (
+                <YesOrNoQuestion
+                    prompt={card.question.prompt}
+                    handleResponse={handleYesOrNoResponse}
+                />
+            );
         case "Address":
-            return <AddressQuestion route={route} navigation={navigation} />;
+            return (
+                <TextInputQuestion
+                    prompt={card.question.prompt}
+                    handleResponse={handleTextInputResponse}
+                />
+            );
         case "MultipleChoice":
             return (
-                <MultipleChoiceQuestion route={route} navigation={navigation} />
+                <MultipleChoiceQuestion
+                    prompt={card.question.prompt}
+                    options={card.question.options}
+                    handleResponse={handleMultipleChoiceResponse}
+                />
             );
         // case "MultiSelectQuestion":
         //     return (
@@ -49,8 +137,7 @@ const Question = (props: Props) => {
         default:
             return (
                 <Text>
-                    Unable to find this type of question:{" "}
-                    {params.card.question.type}
+                    Unable to find this type of question: {card.question.type}
                 </Text>
             );
     }

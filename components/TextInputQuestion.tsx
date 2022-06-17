@@ -19,46 +19,17 @@ import {
 import { StackNavigationProp } from "@react-navigation/stack";
 
 type Props = {
-    route: RouteProp<QuestionStackParams, "Question">;
-    navigation: StackNavigationProp<QuestionStackParams, "Question">;
+    prompt: string;
+    handleResponse: (value: string) => void;
 };
 
-const AddressQuestion = ({ route, navigation }: Props) => {
+const TextInputQuestion = ({ prompt, handleResponse }: Props) => {
     const [value, setValue] = useState("");
-    const { card, group } = route.params;
-    const { setFinishedCardGroups } = useContext(QuestionContext);
 
     const handleChange = (text: string) => {
         setValue(text);
     };
 
-    const handleResponse = () => {
-        if (card.question.pass.includes(value.trim())) {
-            if (card.on_true == null) {
-                setFinishedCardGroups((finishedCardGroups) => [
-                    ...finishedCardGroups,
-                    group.id,
-                ]);
-                navigation.navigate("Start");
-                return;
-            }
-            const nextCardIndex = group.cards.findIndex(
-                (c) => c.id == card.on_true
-            );
-            if (nextCardIndex == -1)
-                throw new Error("Next card index out of scope.");
-            navigation.push("Question", {
-                card: group.cards[nextCardIndex],
-                group,
-            });
-        } else {
-            navigation.push("Ineligible", {
-                message: `You must live in one of the follow states to use this program: ${card.question.pass.join(
-                    ", "
-                )}`,
-            });
-        }
-    };
     return (
         <QuestionContainer>
             <Text
@@ -67,7 +38,7 @@ const AddressQuestion = ({ route, navigation }: Props) => {
                 textAlign={"center"}
                 w={"300"}
             >
-                {card.question.prompt}
+                {prompt}
             </Text>
             <Stack direction={"row"} space="2.5" mt="2" px="8">
                 <Input
@@ -76,12 +47,12 @@ const AddressQuestion = ({ route, navigation }: Props) => {
                     maxW="300px"
                     onChangeText={handleChange}
                     placeholder="Value Controlled Input"
-                    onSubmitEditing={() => handleResponse()}
+                    onSubmitEditing={() => handleResponse(value)}
                 />
                 <Button
                     bgColor={customTheme.colors["button-surface"]}
                     color={customTheme.colors["on-button-surface"]}
-                    onPress={() => handleResponse()}
+                    onPress={() => handleResponse(value)}
                 >
                     Submit
                 </Button>
@@ -90,6 +61,6 @@ const AddressQuestion = ({ route, navigation }: Props) => {
     );
 };
 
-export default AddressQuestion;
+export default TextInputQuestion;
 
 const styles = StyleSheet.create({});
