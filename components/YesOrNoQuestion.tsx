@@ -13,7 +13,7 @@ type Props = {
 
 const YesOrNoQuestion = ({ prompt, handleResponse }: Props) => {
     return (
-        <QuestionContainer>
+        <>
             <Text
                 color={customTheme.colors["on-surface"].text}
                 fontFamily={"question-text"}
@@ -38,7 +38,7 @@ const YesOrNoQuestion = ({ prompt, handleResponse }: Props) => {
                     No
                 </Button>
             </Stack>
-        </QuestionContainer>
+        </>
     );
 };
 
