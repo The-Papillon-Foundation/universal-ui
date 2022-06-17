@@ -1,15 +1,13 @@
 import { StyleSheet, Text } from "react-native";
 import React, { useContext } from "react";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import {
-    QuestionContext,
-    QuestionStackParams,
-} from "../screens/QuestionScreen";
+import { QuestionStackParams } from "../screens/QuestionScreen";
 import YesOrNoQuestion from "./YesOrNoQuestion";
 import { StackNavigationProp } from "@react-navigation/stack";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 import TextInputQuestion from "./TextInputQuestion";
 import QuestionContainer from "./QuestionContainer";
+import { QuestionContext } from "../contexts/QuestionContext";
 
 const Question = () => {
     const route = useRoute<RouteProp<QuestionStackParams, "Question">>();
