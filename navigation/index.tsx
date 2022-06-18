@@ -9,6 +9,7 @@ import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
 import { GlobalContextProvider } from "../contexts/GlobalContext";
 import DetermineWorkflow from "../screens/DetermineWorkflow";
+import HomeScreen from "../screens/HomeScreen";
 import LandingScreen from "../screens/LandingScreen";
 
 import ModalScreen from "../screens/ModalScreen";
@@ -48,6 +49,12 @@ function RootNavigator() {
                 component={LandingScreen}
                 options={{ headerShown: false }}
             />
+            <Stack.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{ headerShown: false }}
+            />
+
             <Stack.Screen
                 name="DetermineWorkflow"
                 component={DetermineWorkflow}
