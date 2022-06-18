@@ -11,6 +11,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Box, Button, Center, Container, Heading, Text } from "native-base";
 import { customTheme } from "../papillon-design-system/custom-theme";
 import { QuestionContext } from "../contexts/QuestionContext";
+import { useCreateSession } from "../hooks/useCreateSession";
 
 type Props = {
     route: RouteProp<QuestionStackParams, "WorkflowLoading">;
@@ -19,6 +20,7 @@ type Props = {
 const WorkflowLoading = ({ route }: Props) => {
     const { error, isLoading, payload } = usePayload(route.params!.stateName);
     const { finishedCardGroups, isLoggedIn } = useContext(QuestionContext);
+    useCreateSession(route.params!.stateName);
     const [done, setDone] = useState(false);
 
     const isFocused = useIsFocused();

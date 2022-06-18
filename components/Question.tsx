@@ -8,6 +8,7 @@ import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 import TextInputQuestion from "./TextInputQuestion";
 import QuestionContainer from "./QuestionContainer";
 import { QuestionContext } from "../contexts/QuestionContext";
+import { useUpdateSession } from "../hooks/useUpdateSession";
 
 const Question = () => {
     const route = useRoute<RouteProp<QuestionStackParams, "Question">>();
@@ -17,8 +18,10 @@ const Question = () => {
         params: { group, card },
     } = route;
     const { setFinishedCardGroups } = useContext(QuestionContext);
+    const { updateSession } = useUpdateSession();
 
     const handleYesOrNoResponse = (response: "yes" | "no") => {
+        updateSession({ [group.id]: response });
         if (response == "yes") {
             if (card.on_true == null) {
                 setFinishedCardGroups((finishedCardGroups) => [
@@ -46,6 +49,7 @@ const Question = () => {
 
     const handleTextInputResponse = (value: string) => {
         if (value == "") return;
+        updateSession({ [group.id]: value });
         if (card.question.pass.includes(value.trim())) {
             if (card.on_true == null) {
                 setFinishedCardGroups((finishedCardGroups) => [
@@ -74,6 +78,8 @@ const Question = () => {
     };
 
     const handleMultipleChoiceResponse = (value: string) => {
+        if (value == "") return;
+        updateSession({ [group.id]: value });
         if (card.question.pass.includes(value)) {
             if (card.on_true == null) {
                 setFinishedCardGroups((finishedCardGroups) => [

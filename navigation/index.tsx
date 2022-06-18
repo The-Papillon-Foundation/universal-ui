@@ -7,6 +7,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName, Pressable } from "react-native";
+import { GlobalContextProvider } from "../contexts/GlobalContext";
 import DetermineWorkflow from "../screens/DetermineWorkflow";
 import LandingScreen from "../screens/LandingScreen";
 
@@ -22,12 +23,14 @@ export default function Navigation({
     colorScheme: ColorSchemeName;
 }) {
     return (
-        <NavigationContainer
-            linking={LinkingConfiguration}
-            // theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-            <RootNavigator />
-        </NavigationContainer>
+        <GlobalContextProvider>
+            <NavigationContainer
+                linking={LinkingConfiguration}
+                // theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+            >
+                <RootNavigator />
+            </NavigationContainer>
+        </GlobalContextProvider>
     );
 }
 
