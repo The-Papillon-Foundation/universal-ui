@@ -20,7 +20,7 @@ declare global {
 export type RootStackParamList = {
     Landing: undefined;
     DetermineWorkflow: undefined;
-    Questions: undefined;
+    Questions: { stateName: string } | undefined;
     Modal: undefined;
     NotFound: undefined;
 };

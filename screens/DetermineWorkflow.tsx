@@ -6,13 +6,18 @@ import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../types";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-const DetermineWorkflow = () => {
-    const navigation =
-        useNavigation<
-            StackNavigationProp<RootStackParamList, "DetermineWorkflow">
-        >();
-    const handleResponse = () => {
-        navigation.push("Questions");
+interface Props {
+    navigation: StackNavigationProp<RootStackParamList, "DetermineWorkflow">;
+}
+
+const DetermineWorkflow = ({ navigation }: Props) => {
+    // const navigation =
+    //     useNavigation<
+    //         StackNavigationProp<RootStackParamList, "DetermineWorkflow">
+    //     >();
+    const handleResponse = (state: string) => {
+        if (state == "") return;
+        navigation.push("Questions", { stateName: state });
     };
     return (
         <QuestionContainer>

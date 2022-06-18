@@ -2,16 +2,22 @@ import { ActivityIndicator } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import usePayload from "../hooks/usePayload";
 import { QuestionStackParams } from "./QuestionScreen";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+import {
+    RouteProp,
+    useIsFocused,
+    useNavigation,
+} from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Box, Button, Center, Container, Heading, Text } from "native-base";
 import { customTheme } from "../papillon-design-system/custom-theme";
 import { QuestionContext } from "../contexts/QuestionContext";
 
-type Props = {};
+type Props = {
+    route: RouteProp<QuestionStackParams, "WorkflowLoading">;
+};
 
-const WorkflowLoading = (props: Props) => {
-    const { error, isLoading, payload } = usePayload();
+const WorkflowLoading = ({ route }: Props) => {
+    const { error, isLoading, payload } = usePayload(route.params!.stateName);
     const { finishedCardGroups, isLoggedIn } = useContext(QuestionContext);
     const [done, setDone] = useState(false);
 
@@ -24,11 +30,11 @@ const WorkflowLoading = (props: Props) => {
     useEffect(() => {
         if (!isLoading && payload != undefined && isFocused) {
             if (
-                !payload[0].eligibility_module.card_groups.every((card_group) =>
+                !payload.eligibility_module?.card_groups.every((card_group) =>
                     finishedCardGroups.includes(card_group.id)
                 )
             ) {
-                for (const card_group of payload[0].eligibility_module
+                for (const card_group of payload.eligibility_module
                     .card_groups) {
                     if (!finishedCardGroups.includes(card_group.id)) {
                         navigation.push("Question", {
@@ -41,12 +47,12 @@ const WorkflowLoading = (props: Props) => {
             } else if (!isLoggedIn) {
                 navigation.push("ForceLogin");
             } else if (
-                !payload[0].process_module.card_groups.every((card_group) =>
+                isLoggedIn &&
+                !payload.process_module?.card_groups.every((card_group) =>
                     finishedCardGroups.includes(card_group.id)
                 )
             ) {
-                for (const card_group of payload[0].process_module
-                    .card_groups) {
+                for (const card_group of payload.process_module.card_groups) {
                     if (!finishedCardGroups.includes(card_group.id)) {
                         navigation.push("Question", {
                             card: card_group.cards[0],

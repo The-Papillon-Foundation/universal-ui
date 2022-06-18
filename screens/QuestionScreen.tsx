@@ -23,7 +23,7 @@ type Props = {
     route: RouteProp<RootStackParamList, "Questions">;
 };
 export interface QuestionStackParams extends ParamListBase {
-    WorkflowLoading: undefined;
+    WorkflowLoading: { stateName: string } | undefined;
     Question: { card: QuestionCard; group: QuestionGroup };
     Ineligible: undefined | { message: string };
 }
@@ -57,6 +57,7 @@ const QuestionScreen = ({ route }: Props) => {
                     name="WorkflowLoading"
                     component={WorkflowLoading}
                     options={{ headerShown: false }}
+                    initialParams={{ stateName: route.params?.stateName }}
                 />
                 <QuestionStack.Screen
                     name="ForceLogin"
