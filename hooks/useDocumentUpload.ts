@@ -34,6 +34,8 @@ export const useDocumentUpload = () => {
                     method: "POST",
                     headers: {
                         "Content-Type": "multipart/form-data",
+                        "X-Papillon-User-Id": "test-id",
+                        "X-Papillon-File-Name": documentResult.name,
                     },
                     body: data,
                 });
