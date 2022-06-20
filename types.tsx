@@ -9,7 +9,6 @@ import {
     NavigatorScreenParams,
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { QuestionStackParams } from "./screens/QuestionScreen";
 
 declare global {
     namespace ReactNavigation {
@@ -21,7 +20,7 @@ export type RootStackParamList = {
     Landing: undefined;
     Home: undefined;
     DetermineWorkflow: undefined;
-    Questions: { stateName: string };
+    Workflow: { stateName: string };
     Modal: undefined;
     NotFound: undefined;
 };
@@ -41,7 +40,7 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
     >;
 
 export interface Question {
-    type: "TrueOrFalse" | "Address" | "MultipleChoice";
+    type: "TrueOrFalse" | "Address" | "MultipleChoice" | "Text" | "Date";
     prompt: string;
     pass: string[];
     options: string[];

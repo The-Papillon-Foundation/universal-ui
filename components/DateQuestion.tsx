@@ -6,29 +6,17 @@ import { customTheme } from "../papillon-design-system/custom-theme";
 import QuestionContainer from "./QuestionContainer";
 
 type Props = {
-    place: number;
     prompt: string;
-    handleResponse: (event: GestureResponderEvent) => void;
+    handleResponse: (value: string | Date) => void;
 };
 
-const DateQuestion = ({ place, prompt, handleResponse }: Props) => {
+const DateQuestion = ({ prompt, handleResponse }: Props) => {
     const [inputDate, setInputDate] = React.useState<Date | undefined>(
         undefined
     );
     return (
         <>
-            <Heading
-                color={customTheme.colors["on-surface"].heading}
-                fontFamily={"question-heading"}
-            >
-                Question {place + 1}
-            </Heading>
-            <Text
-                color={customTheme.colors["on-surface"].text}
-                fontFamily={"question-text"}
-                textAlign={"center"}
-                w={"300"}
-            >
+            <Text textAlign={"center"} w={"300"}>
                 {prompt}
             </Text>
             <DatePickerInput
@@ -55,7 +43,10 @@ const DateQuestion = ({ place, prompt, handleResponse }: Props) => {
             />
             <Button
                 bgColor={customTheme.colors["button-surface"]}
-                onPress={handleResponse}
+                onPress={() => {
+                    console.log("firing");
+                    if (inputDate != undefined) handleResponse(inputDate);
+                }}
             >
                 Submit
             </Button>

@@ -17,12 +17,7 @@ const TextInputQuestion = ({ prompt, handleResponse }: Props) => {
 
     return (
         <>
-            <Text
-                color={customTheme.colors["on-surface"].text}
-                fontFamily={"question-text"}
-                textAlign={"center"}
-                w={"300"}
-            >
+            <Text textAlign={"center"} w={"300"}>
                 {prompt}
             </Text>
             <Stack direction={"row"} space="2.5" mt="2" px="8">
@@ -32,12 +27,18 @@ const TextInputQuestion = ({ prompt, handleResponse }: Props) => {
                     maxW="300px"
                     onChangeText={handleChange}
                     placeholder="Value Controlled Input"
-                    onSubmitEditing={() => handleResponse(value)}
+                    onSubmitEditing={() => {
+                        setValue("");
+                        handleResponse(value);
+                    }}
                 />
                 <Button
                     bgColor={customTheme.colors["button-surface"]}
                     color={customTheme.colors["on-button-surface"]}
-                    onPress={() => handleResponse(value)}
+                    onPress={() => {
+                        setValue("");
+                        handleResponse(value);
+                    }}
                 >
                     Submit
                 </Button>

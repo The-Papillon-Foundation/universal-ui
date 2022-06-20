@@ -6,7 +6,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { ColorSchemeName, Pressable } from "react-native";
+import { ColorSchemeName } from "react-native";
 import { GlobalContextProvider } from "../contexts/GlobalContext";
 import DetermineWorkflow from "../screens/DetermineWorkflow";
 import HomeScreen from "../screens/HomeScreen";
@@ -14,7 +14,7 @@ import LandingScreen from "../screens/LandingScreen";
 
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import QuestionScreen from "../screens/QuestionScreen";
+import WorkflowScreen from "../screens/WorkflowScreen";
 import { RootStackParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 
@@ -61,8 +61,8 @@ function RootNavigator() {
                 options={{ headerShown: false }}
             />
             <Stack.Screen
-                name="Questions"
-                component={QuestionScreen}
+                name="Workflow"
+                component={WorkflowScreen}
                 options={{ headerShown: false }}
             />
             <Stack.Screen

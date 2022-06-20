@@ -1,22 +1,14 @@
 import React, { useContext } from "react";
 import { Box, Button, Center, Heading, Spacer } from "native-base";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { QuestionStackParams } from "./QuestionScreen";
-import { useNavigation } from "@react-navigation/native";
-import { QuestionContext } from "../contexts/QuestionContext";
+import { WorkflowContext } from "../contexts/WorkflowContext";
 
 type Props = {};
 
 const ForceLoginScreen = (props: Props) => {
-    const navigation =
-        useNavigation<
-            StackNavigationProp<QuestionStackParams, "ForceLoginScreen">
-        >();
-    const { setIsLoggedIn } = useContext(QuestionContext);
+    const { setIsLoggedIn } = useContext(WorkflowContext);
 
     const handleLogin = () => {
         setIsLoggedIn(true);
-        navigation.navigate("WorkflowLoading");
     };
     return (
         <Center flex={1}>

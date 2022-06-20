@@ -17,7 +17,7 @@ const DetermineWorkflow = ({ navigation }: Props) => {
     //     >();
     const handleResponse = (state: string) => {
         if (state == "") return;
-        navigation.push("Questions", { stateName: state });
+        navigation.push("Workflow", { stateName: state });
     };
     return (
         <QuestionContainer>

@@ -1,10 +1,7 @@
 import { StyleSheet } from "react-native";
 import React from "react";
 import { Button, Stack, Text } from "native-base";
-import QuestionContainer from "./QuestionContainer";
 import { customTheme } from "../papillon-design-system/custom-theme";
-import { RouteProp } from "@react-navigation/native";
-import { QuestionStackParams } from "../screens/QuestionScreen";
 
 type Props = {
     prompt: string;
@@ -14,12 +11,7 @@ type Props = {
 const YesOrNoQuestion = ({ prompt, handleResponse }: Props) => {
     return (
         <>
-            <Text
-                color={customTheme.colors["on-surface"].text}
-                fontFamily={"question-text"}
-                textAlign={"center"}
-                w={"300"}
-            >
+            <Text textAlign={"center"} w={"300"}>
                 {prompt}
             </Text>
             <Stack direction={"row"} space="2.5" mt="2" px="8">

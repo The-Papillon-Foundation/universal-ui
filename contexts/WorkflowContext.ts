@@ -1,6 +1,6 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 
-export const QuestionContext = createContext<{
+export const WorkflowContext = createContext<{
     finishedCardGroups: string[];
     setFinishedCardGroups: Dispatch<SetStateAction<string[]>>;
     isLoggedIn: boolean;

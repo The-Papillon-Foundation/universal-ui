@@ -1,112 +1,71 @@
 import { StyleSheet, Text } from "react-native";
-import React, { useContext, useEffect } from "react";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { QuestionStackParams } from "../screens/QuestionScreen";
+import React, { useContext } from "react";
 import YesOrNoQuestion from "./YesOrNoQuestion";
-import { StackNavigationProp } from "@react-navigation/stack";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 import TextInputQuestion from "./TextInputQuestion";
 import QuestionContainer from "./QuestionContainer";
-import { QuestionContext } from "../contexts/QuestionContext";
 import { useUpdateSession } from "../hooks/useUpdateSession";
+import { WorkflowContext } from "../contexts/WorkflowContext";
+import { QuestionCard, QuestionGroup } from "../types";
+import DateQuestion from "./DateQuestion";
 
-const Question = () => {
-    const route = useRoute<RouteProp<QuestionStackParams, "Question">>();
-    const navigation =
-        useNavigation<StackNavigationProp<QuestionStackParams, "Question">>();
-    const {
-        params: { group, card },
-    } = route;
-    const { setFinishedCardGroups } = useContext(QuestionContext);
+interface Props {
+    card: QuestionCard;
+    group: QuestionGroup;
+    goNext: () => void;
+    goIneligible: ({ message }: { message: string }) => void;
+}
+
+const Question = ({ card, group, goNext, goIneligible }: Props) => {
+    const { setFinishedCardGroups } = useContext(WorkflowContext);
     const { updateSession } = useUpdateSession();
 
-    useEffect(() => {
-        console.log(route.params.card);
-        if (route.params.card.id == undefined) {
-            navigation.navigate("WorkflowLoading", { stateName: undefined });
-        }
-    }, []);
-
     const handleYesOrNoResponse = (response: "yes" | "no") => {
-        updateSession({ [group.id]: response });
+        updateSession({ [card.id]: response });
         if (response == "yes") {
             if (card.on_true == null) {
                 setFinishedCardGroups((finishedCardGroups) => [
                     ...finishedCardGroups,
                     group.id,
                 ]);
-                navigation.navigate("WorkflowLoading", {});
                 return;
             }
-            const nextCardIndex = group.cards.findIndex(
-                (c) => c.id == card.on_true
-            );
-            if (nextCardIndex == -1)
-                throw new Error("Next card index out of scope.");
-            navigation.push("Question", {
-                card: group.cards[nextCardIndex],
-                group,
-            });
+            goNext();
         } else {
-            navigation.push("Ineligible", {
+            goIneligible({
                 message: `Because you answered no on the previous question: \n${card.question.prompt}`,
             });
         }
     };
 
-    const handleTextInputResponse = (value: string) => {
+    const handleTextInputResponse = (value: string | Date) => {
         if (value == "") return;
-        updateSession({ [group.id]: value });
-        if (card.question.pass.includes(value.trim())) {
-            if (card.on_true == null) {
-                setFinishedCardGroups((finishedCardGroups) => [
-                    ...finishedCardGroups,
-                    group.id,
-                ]);
-                navigation.navigate("Start");
-                return;
-            }
-            const nextCardIndex = group.cards.findIndex(
-                (c) => c.id == card.on_true
-            );
-            if (nextCardIndex == -1)
-                throw new Error("Next card index out of scope.");
-            navigation.push("Question", {
-                card: group.cards[nextCardIndex],
-                group,
-            });
-        } else {
-            navigation.push("Ineligible", {
-                message: `You must live in one of the follow states to use this program: ${card.question.pass.join(
-                    ", "
-                )}`,
-            });
+        updateSession({ [card.id]: value });
+
+        if (card.on_true == null) {
+            setFinishedCardGroups((finishedCardGroups) => [
+                ...finishedCardGroups,
+                group.id,
+            ]);
+            return;
         }
+        goNext();
     };
 
     const handleMultipleChoiceResponse = (value: string) => {
         if (value == "") return;
-        updateSession({ [group.id]: value });
+        updateSession({ [card.id]: value });
         if (card.question.pass.includes(value)) {
             if (card.on_true == null) {
                 setFinishedCardGroups((finishedCardGroups) => [
                     ...finishedCardGroups,
                     group.id,
                 ]);
-                navigation.navigate("Start");
                 return;
             }
-            const nextCardIndex = group.cards.findIndex(
-                (c) => c.id == card.on_true
-            );
-            if (nextCardIndex == -1)
-                throw new Error("Next card index out of scope.");
-            navigation.push("Question", {
-                card: group.cards[nextCardIndex],
-                group,
-            });
+            goNext();
         } else {
-            navigation.push("Ineligible", {
+            goIneligible({
                 message: `Because the only correct answers to the question: \n${
                     card.question.prompt
                 }\nAre: ${card.question.pass.join(", ")}`,
@@ -127,6 +86,20 @@ const Question = () => {
                 case "Address":
                     return (
                         <TextInputQuestion
+                            prompt={card.question.prompt}
+                            handleResponse={handleTextInputResponse}
+                        />
+                    );
+                case "Text":
+                    return (
+                        <TextInputQuestion
+                            prompt={card.question.prompt}
+                            handleResponse={handleTextInputResponse}
+                        />
+                    );
+                case "Date":
+                    return (
+                        <DateQuestion
                             prompt={card.question.prompt}
                             handleResponse={handleTextInputResponse}
                         />
