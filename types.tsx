@@ -21,7 +21,7 @@ export type RootStackParamList = {
     Landing: undefined;
     Home: undefined;
     DetermineWorkflow: undefined;
-    Questions: { stateName: string } & undefined;
+    Questions: { stateName: string };
     Modal: undefined;
     NotFound: undefined;
 };

@@ -4,24 +4,23 @@ import { useQuery } from "react-query";
 import { WorkflowPayload } from "../types";
 import { url } from "../constants/Urls";
 
-const payloadUrl = `${url}workflows/`;
+const workflowUrl = `${url}workflows/`;
 
-const fetchPayload = async (stateName: string) => {
-    const res = await fetch(payloadUrl + stateName, { mode: "cors" });
+const fetchWorkflow = async (stateName: string) => {
+    const res = await fetch(workflowUrl + stateName, { mode: "cors" });
     console.log(res);
     return res.json();
 };
 
-const usePayload = (stateName: string) => {
+const useWorkflow = (stateName: string) => {
     const { isLoading, error, data } = useQuery("payload", () =>
-        fetchPayload(stateName)
+        fetchWorkflow(stateName)
     );
     return {
         isLoading,
         error,
-        payload:
-            data != undefined ? (data.payload as WorkflowPayload) : undefined,
+        data: data as WorkflowPayload,
     };
 };
 
-export default usePayload;
+export default useWorkflow;

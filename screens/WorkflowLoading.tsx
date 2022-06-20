@@ -1,6 +1,6 @@
 import { ActivityIndicator } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
-import usePayload from "../hooks/usePayload";
+import usePayload from "../hooks/useWorkflow";
 import { QuestionStackParams } from "./QuestionScreen";
 import {
     RouteProp,
@@ -18,9 +18,9 @@ type Props = {
 };
 
 const WorkflowLoading = ({ route }: Props) => {
-    const { error, isLoading, payload } = usePayload(route.params!.stateName);
+    const { error, isLoading, data } = usePayload(route.params.stateName!);
     const { finishedCardGroups, isLoggedIn } = useContext(QuestionContext);
-    useCreateSession(route.params!.stateName);
+    useCreateSession(route.params.stateName!);
     const [done, setDone] = useState(false);
 
     const isFocused = useIsFocused();
@@ -30,14 +30,17 @@ const WorkflowLoading = ({ route }: Props) => {
         >();
 
     useEffect(() => {
-        if (!isLoading && payload != undefined && isFocused) {
+        if (route.params.stateName == undefined) {
+            navigation.navigate("Home");
+            return;
+        }
+        if (!isLoading && data != undefined && isFocused) {
             if (
-                !payload.eligibility_module?.card_groups.every((card_group) =>
+                !data.eligibility_module?.card_groups.every((card_group) =>
                     finishedCardGroups.includes(card_group.id)
                 )
             ) {
-                for (const card_group of payload.eligibility_module
-                    .card_groups) {
+                for (const card_group of data.eligibility_module.card_groups) {
                     if (!finishedCardGroups.includes(card_group.id)) {
                         navigation.push("Question", {
                             card: card_group.cards[0],
@@ -50,11 +53,11 @@ const WorkflowLoading = ({ route }: Props) => {
                 navigation.push("ForceLogin");
             } else if (
                 isLoggedIn &&
-                !payload.process_module?.card_groups.every((card_group) =>
+                !data.process_module?.card_groups.every((card_group) =>
                     finishedCardGroups.includes(card_group.id)
                 )
             ) {
-                for (const card_group of payload.process_module.card_groups) {
+                for (const card_group of data.process_module.card_groups) {
                     if (!finishedCardGroups.includes(card_group.id)) {
                         navigation.push("Question", {
                             card: card_group.cards[0],
@@ -67,7 +70,7 @@ const WorkflowLoading = ({ route }: Props) => {
                 setDone(true);
             }
         }
-    }, [payload, isFocused]);
+    }, [data, isFocused]);
 
     return (
         <Box flex={1} justifyContent="center">
@@ -75,12 +78,14 @@ const WorkflowLoading = ({ route }: Props) => {
                 <Container centerContent>
                     {done ? (
                         <Text>You're all done for now.</Text>
-                    ) : (
+                    ) : isLoading ? (
                         <ActivityIndicator
                             size="large"
                             color={customTheme.colors.primary[500]}
                         />
-                    )}
+                    ) : error ? (
+                        <Text>An error has occurred</Text>
+                    ) : null}
                 </Container>
             </Center>
         </Box>

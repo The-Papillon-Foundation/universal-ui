@@ -1,19 +1,10 @@
-import { NativeEventEmitter, StyleSheet } from "react-native";
-import React, {
-    createContext,
-    Dispatch,
-    SetStateAction,
-    useContext,
-    useState,
-} from "react";
-import { Box, Button, Center, Container, Heading, Text } from "native-base";
+import { StyleSheet } from "react-native";
+import React, { useState } from "react";
 import Question from "../components/Question";
-import { ParamListBase, RouteProp, useRoute } from "@react-navigation/native";
+import { ParamListBase, RouteProp } from "@react-navigation/native";
 import { customTheme } from "../papillon-design-system/custom-theme";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { QuestionCard, QuestionGroup, RootStackParamList } from "../types";
-import usePayload from "../hooks/usePayload";
-import { StackNavigationProp } from "@react-navigation/stack";
 import WorkflowLoading from "./WorkflowLoading";
 import { IneligibleScreen } from "./IneligibleScreen";
 import { QuestionContext } from "../contexts/QuestionContext";
@@ -23,7 +14,7 @@ type Props = {
     route: RouteProp<RootStackParamList, "Questions">;
 };
 export interface QuestionStackParams extends ParamListBase {
-    WorkflowLoading: { stateName: string } | undefined;
+    WorkflowLoading: { stateName?: string };
     Question: { card: QuestionCard; group: QuestionGroup };
     Ineligible: undefined | { message: string };
 }

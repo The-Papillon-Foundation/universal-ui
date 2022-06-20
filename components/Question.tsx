@@ -1,5 +1,5 @@
 import { StyleSheet, Text } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { QuestionStackParams } from "../screens/QuestionScreen";
 import YesOrNoQuestion from "./YesOrNoQuestion";
@@ -20,6 +20,13 @@ const Question = () => {
     const { setFinishedCardGroups } = useContext(QuestionContext);
     const { updateSession } = useUpdateSession();
 
+    useEffect(() => {
+        console.log(route.params.card);
+        if (route.params.card.id == undefined) {
+            navigation.navigate("WorkflowLoading", { stateName: undefined });
+        }
+    }, []);
+
     const handleYesOrNoResponse = (response: "yes" | "no") => {
         updateSession({ [group.id]: response });
         if (response == "yes") {
@@ -28,7 +35,7 @@ const Question = () => {
                     ...finishedCardGroups,
                     group.id,
                 ]);
-                navigation.navigate("WorkflowLoading");
+                navigation.navigate("WorkflowLoading", {});
                 return;
             }
             const nextCardIndex = group.cards.findIndex(
@@ -141,13 +148,12 @@ const Question = () => {
                     );
             }
         } catch (error) {
-            navigation.navigate("WorkflowLoading");
             return null;
         }
     };
     return (
         <QuestionContainer>
-            {renderSwitch() || <Text>Error </Text>}
+            {renderSwitch() || <Text>Error</Text>}
         </QuestionContainer>
     );
 };
