@@ -10,6 +10,7 @@ import { ColorSchemeName } from "react-native";
 import { GlobalContextProvider } from "../contexts/GlobalContext";
 import DetermineWorkflow from "../screens/DetermineWorkflow";
 import HomeScreen from "../screens/HomeScreen";
+import { IneligibleScreen } from "../screens/IneligibleScreen";
 import LandingScreen from "../screens/LandingScreen";
 
 import ModalScreen from "../screens/ModalScreen";
@@ -63,6 +64,11 @@ function RootNavigator() {
             <Stack.Screen
                 name="Workflow"
                 component={WorkflowScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="Ineligible"
+                component={IneligibleScreen}
                 options={{ headerShown: false }}
             />
             <Stack.Screen

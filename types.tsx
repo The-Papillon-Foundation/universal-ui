@@ -23,6 +23,7 @@ export type RootStackParamList = {
     Workflow: { stateName: string };
     Modal: undefined;
     NotFound: undefined;
+    Ineligible: { message?: string };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
