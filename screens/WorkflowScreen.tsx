@@ -1,11 +1,10 @@
-import { View, Text } from "react-native";
 import React, { useState } from "react";
 import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList, WorkflowPayload } from "../types";
 import { WorkflowContext } from "../contexts/WorkflowContext";
 import useWorkflow from "../hooks/useWorkflow";
 import { useCreateSession } from "../hooks/useCreateSession";
-import { Box, Center, Container } from "native-base";
+import { Box, Center, Container, View, Text } from "native-base";
 import { ActivityIndicator } from "react-native-paper";
 import { customTheme } from "../papillon-design-system/custom-theme";
 import QuestionStack from "../components/QuestionStack";
@@ -74,33 +73,32 @@ const Workflow = ({ route }: Props) => {
                 setIsLoggedIn,
             }}
         >
-            <Box flex={1} justifyContent="center">
-                <Center>
-                    <Container centerContent>
-                        {isLoading && (
-                            <ActivityIndicator
-                                size="large"
-                                color={customTheme.colors.primary[500]}
-                            />
-                        )}
-                        {error && <Text>An error has occurred</Text>}
-                        {data != undefined &&
-                            (readyForEligibilityModule() ? (
-                                <QuestionStack
-                                    module={data.eligibility_module}
-                                />
-                            ) : null)}
-                        {data != undefined &&
-                            (readyForLogin() ? <ForceLoginScreen /> : null)}
-                        {data != undefined &&
-                            !isFinished() &&
-                            (readyForProcessModule() ? (
-                                <QuestionStack module={data.process_module} />
-                            ) : null)}
-                        {isFinished() && <Text>You are done</Text>}
-                    </Container>
-                </Center>
-            </Box>
+            <View
+                flex={1}
+                justifyContent="center"
+                alignContent={"center"}
+                backgroundColor={"blue.100"}
+            >
+                {isLoading && (
+                    <ActivityIndicator
+                        size="large"
+                        color={customTheme.colors.primary[500]}
+                    />
+                )}
+                {error && <Text>An error has occurred</Text>}
+                {data != undefined &&
+                    (readyForEligibilityModule() ? (
+                        <QuestionStack module={data.eligibility_module} />
+                    ) : null)}
+                {data != undefined &&
+                    (readyForLogin() ? <ForceLoginScreen /> : null)}
+                {data != undefined &&
+                    !isFinished() &&
+                    (readyForProcessModule() ? (
+                        <QuestionStack module={data.process_module} />
+                    ) : null)}
+                {isFinished() && <Text>You are done</Text>}
+            </View>
         </WorkflowContext.Provider>
     );
 };

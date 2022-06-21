@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Center, Heading, Spacer, Text } from "native-base";
+import { Box, Button, Center, Heading, Spacer, Text, View } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types";
@@ -16,9 +16,9 @@ const LandingScreen = () => {
         navigation.push("DetermineWorkflow");
     };
     return (
-        <Center flex={1}>
-            <Box>
-                <Heading>Landing</Heading>
+        <View flex={1} justifyContent={"center"}>
+            <Box mx={15}>
+                <Heading textAlign={"center"}>Landing</Heading>
                 <Spacer my={2} />
                 <Button onPress={navigateToHomeScreen}>Login</Button>
                 <Spacer my={1} />
@@ -26,7 +26,7 @@ const LandingScreen = () => {
                     Get Started
                 </Button>
             </Box>
-        </Center>
+        </View>
     );
 };
 

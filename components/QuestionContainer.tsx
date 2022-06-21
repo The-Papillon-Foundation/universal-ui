@@ -8,13 +8,7 @@ type Props = {
 };
 
 const QuestionContainer: React.FC<Props> = ({ children }) => {
-    return (
-        <Center flex={1}>
-            <Container maxH={"50%"} centerContent>
-                {children}
-            </Container>
-        </Center>
-    );
+    return <Container centerContent>{children}</Container>;
 };
 
 export default QuestionContainer;

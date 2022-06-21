@@ -42,6 +42,19 @@ const Question = ({ card, group, goNext, goIneligible }: Props) => {
         if (value == "") return;
         updateSession({ [card.id]: value });
 
+        // There are passing arguments and the value doesn't pass
+        if (
+            card.question.pass != undefined &&
+            typeof value == "string" &&
+            !card.question.pass.includes(value)
+        ) {
+            goIneligible({
+                message: `The only valid answers to this question are: ${card.question.pass.join(
+                    ", "
+                )}`,
+            });
+            return;
+        }
         if (card.on_true == null) {
             setFinishedCardGroups((finishedCardGroups) => [
                 ...finishedCardGroups,

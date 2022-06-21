@@ -33,8 +33,9 @@ const QuestionStack = ({ module }: Props) => {
     };
 
     return (
-        <View>
+        <View alignItems={"center"}>
             <View
+                px={10}
                 style={{
                     flexDirection: "row",
                     justifyContent: "space-between",
@@ -44,6 +45,7 @@ const QuestionStack = ({ module }: Props) => {
                 <Button onPress={goBack}>Back</Button>
                 <Button onPress={goNext}>Next</Button>
             </View>
+            <View my={5} />
             <Question
                 card={module.card_groups[groupIndex].cards[questionIndex]}
                 group={module.card_groups[groupIndex]}
