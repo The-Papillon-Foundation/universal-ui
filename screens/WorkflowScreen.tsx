@@ -21,7 +21,6 @@ const Workflow = ({ route }: Props) => {
 
     const { error, isLoading, data } = useWorkflow(route.params.stateName!);
     useCreateSession(route.params.stateName!);
-    const [done, setDone] = useState(false);
 
     const readyForEligibilityModule = () => {
         if (
@@ -78,7 +77,6 @@ const Workflow = ({ route }: Props) => {
             <Box flex={1} justifyContent="center">
                 <Center>
                     <Container centerContent>
-                        {done && <Text>You're all done for now.</Text>}
                         {isLoading && (
                             <ActivityIndicator
                                 size="large"

@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { url } from "../constants/Urls";
 import { GlobalContext } from "../contexts/GlobalContext";
@@ -18,19 +18,22 @@ const fetchCreateSession = async (workflowId: string) => {
 };
 
 export const useCreateSession = (workflowId: string) => {
+    const { sessionId, setSessionId } = useContext(GlobalContext);
     const { isLoading, error, data } = useQuery("createSession", () =>
         fetchCreateSession(workflowId)
     );
-    const { sessionId, setSessionId } = useContext(GlobalContext);
 
     useEffect(() => {
+        console.log("data", data);
         if (
             !isLoading &&
             data != undefined &&
-            data.session_id &&
-            sessionId != data.session_id
+            data.workflowSession != undefined &&
+            data.workflowSession.sessionId != undefined &&
+            sessionId == ""
         ) {
-            setSessionId(data.session_id as string);
+            console.log("setting session to ", data.workflowSession.sessionId);
+            setSessionId(data.workflowSession.sessionId as string);
         }
     }, [isLoading]);
 };
