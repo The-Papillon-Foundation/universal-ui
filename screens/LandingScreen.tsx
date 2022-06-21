@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Button, Center, Heading, Spacer, Text, View } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types";
+import { GlobalContext } from "../contexts/GlobalContext";
 
 const LandingScreen = () => {
+    const { sessionId } = useContext(GlobalContext);
     const navigation =
         useNavigation<StackNavigationProp<RootStackParamList, "Landing">>();
 

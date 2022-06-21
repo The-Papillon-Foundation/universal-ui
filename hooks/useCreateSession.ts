@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { url } from "../constants/Urls";
 import { GlobalContext } from "../contexts/GlobalContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { sessionIdKey } from "../constants/LocalStorate";
 
 const fetchCreateSession = async (workflowId: string) => {
     const res = await fetch(`${url}/workflow-sessions`, {
@@ -19,8 +21,10 @@ const fetchCreateSession = async (workflowId: string) => {
 
 export const useCreateSession = (workflowId: string) => {
     const { sessionId, setSessionId } = useContext(GlobalContext);
-    const { isLoading, error, data } = useQuery("createSession", () =>
-        fetchCreateSession(workflowId)
+    const { isLoading, error, data } = useQuery(
+        "createSession",
+        () => fetchCreateSession(workflowId),
+        { enabled: sessionId == "" }
     );
 
     useEffect(() => {
@@ -33,6 +37,7 @@ export const useCreateSession = (workflowId: string) => {
         ) {
             console.log("setting session to ", data.workflowSession.sessionId);
             setSessionId(data.workflowSession.sessionId as string);
+            AsyncStorage.setItem(sessionIdKey, data.workflowSession.sessionId);
         }
     }, [isLoading]);
 };

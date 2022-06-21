@@ -7,11 +7,16 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
-import { GlobalContextProvider } from "../contexts/GlobalContext";
+import { ActivityIndicator } from "react-native-paper";
+import {
+    GlobalContext,
+    GlobalContextProvider,
+} from "../contexts/GlobalContext";
 import DetermineWorkflow from "../screens/DetermineWorkflow";
 import HomeScreen from "../screens/HomeScreen";
 import { IneligibleScreen } from "../screens/IneligibleScreen";
 import LandingScreen from "../screens/LandingScreen";
+import Loading from "../screens/Loading";
 
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
@@ -43,8 +48,14 @@ export default function Navigation({
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
+    const { checkingForSession } = React.useContext(GlobalContext);
     return (
-        <Stack.Navigator initialRouteName="Landing">
+        <Stack.Navigator initialRouteName="Loading">
+            <Stack.Screen
+                name="Loading"
+                component={Loading}
+                options={{ headerShown: false }}
+            />
             <Stack.Screen
                 name="Landing"
                 component={LandingScreen}

@@ -1,15 +1,21 @@
 import { StyleSheet } from "react-native";
-import React from "react";
+import React, { useContext, useEffect } from "react";
 
 import { Box, Button, Center, Heading, Spacer, View } from "native-base";
 import { useDocumentUpload } from "../hooks/useDocumentUpload";
 import { ActivityIndicator, ProgressBar } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useDocumentDownload } from "../hooks/useDocumentDownload";
+import { useLogin } from "../hooks/useLogin";
+import { GlobalContext } from "../contexts/GlobalContext";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../types";
 
-type Props = {};
+type Props = {
+    navigation: StackNavigationProp<RootStackParamList, "Home">;
+};
 
-const HomeScreen = (props: Props) => {
+const HomeScreen = ({ navigation }: Props) => {
     const {
         openDocumentPicker,
         isLoading,
@@ -22,6 +28,14 @@ const HomeScreen = (props: Props) => {
         downloadDocument,
         progress: downloadProgress,
     } = useDocumentDownload();
+    const { logout } = useLogin();
+    const { sessionId, checkedForSession } = useContext(GlobalContext);
+
+    useEffect(() => {
+        if (checkedForSession && sessionId == "") {
+            navigation.navigate("Landing");
+        }
+    }, [checkedForSession, sessionId]);
     return (
         <View py={50} flex={1} justifyContent="center" alignItems={"center"}>
             <View>
@@ -54,6 +68,9 @@ const HomeScreen = (props: Props) => {
                         <ProgressBar progress={downloadProgress} />
                     )}
                 </Button>
+            </View>
+            <View>
+                <Button onPress={logout}>Logout</Button>
             </View>
         </View>
     );

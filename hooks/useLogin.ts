@@ -1,10 +1,17 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext, useState } from "react";
 import { url } from "../constants/Urls";
 import { GlobalContext } from "../contexts/GlobalContext";
 
 export const useLogin = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const { setUserId, sessionId } = useContext(GlobalContext);
+    const { setUserId, sessionId, setSessionId } = useContext(GlobalContext);
+
+    const logout = () => {
+        setUserId("");
+        setSessionId("");
+        AsyncStorage.clear();
+    };
 
     const login = async (userId: string) => {
         setIsLoading(true);
@@ -39,5 +46,5 @@ export const useLogin = () => {
         setIsLoading(false);
     };
 
-    return { login, isLoading };
+    return { login, logout, isLoading };
 };
