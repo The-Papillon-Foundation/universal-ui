@@ -15,7 +15,7 @@ export const useDocumentUpload = () => {
     const openDocumentPicker = () => {
         DocumentPicker.getDocumentAsync().then((documentResult) => {
             setDocumentResult(documentResult);
-            console.log;
+            console.log(documentResult);
         });
     };
 
@@ -30,7 +30,7 @@ export const useDocumentUpload = () => {
             data.append(documentResult.name, documentResult.file);
             setIsLoading(true);
             try {
-                const res = await fetch(`${url}documents`, {
+                const res = await fetch(`${url}/documents`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "multipart/form-data",

@@ -4,11 +4,11 @@ import { useQuery } from "react-query";
 import { WorkflowPayload } from "../types";
 import { url } from "../constants/Urls";
 
-const workflowUrl = `${url}workflows/`;
+const workflowUrl = `${url}/workflows/`;
 
 const fetchWorkflow = async (stateName: string) => {
     const res = await fetch(workflowUrl + stateName, { mode: "cors" });
-    console.log(res);
+    console.log(res.status);
     return res.json();
 };
 

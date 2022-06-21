@@ -9,17 +9,17 @@ const updateSession = async (
     },
     sessionId: string
 ) => {
-    const res = await fetch(`${url}workflow-sessions`, {
+    const res = await fetch(`${url}/workflow-sessions`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            update,
+            sessionStateUpdate: update,
             sessionId,
         }),
     });
-    console.log(res);
+    console.log(res.url, res.status);
     return res.json();
 };
 

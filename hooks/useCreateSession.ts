@@ -13,7 +13,7 @@ const fetchCreateSession = async (workflowId: string) => {
             workflowId,
         }),
     });
-    console.log(res);
+    console.log(res.url, res.status);
     return res.json();
 };
 
@@ -24,7 +24,6 @@ export const useCreateSession = (workflowId: string) => {
     );
 
     useEffect(() => {
-        console.log("data", data);
         if (
             !isLoading &&
             data != undefined &&
