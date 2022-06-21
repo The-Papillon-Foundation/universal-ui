@@ -10,9 +10,13 @@ import {
 export const GlobalContext = createContext<{
     sessionId: string;
     setSessionId: Dispatch<SetStateAction<string>>;
+    userId: string;
+    setUserId: Dispatch<SetStateAction<string>>;
 }>({
     sessionId: "",
     setSessionId: () => {},
+    userId: "",
+    setUserId: () => {},
 });
 
 export const GlobalContextProvider = ({
@@ -21,9 +25,12 @@ export const GlobalContextProvider = ({
     children: ReactNode;
 }) => {
     const [sessionId, setSessionId] = useState("");
+    const [userId, setUserId] = useState("");
 
     return (
-        <GlobalContext.Provider value={{ sessionId, setSessionId }}>
+        <GlobalContext.Provider
+            value={{ sessionId, setSessionId, userId, setUserId }}
+        >
             {children}
         </GlobalContext.Provider>
     );
