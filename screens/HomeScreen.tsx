@@ -69,7 +69,9 @@ const HomeScreen = ({ navigation }: Props) => {
                     )}
                 </Button>
             </View>
+            <View my={20} />
             <View>
+                <Heading>Clear your session data</Heading>
                 <Button onPress={logout}>Logout</Button>
             </View>
         </View>
