@@ -31,6 +31,7 @@ const TextInputQuestion = ({ prompt, handleResponse }: Props) => {
                         setValue("");
                         handleResponse(value);
                     }}
+                    isFocused={true}
                 />
                 <Button
                     bgColor={customTheme.colors["button-surface"]}

@@ -6,7 +6,7 @@ import { url } from "../constants/Urls";
 
 const workflowUrl = `${url}/workflows/`;
 
-const fetchWorkflow = async (stateName: string) => {
+export const fetchWorkflow = async (stateName: string) => {
     const res = await fetch(workflowUrl + stateName, { mode: "cors" });
     console.log(res.status);
     return res.json();
