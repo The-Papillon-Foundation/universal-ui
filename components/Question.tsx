@@ -1,4 +1,4 @@
-import { StyleSheet, Text } from "react-native";
+import { Text } from "react-native";
 import React, { useContext } from "react";
 import YesOrNoQuestion from "./YesOrNoQuestion";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
@@ -12,7 +12,7 @@ import DateQuestion from "./DateQuestion";
 interface Props {
     card: QuestionCard;
     group: QuestionGroup;
-    goNext: () => void;
+    goNext: (id: string | null) => void;
     goIneligible: ({ message }: { message: string }) => void;
 }
 
@@ -23,18 +23,33 @@ const Question = ({ card, group, goNext, goIneligible }: Props) => {
     const handleYesOrNoResponse = (response: "yes" | "no") => {
         updateSession({ [card.id]: response });
         if (response == "yes") {
+            if (card.on_true == "exit") {
+                goIneligible({ message: "" });
+                return;
+            }
             if (card.on_true == null) {
                 setFinishedCardGroups((finishedCardGroups) => [
                     ...finishedCardGroups,
                     group.id,
                 ]);
-                return;
             }
-            goNext();
+
+            goNext(card.on_true);
         } else {
-            goIneligible({
-                message: `Because you answered no on the previous question: \n${card.question.prompt}`,
-            });
+            if (card.on_false != "exit") {
+                if (card.on_false == null) {
+                    setFinishedCardGroups((finishedCardGroups) => [
+                        ...finishedCardGroups,
+                        group.id,
+                    ]);
+                }
+
+                goNext(card.on_false);
+            } else {
+                goIneligible({
+                    message: `Because you answered no on the previous question: \n${card.question.prompt}`,
+                });
+            }
         }
     };
 
@@ -60,30 +75,20 @@ const Question = ({ card, group, goNext, goIneligible }: Props) => {
                 ...finishedCardGroups,
                 group.id,
             ]);
-            return;
         }
-        goNext();
+        goNext(card.on_true);
     };
 
     const handleMultipleChoiceResponse = (value: string) => {
         if (value == "") return;
         updateSession({ [card.id]: value });
-        if (card.question.pass.includes(value)) {
-            if (card.on_true == null) {
-                setFinishedCardGroups((finishedCardGroups) => [
-                    ...finishedCardGroups,
-                    group.id,
-                ]);
-                return;
-            }
-            goNext();
-        } else {
-            goIneligible({
-                message: `Because the only correct answers to the question: \n${
-                    card.question.prompt
-                }\nAre: ${card.question.pass.join(", ")}`,
-            });
+        if (card.on_true == null) {
+            setFinishedCardGroups((finishedCardGroups) => [
+                ...finishedCardGroups,
+                group.id,
+            ]);
         }
+        goNext(card.on_true);
     };
 
     const renderSwitch = () => {
@@ -145,5 +150,3 @@ const Question = ({ card, group, goNext, goIneligible }: Props) => {
 };
 
 export default Question;
-
-const styles = StyleSheet.create({});
