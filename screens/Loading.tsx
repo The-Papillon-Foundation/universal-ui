@@ -23,12 +23,6 @@ const Loading = ({ navigation }: Props) => {
         }
     }, [checkedForSession]);
 
-    useEffect(() => {
-        if (sessionId == "") {
-            navigation.navigate("Landing");
-        }
-    }, [sessionId]);
-
     return (
         <View>
             <ActivityIndicator color="grey" />

@@ -22,6 +22,7 @@ export type RootStackParamList = {
     Home: undefined;
     DetermineWorkflow: undefined;
     Workflow: { stateName: string };
+    Review: undefined;
     Modal: undefined;
     NotFound: undefined;
     Ineligible: { message?: string };
@@ -73,4 +74,15 @@ export interface WorkflowPayload {
     id: string;
     eligibility_module: Module;
     process_module: Module;
+}
+
+export interface SessionState {
+    [key: string]: any;
+}
+
+export interface Session {
+    workflowId: string;
+    sessionId: string;
+    sessionState: SessionState;
+    userId: string;
 }

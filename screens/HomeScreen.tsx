@@ -31,13 +31,22 @@ const HomeScreen = ({ navigation }: Props) => {
     const { logout } = useLogin();
     const { sessionId, checkedForSession } = useContext(GlobalContext);
 
+    const review = () => {
+        navigation.navigate("Review");
+    };
+
     useEffect(() => {
         if (checkedForSession && sessionId == "") {
             navigation.navigate("Landing");
         }
     }, [checkedForSession, sessionId]);
     return (
-        <View py={50} flex={1} justifyContent="center" alignItems={"center"}>
+        <View
+            py={50}
+            flex={1}
+            justifyContent="space-around"
+            alignItems={"center"}
+        >
             <View>
                 <Heading>Upload a document</Heading>
                 {isLoading && <ActivityIndicator color="grey" size="large" />}
@@ -55,7 +64,6 @@ const HomeScreen = ({ navigation }: Props) => {
                     </>
                 )}
             </View>
-            <View my={20} />
             <View>
                 <Heading>Download your document</Heading>
                 <Button onPress={downloadDocument}>
@@ -69,7 +77,10 @@ const HomeScreen = ({ navigation }: Props) => {
                     )}
                 </Button>
             </View>
-            <View my={20} />
+            <View>
+                <Heading>Review your answers</Heading>
+                <Button onPress={review}>Review</Button>
+            </View>
             <View>
                 <Heading>Clear your session data</Heading>
                 <Button onPress={logout}>Logout</Button>

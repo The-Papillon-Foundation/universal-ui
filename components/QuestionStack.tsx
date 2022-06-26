@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Module } from "../types";
-import { Button, Container, Stack, Text, View } from "native-base";
+import { Module, RootStackParamList } from "../types";
+import { Button, View } from "native-base";
 import Question from "./Question";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 type Props = {
     module: Module;
@@ -11,25 +13,38 @@ type Props = {
 const QuestionStack = ({ module }: Props) => {
     const [groupIndex, setGroupIndex] = useState(0);
     const [questionIndex, setQuestionIndex] = useState(0);
+    const navigation =
+        useNavigation<StackNavigationProp<RootStackParamList, "Workflow">>();
 
     const goBack = () => {
         if (questionIndex == 0) return;
         else setQuestionIndex((questionIndex) => questionIndex - 1);
     };
 
-    const goNext = () => {
-        if (questionIndex >= module.card_groups[groupIndex].cards.length - 1) {
+    const skipQuestion = () => {
+        if (questionIndex >= module.card_groups[groupIndex].cards.length - 1)
+            return;
+        else setQuestionIndex((questionIndex) => questionIndex + 1);
+    };
+
+    const goNext = (id: string | null) => {
+        if (id == null) {
             if (groupIndex >= module.card_groups.length - 1) {
                 // All groups answer
             } else {
                 setQuestionIndex(0);
                 setGroupIndex((groupIndex) => groupIndex + 1);
             }
-        } else setQuestionIndex((questionIndex) => questionIndex + 1);
+        } else {
+            const questionIndex = module.card_groups[
+                groupIndex
+            ].cards.findIndex((c) => c.id == id);
+            setQuestionIndex(questionIndex);
+        }
     };
 
     const goIneligible = ({ message }: { message: string }) => {
-        console.log("Ineligible");
+        navigation.navigate("Ineligible", { message });
     };
 
     return (
@@ -43,7 +58,15 @@ const QuestionStack = ({ module }: Props) => {
                 }}
             >
                 <Button onPress={goBack}>Back</Button>
-                <Button onPress={goNext}>Next</Button>
+                <Button
+                    onPress={skipQuestion}
+                    isDisabled={
+                        questionIndex >=
+                        module.card_groups[groupIndex].cards.length - 1
+                    }
+                >
+                    Skip
+                </Button>
             </View>
             <View my={5} />
             <Question

@@ -20,6 +20,7 @@ import Loading from "../screens/Loading";
 
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
+import ReviewScreen from "../screens/ReviewScreen";
 import WorkflowScreen from "../screens/WorkflowScreen";
 import { RootStackParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
@@ -75,6 +76,11 @@ function RootNavigator() {
             <Stack.Screen
                 name="Workflow"
                 component={WorkflowScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="Review"
+                component={ReviewScreen}
                 options={{ headerShown: false }}
             />
             <Stack.Screen
