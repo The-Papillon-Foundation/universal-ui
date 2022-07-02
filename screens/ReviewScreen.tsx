@@ -2,23 +2,34 @@ import { View, Text, ScrollView } from "react-native";
 import React from "react";
 import { useReview } from "../hooks/useReview";
 import { ActivityIndicator } from "react-native-paper";
+import { Button } from "native-base";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../types";
 
-type Props = {};
+type Props = {
+    navigation: StackNavigationProp<RootStackParamList, "Review">;
+};
 
-const ReviewScreen = (props: Props) => {
+const ReviewScreen = ({ navigation }: Props) => {
     const { notSignedIn, loading, error, session, workflow } = useReview();
     return (
         <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+            style={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 5,
+            }}
         >
-            <View style={{ flex: 1 }}>
+            <Button onPress={() => navigation.navigate("Home")}>Go Home</Button>
+            <View style={{ flex: 1, padding: 15 }}>
                 {error && <Text>{JSON.stringify(error)}</Text>}
                 {loading && <ActivityIndicator color="grey" />}
                 {notSignedIn && (
                     <Text>You are not signed in. Go back to Landing.</Text>
                 )}
                 {!loading && session != null && workflow != null && (
-                    <ScrollView>
+                    <ScrollView style={{ padding: 10 }}>
                         {workflow.eligibility_module.card_groups.map(
                             (card_group) => {
                                 return card_group.cards.map((card) => {

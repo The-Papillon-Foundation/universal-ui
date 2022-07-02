@@ -26,6 +26,9 @@ const Workflow = ({ route, navigation }: Props) => {
     const goHome = () => {
         navigation.navigate("Home");
     };
+    const goReview = () => {
+        navigation.navigate("Review");
+    };
 
     const readyForEligibilityModule = () => {
         if (
@@ -108,6 +111,9 @@ const Workflow = ({ route, navigation }: Props) => {
                         <Text textAlign={"center"}>You are done</Text>
                         <Button mx="20" onPress={goHome}>
                             Go Home
+                        </Button>
+                        <Button mx="20" onPress={goReview}>
+                            Review Answers
                         </Button>
                     </>
                 )}
