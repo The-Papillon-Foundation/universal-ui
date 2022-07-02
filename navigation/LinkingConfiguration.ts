@@ -18,6 +18,7 @@ const linking: LinkingOptions<RootStackParamList> = {
             DetermineWorkflow: "determine-workflow",
             Home: "home",
             Workflow: "workflow",
+            Ineligible: "ineligible",
             Review: "review",
             Modal: "modal",
             NotFound: "*",
