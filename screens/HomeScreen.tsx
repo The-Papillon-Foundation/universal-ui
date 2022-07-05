@@ -25,8 +25,10 @@ const HomeScreen = ({ navigation }: Props) => {
     } = useDocumentUpload();
     const {
         isLoading: isDownloadLoading,
-        downloadDocument,
+        prepareDownload,
         progress: downloadProgress,
+        downloadDocument,
+        documentLink,
     } = useDocumentDownload();
     const { logout } = useLogin();
     const { sessionId, checkedForSession } = useContext(GlobalContext);
@@ -66,16 +68,22 @@ const HomeScreen = ({ navigation }: Props) => {
             </View>
             <View>
                 <Heading>Download your document</Heading>
-                <Button onPress={downloadDocument}>
-                    {isDownloadLoading ? (
-                        <ActivityIndicator color="white" />
-                    ) : (
-                        "Download"
-                    )}
-                    {downloadProgress > 0 && (
-                        <ProgressBar progress={downloadProgress} />
-                    )}
-                </Button>
+                {documentLink == "" ? (
+                    <Button onPress={prepareDownload}>
+                        {isDownloadLoading ? (
+                            <ActivityIndicator color="white" />
+                        ) : (
+                            "Prepare Download"
+                        )}
+                        {downloadProgress > 0 && (
+                            <ProgressBar progress={downloadProgress} />
+                        )}
+                    </Button>
+                ) : (
+                    <Button onPress={downloadDocument} bgColor={"success.600"}>
+                        Download pdf
+                    </Button>
+                )}
             </View>
             <View>
                 <Heading>Review your answers</Heading>
