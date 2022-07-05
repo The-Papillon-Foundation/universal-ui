@@ -86,3 +86,32 @@ export interface Session {
     sessionState: SessionState;
     userId: string;
 }
+
+/* Styles JSON */
+export interface StylesJson {
+    colors: Colors;
+    fonts: Fonts;
+}
+
+export interface Colors {
+    primary: string;
+    surface: string;
+    "surface-secondary": string;
+    "on-surface": OnSurface;
+    "button-surface": string;
+    "on-button-surface": string;
+    "date-field-outline-inactive": string;
+    "date-field-outline-active": string;
+    "multi-select-active": string;
+}
+
+export interface OnSurface {
+    heading: string;
+    text: string;
+}
+
+export interface Fonts {
+    default: string;
+    "question-heading": string;
+    "question-text": string;
+}
