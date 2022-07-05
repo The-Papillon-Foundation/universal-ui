@@ -37,7 +37,10 @@ export const GlobalContextProvider = ({
 
     const getSessionId = async () => {
         const sessionId = await AsyncStorage.getItem(sessionIdKey);
-        if (sessionId) setSessionId(sessionId);
+        if (sessionId) {
+            setSessionId(sessionId);
+            setUserId("testing");
+        }
         console.log(sessionId);
         setCheckingForSession(false);
         setCheckedForSession(true);
