@@ -1,24 +1,59 @@
 import React, { useContext, useState } from "react";
-import { Box, Button, Center, Heading, Input, Spacer, View } from "native-base";
+import {
+    Button,
+    FormControl,
+    Heading,
+    Input,
+    Spacer,
+    View,
+    WarningOutlineIcon,
+} from "native-base";
 import { WorkflowContext } from "../contexts/WorkflowContext";
-import QuestionContainer from "./QuestionContainer";
-import { GlobalContext } from "../contexts/GlobalContext";
 import { useLogin } from "../hooks/useLogin";
-import { ActivityIndicator } from "react-native-paper";
+import * as yup from "yup";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../types";
+import { RouteProp } from "@react-navigation/native";
 
-type Props = {};
+const userCreationSchema = yup.object().shape({
+    username: yup
+        .string()
+        .min(4, "Username must be at least 4 characters.")
+        .matches(/^[a-zA-Z0-9]+$/, "No special characters or spaces allowed.")
+        .required(),
+});
 
-const ForceLoginScreen = (props: Props) => {
+type Props = {
+    navigation: StackNavigationProp<RootStackParamList, "CreateUser">;
+    route: RouteProp<RootStackParamList, "CreateUser">;
+};
+
+const ForceLoginScreen = ({ navigation, route }: Props) => {
     const { setIsLoggedIn } = useContext(WorkflowContext);
-    const [value, setValue] = useState("");
+    const [username, setUsername] = useState("");
     const { isLoading, login } = useLogin();
+    const [isInvalid, setIsInvalid] = useState(false);
+    const [error, setError] = useState("");
 
     const handleChange = (value: string) => {
-        setValue(value);
+        setUsername(value);
     };
 
     const handleLogin = () => {
-        login(value).then(() => setIsLoggedIn(true));
+        setIsInvalid(false);
+        setError("");
+        userCreationSchema
+            .validate({ username })
+            .then(() => {
+                login(username).then(() => setIsLoggedIn(true));
+                navigation.navigate("Process", {
+                    stateName: route.params.stateName,
+                });
+            })
+            .catch((err) => {
+                setIsInvalid(true);
+                setError(err.errors);
+            });
     };
     return (
         <View alignItems={"center"} w="100%">
@@ -27,15 +62,25 @@ const ForceLoginScreen = (props: Props) => {
                     You must log in to continue the process
                 </Heading>
                 <Spacer my={2} />
-                <Input
-                    value={value}
-                    onChangeText={handleChange}
-                    placeholder="Enter Your Username"
-                    onSubmitEditing={handleLogin}
-                />
+                <FormControl isInvalid={isInvalid}>
+                    <Input
+                        value={username}
+                        onChangeText={handleChange}
+                        placeholder="Enter Your Username"
+                        onSubmitEditing={handleLogin}
+                        autoFocus
+                        editable={!isLoading}
+                    />
+                    <FormControl.ErrorMessage
+                        alignItems={"flex-start"}
+                        leftIcon={<WarningOutlineIcon size="xs" />}
+                    >
+                        {error}
+                    </FormControl.ErrorMessage>
+                </FormControl>
                 <Spacer my={1} />
-                <Button onPress={handleLogin}>
-                    {isLoading ? <ActivityIndicator /> : "Login"}
+                <Button onPress={handleLogin} isLoading={isLoading}>
+                    Login
                 </Button>
             </View>
         </View>
