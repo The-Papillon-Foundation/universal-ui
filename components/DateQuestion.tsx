@@ -1,13 +1,11 @@
-import { GestureResponderEvent, StyleSheet } from "react-native";
 import React from "react";
-import { Button, Heading, Stack, Text, View } from "native-base";
+import { Button, Stack, Text } from "native-base";
 import { DatePickerInput } from "react-native-paper-dates";
 import { customTheme } from "../papillon-design-system/custom-theme";
-import QuestionContainer from "./QuestionContainer";
 
 type Props = {
     prompt: string;
-    handleResponse: (value: string | Date) => void;
+    handleResponse: (value: Date) => void;
 };
 
 const DateQuestion = ({ prompt, handleResponse }: Props) => {
@@ -26,29 +24,22 @@ const DateQuestion = ({ prompt, handleResponse }: Props) => {
                     value={inputDate}
                     onChange={(d) => setInputDate(d)}
                     inputMode="start"
+                    activeOutlineColor={customTheme.colors.primary[500]}
                     withModal={false}
                     withDateFormatInLabel={false}
                     style={{
                         backgroundColor: "transparent",
-                        borderBottomColor: "yellow",
                         textAlign: "center",
-                        color: "blue",
                         height: 40,
                         justifyContent: "center",
                     }}
                     mode="outlined" //(see react-native-paper docs)
-                    underlineColor={
-                        customTheme.colors["date-field-outline-inactive"]
-                    }
-                    activeUnderlineColor={
-                        customTheme.colors["date-field-outline-active"]
-                    }
+                    autoFocus
                 />
                 {/* </View> */}
                 <Button
                     bgColor={customTheme.colors["button-surface"]}
                     onPress={() => {
-                        console.log("firing");
                         if (inputDate != undefined) handleResponse(inputDate);
                     }}
                 >
@@ -60,5 +51,3 @@ const DateQuestion = ({ prompt, handleResponse }: Props) => {
 };
 
 export default DateQuestion;
-
-const styles = StyleSheet.create({});

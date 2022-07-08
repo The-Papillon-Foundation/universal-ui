@@ -1,5 +1,5 @@
-import { StyleSheet } from "react-native";
-import React, { useState } from "react";
+import { Platform, StyleSheet } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Input, Stack, Text } from "native-base";
 import { customTheme } from "../papillon-design-system/custom-theme";
 
@@ -10,10 +10,17 @@ type Props = {
 
 const TextInputQuestion = ({ prompt, handleResponse }: Props) => {
     const [value, setValue] = useState("");
+    const inputElement = useRef<{ focus: () => void }>(null);
 
     const handleChange = (text: string) => {
         setValue(text);
     };
+
+    useEffect(() => {
+        if (inputElement.current) {
+            inputElement.current.focus();
+        }
+    }, [prompt]);
 
     return (
         <>
@@ -22,6 +29,7 @@ const TextInputQuestion = ({ prompt, handleResponse }: Props) => {
             </Text>
             <Stack direction={"row"} space="2.5" mt="2" px="8">
                 <Input
+                    ref={inputElement}
                     value={value}
                     w="75%"
                     maxW="300px"
@@ -31,7 +39,7 @@ const TextInputQuestion = ({ prompt, handleResponse }: Props) => {
                         setValue("");
                         handleResponse(value);
                     }}
-                    isFocused={true}
+                    autoFocus
                 />
                 <Button
                     bgColor={customTheme.colors["button-surface"]}

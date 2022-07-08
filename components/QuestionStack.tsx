@@ -7,14 +7,17 @@ import { StackNavigationProp } from "@react-navigation/stack";
 
 type Props = {
     module: Module;
-    currentIndex?: number;
+    navigable: boolean;
+    onFinish: () => void;
 };
 
-const QuestionStack = ({ module }: Props) => {
+const QuestionStack = ({ module, navigable, onFinish }: Props) => {
     const [groupIndex, setGroupIndex] = useState(0);
     const [questionIndex, setQuestionIndex] = useState(0);
     const navigation =
-        useNavigation<StackNavigationProp<RootStackParamList, "Workflow">>();
+        useNavigation<
+            StackNavigationProp<RootStackParamList, "Process" | "Eligibility">
+        >();
 
     const goBack = () => {
         if (questionIndex == 0) return;
@@ -57,16 +60,18 @@ const QuestionStack = ({ module }: Props) => {
                     width: "100%",
                 }}
             >
-                <Button onPress={goBack}>Back</Button>
-                <Button
-                    onPress={skipQuestion}
-                    isDisabled={
-                        questionIndex >=
-                        module.card_groups[groupIndex].cards.length - 1
-                    }
-                >
-                    Skip
-                </Button>
+                {navigable && <Button onPress={goBack}>Back</Button>}
+                {navigable && (
+                    <Button
+                        onPress={skipQuestion}
+                        isDisabled={
+                            questionIndex >=
+                            module.card_groups[groupIndex].cards.length - 1
+                        }
+                    >
+                        Skip
+                    </Button>
+                )}
             </View>
             <View my={5} />
             <Question
@@ -74,6 +79,7 @@ const QuestionStack = ({ module }: Props) => {
                 group={module.card_groups[groupIndex]}
                 goNext={goNext}
                 goIneligible={goIneligible}
+                onFinish={onFinish}
             />
         </View>
     );

@@ -7,12 +7,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
 import {
     GlobalContext,
     GlobalContextProvider,
 } from "../contexts/GlobalContext";
+import CreateUserScreen from "../screens/CreateUserScreen";
 import DetermineWorkflow from "../screens/DetermineWorkflow";
+import EligibilityScreen from "../screens/EligibilityScreen";
 import HomeScreen from "../screens/HomeScreen";
 import { IneligibleScreen } from "../screens/IneligibleScreen";
 import LandingScreen from "../screens/LandingScreen";
@@ -20,8 +21,8 @@ import Loading from "../screens/Loading";
 
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
+import ProcessScreen from "../screens/ProcessScreen";
 import ReviewScreen from "../screens/ReviewScreen";
-import WorkflowScreen from "../screens/WorkflowScreen";
 import { RootStackParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 
@@ -51,42 +52,26 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
     const { checkingForSession } = React.useContext(GlobalContext);
     return (
-        <Stack.Navigator initialRouteName="Loading">
-            <Stack.Screen
-                name="Loading"
-                component={Loading}
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
-                name="Landing"
-                component={LandingScreen}
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
-                name="Home"
-                component={HomeScreen}
-                options={{ headerShown: false }}
-            />
+        <Stack.Navigator
+            initialRouteName="Loading"
+            screenOptions={{ headerShown: false }}
+        >
+            <Stack.Screen name="Loading" component={Loading} />
+            <Stack.Screen name="Landing" component={LandingScreen} />
+            <Stack.Screen name="Home" component={HomeScreen} />
 
             <Stack.Screen
                 name="DetermineWorkflow"
                 component={DetermineWorkflow}
-                options={{ headerShown: false }}
             />
-            <Stack.Screen
-                name="Workflow"
-                component={WorkflowScreen}
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
-                name="Review"
-                component={ReviewScreen}
-                options={{ headerShown: false }}
-            />
+            <Stack.Screen name="Eligibility" component={EligibilityScreen} />
+            <Stack.Screen name="CreateUser" component={CreateUserScreen} />
+            <Stack.Screen name="Process" component={ProcessScreen} />
+            <Stack.Screen name="Review" component={ReviewScreen} />
             <Stack.Screen
                 name="Ineligible"
                 component={IneligibleScreen}
-                options={{ headerShown: false }}
+                options={{ headerShown: true }}
             />
             <Stack.Screen
                 name="NotFound"
