@@ -14,9 +14,10 @@ interface Props {
     group: QuestionGroup;
     goNext: (id: string | null) => void;
     goIneligible: ({ message }: { message: string }) => void;
+    onFinish: () => void;
 }
 
-const Question = ({ card, group, goNext, goIneligible }: Props) => {
+const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
     const { setFinishedCardGroups } = useContext(WorkflowContext);
     const { updateSession } = useUpdateSession();
 
@@ -28,20 +29,14 @@ const Question = ({ card, group, goNext, goIneligible }: Props) => {
                 return;
             }
             if (card.on_true == null) {
-                setFinishedCardGroups((finishedCardGroups) => [
-                    ...finishedCardGroups,
-                    group.id,
-                ]);
+                onFinish();
             }
 
             goNext(card.on_true);
         } else {
             if (card.on_false != "exit") {
                 if (card.on_false == null) {
-                    setFinishedCardGroups((finishedCardGroups) => [
-                        ...finishedCardGroups,
-                        group.id,
-                    ]);
+                    onFinish();
                 }
 
                 goNext(card.on_false);
@@ -71,10 +66,7 @@ const Question = ({ card, group, goNext, goIneligible }: Props) => {
             return;
         }
         if (card.on_true == null) {
-            setFinishedCardGroups((finishedCardGroups) => [
-                ...finishedCardGroups,
-                group.id,
-            ]);
+            onFinish();
         }
         goNext(card.on_true);
     };
@@ -83,10 +75,7 @@ const Question = ({ card, group, goNext, goIneligible }: Props) => {
         if (value == "") return;
         updateSession({ [card.id]: value });
         if (card.on_true == null) {
-            setFinishedCardGroups((finishedCardGroups) => [
-                ...finishedCardGroups,
-                group.id,
-            ]);
+            onFinish();
         }
         goNext(card.on_true);
     };

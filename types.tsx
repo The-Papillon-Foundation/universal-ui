@@ -21,7 +21,9 @@ export type RootStackParamList = {
     Landing: undefined;
     Home: undefined;
     DetermineWorkflow: undefined;
-    Workflow: { stateName: string };
+    Eligibility: { stateName: string };
+    CreateUser: { stateName: string };
+    Process: { stateName: string };
     Review: undefined;
     Modal: undefined;
     NotFound: undefined;
