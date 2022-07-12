@@ -1,6 +1,7 @@
 import * as DocumentPicker from "expo-document-picker";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { url } from "../constants/Urls";
+import { GlobalContext } from "../contexts/GlobalContext";
 
 const documentPickerOptions: DocumentPicker.DocumentPickerOptions = {
     type: "application/pdf",
@@ -8,6 +9,7 @@ const documentPickerOptions: DocumentPicker.DocumentPickerOptions = {
 };
 
 export const useDocumentUpload = () => {
+    const { userId } = useContext(GlobalContext);
     const [documentResult, setDocumentResult] =
         useState<DocumentPicker.DocumentResult | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -34,7 +36,7 @@ export const useDocumentUpload = () => {
                     method: "POST",
                     headers: {
                         "Content-Type": "multipart/form-data",
-                        "X-Papillon-User-Id": "test-id",
+                        "X-Papillon-User-Id": userId,
                         "X-Papillon-File-Name": documentResult.name,
                     },
                     body: data,
