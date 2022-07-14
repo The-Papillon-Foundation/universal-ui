@@ -13,9 +13,11 @@ export const useDocumentUpload = () => {
     const [documentResult, setDocumentResult] =
         useState<DocumentPicker.DocumentResult | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [isUploaded, setIsUploaded] = useState(false);
 
     const openDocumentPicker = () => {
         DocumentPicker.getDocumentAsync().then((documentResult) => {
+            setIsUploaded(false);
             setDocumentResult(documentResult);
             console.log(documentResult);
         });
@@ -32,16 +34,21 @@ export const useDocumentUpload = () => {
             data.append(documentResult.name, documentResult.file);
             setIsLoading(true);
             try {
+                console.log(userId);
                 const res = await fetch(`${url}/documents`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "multipart/form-data",
+                        "Content-Length": documentResult.size?.toString() || "",
                         "X-Papillon-User-Id": userId,
                         "X-Papillon-File-Name": documentResult.name,
                     },
                     body: data,
                 });
                 console.log(res);
+                if (res.status == 201) {
+                    setIsUploaded(true);
+                }
             } catch (error) {
                 alert(error);
             }
@@ -53,6 +60,7 @@ export const useDocumentUpload = () => {
         openDocumentPicker,
         documentResult,
         isLoading,
+        isUploaded,
         documentSelected: documentResult ? true : false,
         uploadDocument,
     };
