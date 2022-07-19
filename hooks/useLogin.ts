@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext, useState } from "react";
+import { userIdKey } from "../constants/LocalStorage";
 import { url } from "../constants/Urls";
 import { GlobalContext } from "../contexts/GlobalContext";
 
@@ -16,6 +17,7 @@ export const useLogin = () => {
     const login = async (userId: string) => {
         setIsLoading(true);
         setUserId(userId);
+        AsyncStorage.setItem(userIdKey, userId);
         try {
             const res = await fetch(`${url}/users`, {
                 method: "POST",

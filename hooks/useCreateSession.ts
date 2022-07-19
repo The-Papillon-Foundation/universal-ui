@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { url } from "../constants/Urls";
 import { GlobalContext } from "../contexts/GlobalContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { sessionIdKey } from "../constants/LocalStorate";
+import { sessionIdKey } from "../constants/LocalStorage";
 
 const fetchCreateSession = async (workflowId: string) => {
     const res = await fetch(`${url}/workflow-sessions`, {

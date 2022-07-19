@@ -7,7 +7,7 @@ import {
     useState,
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { sessionIdKey } from "../constants/LocalStorate";
+import { sessionIdKey, userIdKey } from "../constants/LocalStorage";
 
 export const GlobalContext = createContext<{
     sessionId: string;
@@ -37,9 +37,12 @@ export const GlobalContextProvider = ({
 
     const getSessionId = async () => {
         const sessionId = await AsyncStorage.getItem(sessionIdKey);
+        const userId = await AsyncStorage.getItem(userIdKey);
         if (sessionId) {
             setSessionId(sessionId);
-            setUserId("testing");
+        }
+        if (userId) {
+            setUserId(userId);
         }
         console.log(sessionId);
         setCheckingForSession(false);

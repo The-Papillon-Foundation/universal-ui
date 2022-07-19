@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import React, { useContext, useEffect } from "react";
 
-import { Box, Button, Center, Heading, Spacer, View } from "native-base";
+import { Box, Button, Center, Heading, Spacer, Text, View } from "native-base";
 import { useDocumentUpload } from "../hooks/useDocumentUpload";
 import { ActivityIndicator, ProgressBar } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -19,6 +19,7 @@ const HomeScreen = ({ navigation }: Props) => {
     const {
         openDocumentPicker,
         isLoading,
+        isUploaded,
         uploadDocument,
         documentSelected,
         documentResult,
@@ -60,9 +61,16 @@ const HomeScreen = ({ navigation }: Props) => {
                     <>
                         <Heading>{documentResult.name}</Heading>
                         <Spacer my={1} />
-                        <Button onPress={uploadDocument}>
-                            Upload document
-                        </Button>
+                        {!isUploaded && (
+                            <Button onPress={uploadDocument}>
+                                Upload document
+                            </Button>
+                        )}
+                        {isUploaded && (
+                            <Text color="success.500" textAlign={"center"}>
+                                Your document has been successfully uploaded.
+                            </Text>
+                        )}
                     </>
                 )}
             </View>
