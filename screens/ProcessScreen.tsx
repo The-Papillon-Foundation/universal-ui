@@ -8,6 +8,7 @@ import QuestionStack from "../components/QuestionStack";
 import { ActivityIndicator } from "react-native-paper";
 import { customTheme } from "../hooks/useCachedResources";
 import { View } from "native-base";
+import useProcessModules from "../hooks/useProcessModules";
 
 type Props = {
     route: RouteProp<RootStackParamList, "Process">;
@@ -16,7 +17,9 @@ type Props = {
 
 const ProcessScreen = ({ route, navigation }: Props) => {
     // fetch eligibility module
-    const { error, isLoading, data } = useWorkflow(route.params.stateName!);
+    const { error, isLoading, processModules } = useProcessModules(
+        route.params.stateName!
+    );
     // creates a session and stores it in global context
     useCreateSession(route.params.stateName!);
 
@@ -32,9 +35,9 @@ const ProcessScreen = ({ route, navigation }: Props) => {
                     color={customTheme.colors.primary[500]}
                 />
             )}
-            {data != undefined && data.eligibility_module != undefined && (
+            {processModules != undefined && (
                 <QuestionStack
-                    module={data.process_module}
+                    module={processModules}
                     navigable={true}
                     onFinish={onFinish}
                 />

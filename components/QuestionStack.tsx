@@ -33,7 +33,8 @@ const QuestionStack = ({ module, navigable, onFinish }: Props) => {
     const goNext = (id: string | null) => {
         if (id == null) {
             if (groupIndex >= module.card_groups.length - 1) {
-                // All groups answer
+                // All groups answered
+                onFinish();
             } else {
                 setQuestionIndex(0);
                 setGroupIndex((groupIndex) => groupIndex + 1);
