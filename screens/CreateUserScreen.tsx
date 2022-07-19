@@ -15,8 +15,6 @@ type Props = {
 };
 
 const CreateUserScreen = ({ route, navigation }: Props) => {
-    // fetch eligibility module
-    const { error, isLoading, data } = useWorkflow(route.params.stateName!);
     // creates a session and stores it in global context
     useCreateSession(route.params.stateName!);
 
@@ -26,12 +24,6 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
 
     return (
         <View flex={1} justifyContent="center" alignContent={"center"}>
-            {isLoading && (
-                <ActivityIndicator
-                    size="large"
-                    color={customTheme.colors.primary[500]}
-                />
-            )}
             <ForceLoginScreen navigation={navigation} route={route} />
         </View>
     );

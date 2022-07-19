@@ -28,17 +28,10 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                 goIneligible({ message: "" });
                 return;
             }
-            if (card.on_true == null) {
-                onFinish();
-            }
 
             goNext(card.on_true);
         } else {
             if (card.on_false != "exit") {
-                if (card.on_false == null) {
-                    onFinish();
-                }
-
                 goNext(card.on_false);
             } else {
                 goIneligible({
@@ -65,18 +58,12 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
             });
             return;
         }
-        if (card.on_true == null) {
-            onFinish();
-        }
         goNext(card.on_true);
     };
 
     const handleMultipleChoiceResponse = (value: string) => {
         if (value == "") return;
         updateSession({ [card.id]: value });
-        if (card.on_true == null) {
-            onFinish();
-        }
         goNext(card.on_true);
     };
 

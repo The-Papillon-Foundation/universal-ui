@@ -29,7 +29,6 @@ type Props = {
 };
 
 const ForceLoginScreen = ({ navigation, route }: Props) => {
-    const { setIsLoggedIn } = useContext(WorkflowContext);
     const [username, setUsername] = useState("");
     const { isLoading, login } = useLogin();
     const [isInvalid, setIsInvalid] = useState(false);
@@ -45,7 +44,7 @@ const ForceLoginScreen = ({ navigation, route }: Props) => {
         userCreationSchema
             .validate({ username })
             .then(() => {
-                login(username).then(() => setIsLoggedIn(true));
+                login(username);
                 navigation.navigate("Process", {
                     stateName: route.params.stateName,
                 });
