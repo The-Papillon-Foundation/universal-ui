@@ -41,7 +41,6 @@ const MultiSelectQuestion = ({
                 color={customTheme.colors["on-surface"].text}
                 fontFamily={"question-text"}
                 textAlign={"center"}
-                w={"300"}
             >
                 {prompt}
             </Text>

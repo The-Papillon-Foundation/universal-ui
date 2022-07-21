@@ -31,8 +31,6 @@ const TextInputQuestion = ({ prompt, handleResponse }: Props) => {
                 <Input
                     ref={inputElement}
                     value={value}
-                    w="75%"
-                    maxW="300px"
                     onChangeText={handleChange}
                     placeholder="Value Controlled Input"
                     onSubmitEditing={() => {

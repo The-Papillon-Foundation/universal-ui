@@ -8,7 +8,7 @@ type Props = {
 };
 
 const QuestionContainer: React.FC<Props> = ({ children }) => {
-    return <Container centerContent>{children}</Container>;
+    return <View>{children}</View>;
 };
 
 export default QuestionContainer;

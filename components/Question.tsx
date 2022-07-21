@@ -8,6 +8,7 @@ import { useUpdateSession } from "../hooks/useUpdateSession";
 import { WorkflowContext } from "../contexts/WorkflowContext";
 import { QuestionCard, QuestionGroup } from "../types";
 import DateQuestion from "./DateQuestion";
+import AddressQuestion, { AddressFieldObject } from "./AddressQuestion";
 
 interface Props {
     card: QuestionCard;
@@ -39,6 +40,12 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                 });
             }
         }
+    };
+
+    const handleAddressResponse = (addressFieldObject: AddressFieldObject) => {
+        // input is already validated
+        updateSession({ [card.id]: addressFieldObject });
+        goNext(card.on_true);
     };
 
     const handleTextInputResponse = (value: string | Date) => {
@@ -79,9 +86,9 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                     );
                 case "Address":
                     return (
-                        <TextInputQuestion
+                        <AddressQuestion
                             prompt={card.question.prompt}
-                            handleResponse={handleTextInputResponse}
+                            handleResponse={handleAddressResponse}
                         />
                     );
                 case "Text":
