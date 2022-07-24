@@ -19,6 +19,18 @@ export const useReview = () => {
             );
             const sessionJson = await sessionRes.json();
             console.log(sessionJson);
+            Object.keys(sessionJson.sessionState).forEach((key) => {
+                if (
+                    typeof sessionJson.sessionState[key] == "object" &&
+                    sessionJson.sessionState[key] != null
+                ) {
+                    // combine address object in string
+                    let obj = sessionJson.sessionState[key];
+                    sessionJson.sessionState[key] = `${obj.address1}${
+                        obj.address2 != "" ? ", " + obj.address2 + " " : ""
+                    } ${obj.city}, ${obj.state}, ${obj.zip}`;
+                }
+            });
             setSession(sessionJson);
             // fetch workflow
             const workflowJson = await fetchWorkflow(sessionJson.workflowId);

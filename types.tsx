@@ -28,6 +28,7 @@ export type RootStackParamList = {
     Modal: undefined;
     NotFound: undefined;
     Ineligible: { message?: string };
+    Debug: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -116,4 +117,58 @@ export interface Fonts {
     default: string;
     "question-heading": string;
     "question-text": string;
+}
+
+// Geoapify Types
+export interface AddressAutocompleteResponse {
+    features: AddressAutocompleteFeature[];
+}
+
+export interface AddressAutocompleteFeature {
+    type: string;
+    properties: Properties;
+    geometry: Geometry;
+    bbox: number[];
+}
+
+export interface Properties {
+    datasource: Datasource;
+    housenumber?: string;
+    street: string;
+    suburb?: string;
+    county: string;
+    state: string;
+    postcode?: string;
+    country: string;
+    country_code: string;
+    lon: number;
+    lat: number;
+    state_code: string;
+    formatted: string;
+    address_line1: string;
+    address_line2: string;
+    category?: string;
+    result_type: string;
+    rank: Rank;
+    place_id: string;
+    name?: string;
+    city?: string;
+}
+
+export interface Datasource {
+    sourcename: string;
+    attribution: string;
+    license: string;
+    url: string;
+}
+
+export interface Rank {
+    importance: number;
+    confidence: number;
+    match_type: string;
+}
+
+export interface Geometry {
+    type: string;
+    coordinates: number[];
 }

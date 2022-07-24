@@ -22,6 +22,7 @@ const linking: LinkingOptions<RootStackParamList> = {
             Home: "home",
             Ineligible: "ineligible",
             Review: "review",
+            Debug: "debug",
             Modal: "modal",
             NotFound: "*",
         },
