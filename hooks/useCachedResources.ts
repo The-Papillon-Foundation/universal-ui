@@ -46,6 +46,11 @@ const applyRemoteStyles = (stylesJson: StylesJson) => {
             "question-heading": stylesJson.fonts["question-heading"],
             "question-text": stylesJson.fonts["question-text"],
         },
+        image_urls: {
+            logo: stylesJson.image_urls.logo,
+            logo_small: stylesJson.image_urls.logo_small,
+            logo_xsmall: stylesJson.image_urls.logo_xsmall,
+        },
     });
 };
 

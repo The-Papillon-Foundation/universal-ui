@@ -94,6 +94,13 @@ export interface Session {
 export interface StylesJson {
     colors: Colors;
     fonts: Fonts;
+    image_urls: ImageUrls;
+}
+
+export interface ImageUrls {
+    logo: string;
+    logo_small: string;
+    logo_xsmall: string;
 }
 
 export interface Colors {
