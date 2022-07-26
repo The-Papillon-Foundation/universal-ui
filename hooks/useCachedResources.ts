@@ -63,6 +63,9 @@ export default function useCachedResources() {
                 await Font.loadAsync({
                     ...FontAwesome.font,
                     "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf"),
+                    "sf-pro": require("../assets/fonts/SFPRODISPLAYREGULAR.OTF"),
+                    "sf-pro-medium": require("../assets/fonts/SFPRODISPLAYMEDIUM.OTF"),
+                    "sf-pro-bold": require("../assets/fonts/SFPRODISPLAYBOLD.OTF"),
                 });
                 const stylesResponse = await fetch(
                     `${url}/styles/${styleName}`
