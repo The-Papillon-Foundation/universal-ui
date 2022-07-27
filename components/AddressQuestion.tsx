@@ -6,6 +6,7 @@ import {
     FormControl,
     Heading,
     Input,
+    ScrollView,
     Select,
     Stack,
     Text,
@@ -19,6 +20,7 @@ import {
 } from "../types";
 import * as yup from "yup";
 import states from "../assets/data/states.json";
+import QuestionButton from "./QuestionButton";
 
 type Props = {
     prompt: string;
@@ -154,7 +156,7 @@ const AddressQuestion = ({ prompt, handleResponse }: Props) => {
     }, [prompt]);
 
     return (
-        <>
+        <ScrollView showsVerticalScrollIndicator={false} mt="10%">
             <Heading textAlign={"center"}>{prompt}</Heading>
             <Stack direction={"column"} space="2.5" mt="2" px="8">
                 {Object.keys(fields).map((field_key, index) => (
@@ -218,23 +220,19 @@ const AddressQuestion = ({ prompt, handleResponse }: Props) => {
                         </FormControl.ErrorMessage>
                     </FormControl>
                 ))}
-                <Button
-                    bgColor={customTheme.colors["button-surface"]}
-                    color={customTheme.colors["on-button-surface"]}
+                <QuestionButton
                     onPress={() => {
                         getAutoComplete();
                     }}
                 >
                     Search for address
-                </Button>
-                <Button
-                    bgColor={customTheme.colors["button-surface"]}
-                    color={customTheme.colors["on-button-surface"]}
+                </QuestionButton>
+                <QuestionButton
                     onPress={validateAddress}
                     isLoading={validatingAddress}
                 >
                     Submit
-                </Button>
+                </QuestionButton>
                 <View>
                     {loadingSuggestions && <ActivityIndicator />}
                     {suggestions.length > 0 && (
@@ -263,7 +261,7 @@ const AddressQuestion = ({ prompt, handleResponse }: Props) => {
                     ))}
                 </View>
             </Stack>
-        </>
+        </ScrollView>
     );
 };
 
