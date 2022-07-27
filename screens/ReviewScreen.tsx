@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Platform } from "react-native";
 import React from "react";
 import { useReview } from "../hooks/useReview";
 import { ActivityIndicator } from "react-native-paper";
@@ -19,6 +19,7 @@ const ReviewScreen = ({ navigation }: Props) => {
                 alignItems: "center",
                 justifyContent: "center",
                 padding: 5,
+                paddingTop: Platform.OS == "web" ? 5 : 35,
             }}
         >
             <Button onPress={() => navigation.navigate("Home")}>Go Home</Button>
