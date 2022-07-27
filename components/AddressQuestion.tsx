@@ -234,7 +234,7 @@ const AddressQuestion = ({ prompt, handleResponse }: Props) => {
                     isLoading={validatingAddress}
                 >
                     Submit
-                </Button>{" "}
+                </Button>
                 <View>
                     {loadingSuggestions && <ActivityIndicator />}
                     {suggestions.length > 0 && (
