@@ -53,17 +53,21 @@ const QuestionStack = ({ module, navigable, onFinish }: Props) => {
     };
 
     return (
-        <View flex={1} justifyContent={"center"}>
-            <Question
-                card={module.card_groups[groupIndex].cards[questionIndex]}
-                group={module.card_groups[groupIndex]}
-                goNext={goNext}
-                goIneligible={goIneligible}
-                onFinish={onFinish}
-            />
-            <View my={"5px"} />
+        <View flex={1}>
+            <View flex={10} justifyContent={"center"}>
+                <Question
+                    card={module.card_groups[groupIndex].cards[questionIndex]}
+                    group={module.card_groups[groupIndex]}
+                    goNext={goNext}
+                    goIneligible={goIneligible}
+                    onFinish={onFinish}
+                />
+            </View>
+
+            <View my={"15px"} />
             <View
-                px={10}
+                flex={1}
+                px={"10px"}
                 style={{
                     flexDirection: "row",
                     justifyContent: "space-between",

@@ -9,6 +9,7 @@ type Props = {
 const QuestionContainer: React.FC<Props> = ({ children }) => {
     return (
         <View
+            flex={1}
             bgColor={"white"}
             w={{ base: "100%", md: "75%" }}
             maxW={900}
