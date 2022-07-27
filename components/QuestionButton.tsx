@@ -16,6 +16,7 @@ const QuestionButton = ({ onPress, children, isLoading = false }: Props) => {
             color={"white"}
             onPress={onPress}
             borderRadius={4}
+            flex={1}
         >
             {children}
         </Button>

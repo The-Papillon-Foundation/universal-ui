@@ -15,7 +15,7 @@ const YesOrNoQuestion = ({ prompt, handleResponse }: Props) => {
             <QuestionPrompt>{prompt}</QuestionPrompt>
             <Stack
                 direction={{ base: "column", md: "row" }}
-                justifyContent={"flex-start"}
+                justifyContent={"space-between"}
                 space="2.5"
                 mt="2"
             >

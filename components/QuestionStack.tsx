@@ -53,7 +53,7 @@ const QuestionStack = ({ module, navigable, onFinish }: Props) => {
     };
 
     return (
-        <View>
+        <View flex={1} justifyContent={"center"}>
             <Question
                 card={module.card_groups[groupIndex].cards[questionIndex]}
                 group={module.card_groups[groupIndex]}
