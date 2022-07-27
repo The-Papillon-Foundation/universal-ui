@@ -1,4 +1,9 @@
-import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
+import {
+    ActivityIndicator,
+    StyleSheet,
+    TouchableOpacity,
+    ScrollView,
+} from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import {
     Button,
@@ -6,7 +11,6 @@ import {
     FormControl,
     Heading,
     Input,
-    ScrollView,
     Select,
     Stack,
     Text,
@@ -156,7 +160,7 @@ const AddressQuestion = ({ prompt, handleResponse }: Props) => {
     }, [prompt]);
 
     return (
-        <ScrollView showsVerticalScrollIndicator={false} mt="10%">
+        <ScrollView showsVerticalScrollIndicator={false}>
             <Heading textAlign={"center"}>{prompt}</Heading>
             <Stack direction={"column"} space="2.5" mt="2" px="8">
                 {Object.keys(fields).map((field_key, index) => (
