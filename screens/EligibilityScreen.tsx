@@ -9,6 +9,9 @@ import { ActivityIndicator } from "react-native-paper";
 import { customTheme } from "../hooks/useCachedResources";
 import { View } from "native-base";
 import useEligibilityModule from "../hooks/useEligibilityModule";
+import Navbar from "../components/Navbar";
+import QuestionContainer from "../components/QuestionContainer";
+import ScreenWithNavbar from "../components/ScreenWithNavbar";
 
 type Props = {
     route: RouteProp<RootStackParamList, "Eligibility">;
@@ -34,21 +37,23 @@ const EligibilityScreen = ({ route, navigation }: Props) => {
     }, [eligibilityModule]);
 
     return (
-        <View flex={1} justifyContent="center" alignContent={"center"}>
-            {isLoading && (
-                <ActivityIndicator
-                    size="large"
-                    color={customTheme.colors.primary[500]}
-                />
-            )}
-            {eligibilityModule != undefined && (
-                <QuestionStack
-                    module={eligibilityModule}
-                    navigable={false}
-                    onFinish={onFinish}
-                />
-            )}
-        </View>
+        <ScreenWithNavbar>
+            <QuestionContainer>
+                {isLoading && (
+                    <ActivityIndicator
+                        size="large"
+                        color={customTheme.colors.primary[500]}
+                    />
+                )}
+                {eligibilityModule != undefined && (
+                    <QuestionStack
+                        module={eligibilityModule}
+                        navigable={false}
+                        onFinish={onFinish}
+                    />
+                )}
+            </QuestionContainer>
+        </ScreenWithNavbar>
     );
 };
 

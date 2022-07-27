@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { Button, Radio, Stack, Text } from "native-base";
 import { customTheme } from "../papillon-design-system/custom-theme";
+import QuestionPrompt from "./QuestionPrompt";
 
 type Props = {
     prompt: string;
@@ -14,14 +15,8 @@ const MultipleChoiceQuestion = ({ prompt, options, handleResponse }: Props) => {
 
     return (
         <>
-            <Text
-                color={customTheme.colors["on-surface"].text}
-                fontFamily={"question-text"}
-                textAlign={"center"}
-            >
-                {prompt}
-            </Text>
-            <Stack space="2.5" mt="2" px="8">
+            <QuestionPrompt>{prompt}</QuestionPrompt>
+            <Stack space="2.5" mt="2">
                 <Radio.Group
                     name={prompt}
                     accessibilityLabel={prompt}

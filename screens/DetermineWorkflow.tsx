@@ -10,10 +10,18 @@ import {
     Select,
     Text,
     View,
+    HStack,
+    Image,
+    HamburgerIcon,
+    useBreakpointValue,
+    Spacer,
 } from "native-base";
 import states from "../assets/data/states.json";
 import { useDetermineWorkflow } from "../hooks/useDetermineWorkflow";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, Platform, TouchableOpacity } from "react-native";
+import { customAssets, customTheme } from "../hooks/useCachedResources";
+import Navbar from "../components/Navbar";
+import ScreenWithNavbar from "../components/ScreenWithNavbar";
 
 interface Props {
     navigation: StackNavigationProp<RootStackParamList, "DetermineWorkflow">;
@@ -21,6 +29,10 @@ interface Props {
 
 const DetermineWorkflow = ({ navigation }: Props) => {
     const { isLoading, workflows, error } = useDetermineWorkflow();
+    const screenSize = useBreakpointValue({
+        base: "base",
+        md: "md",
+    });
     const [checkingForWorkflow, setCheckingForWorkflow] = useState(false);
     const [state, setState] = useState<string | undefined>();
     const handleResponse = () => {
@@ -44,19 +56,22 @@ const DetermineWorkflow = ({ navigation }: Props) => {
         setCheckingForWorkflow(false);
     };
     return (
-        <View flex={1} alignItems={"center"} justifyContent="center">
+        <ScreenWithNavbar>
             <QuestionContainer>
                 {error && <Text color={"danger.500"}>{error as any}</Text>}
                 {isLoading == true && error == undefined ? (
                     <ActivityIndicator color="grey" size={"large"} />
                 ) : (
-                    <Box w="3/4">
-                        <Heading textAlign={"center"}>
+                    <Box>
+                        <Heading
+                            fontFamily={"sf-pro"}
+                            fontSize={{ base: "xl", md: "2xl" }}
+                        >
                             Which state do you live in?
                         </Heading>
                         <Select
                             selectedValue={state}
-                            minWidth="200"
+                            w={{ base: "100%", md: "50%" }}
                             accessibilityLabel="Select a state."
                             placeholder="Select a state."
                             _selectedItem={{
@@ -75,18 +90,20 @@ const DetermineWorkflow = ({ navigation }: Props) => {
                             ))}
                         </Select>
                         <Button
+                            w={{ base: "100%", md: "200px" }}
                             isLoading={checkingForWorkflow}
                             mt={2}
+                            bgColor={customTheme.colors.button_surface}
                             onPress={handleResponse}
                             disabled={state == undefined}
                             isDisabled={state == undefined}
                         >
-                            Submit
+                            Ok
                         </Button>
                     </Box>
                 )}
             </QuestionContainer>
-        </View>
+        </ScreenWithNavbar>
     );
 };
 

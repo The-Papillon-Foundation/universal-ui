@@ -2,6 +2,8 @@ import React from "react";
 import { Button, Stack, Text } from "native-base";
 import { DatePickerInput } from "react-native-paper-dates";
 import { customTheme } from "../papillon-design-system/custom-theme";
+import QuestionPrompt from "./QuestionPrompt";
+import QuestionButton from "./QuestionButton";
 
 type Props = {
     prompt: string;
@@ -14,10 +16,8 @@ const DateQuestion = ({ prompt, handleResponse }: Props) => {
     );
     return (
         <>
-            <Text textAlign={"center"} w={"300"}>
-                {prompt}
-            </Text>
-            <Stack direction={"row"} space="2.5" mt="2" px="8">
+            <QuestionPrompt>{prompt}</QuestionPrompt>
+            <Stack space="2.5" mt="2">
                 {/* <View bg="green.100" height={"30%"}> */}
                 <DatePickerInput
                     locale="en"
@@ -37,14 +37,13 @@ const DateQuestion = ({ prompt, handleResponse }: Props) => {
                     autoFocus
                 />
                 {/* </View> */}
-                <Button
-                    bgColor={customTheme.colors["button-surface"]}
+                <QuestionButton
                     onPress={() => {
                         if (inputDate != undefined) handleResponse(inputDate);
                     }}
                 >
                     Submit
-                </Button>
+                </QuestionButton>
             </Stack>
         </>
     );
