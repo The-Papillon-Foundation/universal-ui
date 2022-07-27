@@ -116,7 +116,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                 default:
                     return (
                         <Text>
-                            Unable to find this type of question:{" "}
+                            Unable to find this type of question:
                             {card.question.type}
                         </Text>
                     );
