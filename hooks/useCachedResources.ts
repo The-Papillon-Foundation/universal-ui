@@ -16,6 +16,7 @@ export let customTheme = extendTheme({
         login_button_surface: "",
         signup_button_surface: "",
         navbar_button: "",
+        mobile_navbar_button: "",
         large_question_screen_background: "",
         mobile_question_screen_background: "",
         org_name_heading: "",
@@ -47,6 +48,7 @@ const applyRemoteStyles = (stylesJson: StylesJson) => {
             login_button_surface: stylesJson.colors.login_button_surface,
             signup_button_surface: stylesJson.colors.signup_button_surface,
             navbar_button: stylesJson.colors.navbar_button,
+            mobile_navbar_button: stylesJson.colors.mobile_navbar_button,
             large_question_screen_background:
                 stylesJson.colors.large_question_screen_background,
             mobile_question_screen_background:
