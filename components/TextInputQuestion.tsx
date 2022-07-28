@@ -1,7 +1,9 @@
 import { Platform, StyleSheet } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Input, Stack, Text } from "native-base";
+import { Button, Input, Spacer, Stack, Text, View } from "native-base";
 import { customTheme } from "../papillon-design-system/custom-theme";
+import QuestionButton from "./QuestionButton";
+import QuestionPrompt from "./QuestionPrompt";
 
 type Props = {
     prompt: string;
@@ -24,31 +26,32 @@ const TextInputQuestion = ({ prompt, handleResponse }: Props) => {
 
     return (
         <>
-            <Text textAlign={"center"} w={"300"}>
-                {prompt}
-            </Text>
-            <Stack direction={"row"} space="2.5" mt="2" px="8">
+            <QuestionPrompt>{prompt}</QuestionPrompt>
+            <Stack direction={"column"} space="24px" mt="2">
                 <Input
                     ref={inputElement}
                     value={value}
                     onChangeText={handleChange}
-                    placeholder="Value Controlled Input"
+                    variant="underlined"
+                    placeholder={prompt}
+                    fontFamily={"sf-pro"}
+                    fontSize={{ base: "md", md: "lg" }}
+                    placeholderTextColor={"#9AB8BF"}
                     onSubmitEditing={() => {
                         setValue("");
                         handleResponse(value);
                     }}
+                    w={{ base: "100%", md: "55%" }}
                     autoFocus
                 />
-                <Button
-                    bgColor={customTheme.colors["button-surface"]}
-                    color={customTheme.colors["on-button-surface"]}
+                <QuestionButton
                     onPress={() => {
                         setValue("");
                         handleResponse(value);
                     }}
                 >
                     Submit
-                </Button>
+                </QuestionButton>
             </Stack>
         </>
     );

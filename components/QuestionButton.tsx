@@ -1,0 +1,28 @@
+import { Button } from "native-base";
+import React from "react";
+import { customTheme } from "../hooks/useCachedResources";
+
+type Props = {
+    onPress: () => void;
+    children: React.ReactNode;
+    isLoading?: boolean;
+};
+
+const QuestionButton = ({ onPress, children, isLoading = false }: Props) => {
+    return (
+        <Button
+            isLoading={isLoading}
+            bgColor={customTheme.colors.button_surface}
+            color={"white"}
+            onPress={onPress}
+            borderRadius={4}
+            flex={1}
+            minH={"45px"}
+            w={{ base: "100%", md: "200px" }}
+        >
+            {children}
+        </Button>
+    );
+};
+
+export default QuestionButton;

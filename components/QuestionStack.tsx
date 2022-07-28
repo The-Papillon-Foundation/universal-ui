@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import { Module, RootStackParamList } from "../types";
-import { Button, View } from "native-base";
+import { View as RNVIEW } from "react-native";
+import { ArrowForwardIcon, Button, View } from "native-base";
 import Question from "./Question";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { customTheme } from "../hooks/useCachedResources";
 
 type Props = {
     module: Module;
@@ -18,6 +20,7 @@ const QuestionStack = ({ module, navigable, onFinish }: Props) => {
         useNavigation<
             StackNavigationProp<RootStackParamList, "Process" | "Eligibility">
         >();
+    const containerRef = useRef<MutableRefObject<typeof View>>(null);
 
     const goBack = () => {
         if (questionIndex == 0) return;
@@ -52,36 +55,61 @@ const QuestionStack = ({ module, navigable, onFinish }: Props) => {
     };
 
     return (
-        <View alignItems={"center"}>
+        <View flex={1} ref={containerRef}>
+            <View flex={10} justifyContent={"center"}>
+                <Question
+                    card={module.card_groups[groupIndex].cards[questionIndex]}
+                    group={module.card_groups[groupIndex]}
+                    goNext={goNext}
+                    goIneligible={goIneligible}
+                    onFinish={onFinish}
+                />
+            </View>
+
             <View
-                px={10}
+                flex={1}
+                px={"10px"}
                 style={{
                     flexDirection: "row",
                     justifyContent: "space-between",
                     width: "100%",
                 }}
             >
-                {navigable && <Button onPress={goBack}>Back</Button>}
                 {navigable && (
                     <Button
+                        position={{ base: undefined, md: "absolute" }}
+                        left={{ md: -100 }}
+                        top={{ md: -200 }}
+                        w="56px"
+                        h="56px"
+                        borderRadius={"50%"}
+                        bgColor={customTheme.colors.arrow_button}
+                        onPress={goBack}
+                    >
+                        <ArrowForwardIcon
+                            style={{ transform: [{ rotateY: "180deg" }] }}
+                        />
+                    </Button>
+                )}
+                {navigable && (
+                    <Button
+                        position={{ base: undefined, md: "absolute" }}
+                        right={{ md: -100 }}
+                        top={{ md: -200 }}
+                        w="56px"
+                        h="56px"
+                        borderRadius={"50%"}
+                        bgColor={customTheme.colors.arrow_button}
                         onPress={skipQuestion}
                         isDisabled={
                             questionIndex >=
                             module.card_groups[groupIndex].cards.length - 1
                         }
                     >
-                        Skip
+                        <ArrowForwardIcon />
                     </Button>
                 )}
             </View>
-            <View my={5} />
-            <Question
-                card={module.card_groups[groupIndex].cards[questionIndex]}
-                group={module.card_groups[groupIndex]}
-                goNext={goNext}
-                goIneligible={goIneligible}
-                onFinish={onFinish}
-            />
         </View>
     );
 };

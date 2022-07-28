@@ -1,7 +1,9 @@
 import React from "react";
-import { Button, Stack, Text } from "native-base";
+import { Button, Stack, Text, useBreakpointValue, View } from "native-base";
 import { DatePickerInput } from "react-native-paper-dates";
 import { customTheme } from "../papillon-design-system/custom-theme";
+import QuestionPrompt from "./QuestionPrompt";
+import QuestionButton from "./QuestionButton";
 
 type Props = {
     prompt: string;
@@ -12,39 +14,47 @@ const DateQuestion = ({ prompt, handleResponse }: Props) => {
     const [inputDate, setInputDate] = React.useState<Date | undefined>(
         undefined
     );
+    const dateFontSize = useBreakpointValue({
+        base: 18,
+        md: 20,
+    });
     return (
         <>
-            <Text textAlign={"center"} w={"300"}>
-                {prompt}
-            </Text>
-            <Stack direction={"row"} space="2.5" mt="2" px="8">
-                {/* <View bg="green.100" height={"30%"}> */}
-                <DatePickerInput
-                    locale="en"
-                    value={inputDate}
-                    onChange={(d) => setInputDate(d)}
-                    inputMode="start"
-                    activeOutlineColor={customTheme.colors.primary[500]}
-                    withModal={false}
-                    withDateFormatInLabel={false}
-                    style={{
-                        backgroundColor: "transparent",
-                        textAlign: "center",
-                        height: 40,
-                        justifyContent: "center",
-                    }}
-                    mode="outlined" //(see react-native-paper docs)
-                    autoFocus
-                />
+            <QuestionPrompt>{prompt}</QuestionPrompt>
+            <Stack space="2.5" mt="2">
+                <View w={{ base: "100%", md: "55%" }}>
+                    <DatePickerInput
+                        locale="en"
+                        value={inputDate}
+                        onChange={(d) => setInputDate(d)}
+                        inputMode="start"
+                        activeUnderlineColor={customTheme.colors.cyan[600]}
+                        withModal={false}
+                        withDateFormatInLabel={false}
+                        style={{
+                            backgroundColor: "transparent",
+                            textAlign: "center",
+                            height: 40,
+                            justifyContent: "center",
+                            fontSize: dateFontSize,
+                        }}
+                        mode="flat" //(see react-native-paper docs)
+                        autoFocus
+                        theme={{
+                            colors: { text: "#9AB8BF" },
+                            fonts: { regular: { fontFamily: "sf-pro" } },
+                        }}
+                    />
+                </View>
+
                 {/* </View> */}
-                <Button
-                    bgColor={customTheme.colors["button-surface"]}
+                <QuestionButton
                     onPress={() => {
                         if (inputDate != undefined) handleResponse(inputDate);
                     }}
                 >
                     Submit
-                </Button>
+                </QuestionButton>
             </Stack>
         </>
     );

@@ -14,6 +14,8 @@ import * as yup from "yup";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types";
 import { RouteProp } from "@react-navigation/native";
+import QuestionButton from "./QuestionButton";
+import QuestionPrompt from "./QuestionPrompt";
 
 const userCreationSchema = yup.object().shape({
     username: yup
@@ -55,20 +57,25 @@ const ForceLoginScreen = ({ navigation, route }: Props) => {
             });
     };
     return (
-        <View alignItems={"center"} w="100%">
-            <View w={300}>
-                <Heading textAlign={"center"}>
+        <View>
+            <View>
+                <QuestionPrompt>
                     You must log in to continue the process
-                </Heading>
+                </QuestionPrompt>
                 <Spacer my={2} />
                 <FormControl isInvalid={isInvalid}>
                     <Input
                         value={username}
+                        variant="underlined"
                         onChangeText={handleChange}
                         placeholder="Enter Your Username"
+                        fontFamily={"sf-pro"}
+                        fontSize={{ base: "md", md: "lg" }}
+                        placeholderTextColor={"#9AB8BF"}
                         onSubmitEditing={handleLogin}
                         autoFocus
                         editable={!isLoading}
+                        w={{ base: "100%", md: "55%" }}
                     />
                     <FormControl.ErrorMessage
                         alignItems={"flex-start"}
@@ -77,10 +84,10 @@ const ForceLoginScreen = ({ navigation, route }: Props) => {
                         {error}
                     </FormControl.ErrorMessage>
                 </FormControl>
-                <Spacer my={1} />
-                <Button onPress={handleLogin} isLoading={isLoading}>
+                <Spacer my={"15px"} />
+                <QuestionButton onPress={handleLogin} isLoading={isLoading}>
                     Login
-                </Button>
+                </QuestionButton>
             </View>
         </View>
     );

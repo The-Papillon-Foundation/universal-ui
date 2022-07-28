@@ -9,6 +9,8 @@ import { ActivityIndicator } from "react-native-paper";
 import { customTheme } from "../hooks/useCachedResources";
 import { View } from "native-base";
 import useProcessModules from "../hooks/useProcessModules";
+import ScreenWithNavbar from "../components/ScreenWithNavbar";
+import QuestionContainer from "../components/QuestionContainer";
 
 type Props = {
     route: RouteProp<RootStackParamList, "Process">;
@@ -28,21 +30,23 @@ const ProcessScreen = ({ route, navigation }: Props) => {
     };
 
     return (
-        <View flex={1} justifyContent="center" alignContent={"center"}>
-            {isLoading && (
-                <ActivityIndicator
-                    size="large"
-                    color={customTheme.colors.primary[500]}
-                />
-            )}
-            {processModules != undefined && (
-                <QuestionStack
-                    module={processModules}
-                    navigable={true}
-                    onFinish={onFinish}
-                />
-            )}
-        </View>
+        <ScreenWithNavbar>
+            <QuestionContainer>
+                {isLoading && (
+                    <ActivityIndicator
+                        size="large"
+                        color={customTheme.colors.primary[500]}
+                    />
+                )}
+                {processModules != undefined && (
+                    <QuestionStack
+                        module={processModules}
+                        navigable={true}
+                        onFinish={onFinish}
+                    />
+                )}
+            </QuestionContainer>
+        </ScreenWithNavbar>
     );
 };
 

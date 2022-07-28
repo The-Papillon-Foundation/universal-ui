@@ -1,7 +1,8 @@
 import { StyleSheet } from "react-native";
 import React from "react";
-import { Button, Stack, Text, VStack } from "native-base";
-import { customTheme } from "../papillon-design-system/custom-theme";
+import { Spacer, Stack } from "native-base";
+import QuestionButton from "./QuestionButton";
+import QuestionPrompt from "./QuestionPrompt";
 
 type Props = {
     prompt: string;
@@ -11,25 +12,21 @@ type Props = {
 const YesOrNoQuestion = ({ prompt, handleResponse }: Props) => {
     return (
         <>
-            <Text textAlign={"center"} w={"300"}>
-                {prompt}
-            </Text>
-            <VStack space="2.5" mt="2" px="8">
-                <Button
-                    bgColor={customTheme.colors["button-surface"]}
-                    color={customTheme.colors["on-button-surface"]}
-                    onPress={() => handleResponse("yes")}
-                >
+            <QuestionPrompt>{prompt}</QuestionPrompt>
+            <Stack
+                direction={{ base: "column", md: "row" }}
+                w={{ base: "100%", md: "40%" }}
+                justifyContent={"space-between"}
+                space={{ base: "8px", md: "16px" }}
+                mt="15px"
+            >
+                <QuestionButton onPress={() => handleResponse("yes")}>
                     Yes
-                </Button>
-                <Button
-                    bgColor={customTheme.colors["button-surface"]}
-                    color={customTheme.colors["on-button-surface"]}
-                    onPress={() => handleResponse("no")}
-                >
+                </QuestionButton>
+                <QuestionButton onPress={() => handleResponse("no")}>
                     No
-                </Button>
-            </VStack>
+                </QuestionButton>
+            </Stack>
         </>
     );
 };

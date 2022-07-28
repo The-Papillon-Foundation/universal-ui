@@ -116,7 +116,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                 default:
                     return (
                         <Text>
-                            Unable to find this type of question:{" "}
+                            Unable to find this type of question:
                             {card.question.type}
                         </Text>
                     );
@@ -125,11 +125,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
             return null;
         }
     };
-    return (
-        <QuestionContainer>
-            {renderSwitch() || <Text>Error</Text>}
-        </QuestionContainer>
-    );
+    return <>{renderSwitch() || <Text>Error</Text>}</>;
 };
 
 export default Question;

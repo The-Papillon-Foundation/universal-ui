@@ -4,10 +4,7 @@
  */
 
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import {
-    CompositeScreenProps,
-    NavigatorScreenParams,
-} from "@react-navigation/native";
+import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 declare global {
@@ -94,18 +91,17 @@ export interface Session {
 export interface StylesJson {
     colors: Colors;
     fonts: Fonts;
+    image_urls: ImageUrls;
+}
+
+export interface ImageUrls {
+    logo: string;
+    logo_small: string;
+    logo_xsmall: string;
 }
 
 export interface Colors {
-    primary: string;
-    surface: string;
-    "surface-secondary": string;
-    "on-surface": OnSurface;
-    "button-surface": string;
-    "on-button-surface": string;
-    "date-field-outline-inactive": string;
-    "date-field-outline-active": string;
-    "multi-select-active": string;
+    [key: string]: string;
 }
 
 export interface OnSurface {

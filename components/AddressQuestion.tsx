@@ -1,4 +1,9 @@
-import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
+import {
+    ActivityIndicator,
+    StyleSheet,
+    TouchableOpacity,
+    ScrollView,
+} from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import {
     Button,
@@ -19,6 +24,7 @@ import {
 } from "../types";
 import * as yup from "yup";
 import states from "../assets/data/states.json";
+import QuestionButton from "./QuestionButton";
 
 type Props = {
     prompt: string;
@@ -154,7 +160,7 @@ const AddressQuestion = ({ prompt, handleResponse }: Props) => {
     }, [prompt]);
 
     return (
-        <>
+        <ScrollView showsVerticalScrollIndicator={false}>
             <Heading textAlign={"center"}>{prompt}</Heading>
             <Stack direction={"column"} space="2.5" mt="2" px="8">
                 {Object.keys(fields).map((field_key, index) => (
@@ -218,23 +224,19 @@ const AddressQuestion = ({ prompt, handleResponse }: Props) => {
                         </FormControl.ErrorMessage>
                     </FormControl>
                 ))}
-                <Button
-                    bgColor={customTheme.colors["button-surface"]}
-                    color={customTheme.colors["on-button-surface"]}
+                <QuestionButton
                     onPress={() => {
                         getAutoComplete();
                     }}
                 >
                     Search for address
-                </Button>
-                <Button
-                    bgColor={customTheme.colors["button-surface"]}
-                    color={customTheme.colors["on-button-surface"]}
+                </QuestionButton>
+                <QuestionButton
                     onPress={validateAddress}
                     isLoading={validatingAddress}
                 >
                     Submit
-                </Button>{" "}
+                </QuestionButton>
                 <View>
                     {loadingSuggestions && <ActivityIndicator />}
                     {suggestions.length > 0 && (
@@ -263,7 +265,7 @@ const AddressQuestion = ({ prompt, handleResponse }: Props) => {
                     ))}
                 </View>
             </Stack>
-        </>
+        </ScrollView>
     );
 };
 
