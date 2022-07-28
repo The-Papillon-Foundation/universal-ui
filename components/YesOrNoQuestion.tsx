@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import React from "react";
-import { Stack } from "native-base";
+import { Spacer, Stack } from "native-base";
 import QuestionButton from "./QuestionButton";
 import QuestionPrompt from "./QuestionPrompt";
 
@@ -15,9 +15,10 @@ const YesOrNoQuestion = ({ prompt, handleResponse }: Props) => {
             <QuestionPrompt>{prompt}</QuestionPrompt>
             <Stack
                 direction={{ base: "column", md: "row" }}
+                w={{ base: "100%", md: "40%" }}
                 justifyContent={"space-between"}
-                space="2.5"
-                mt="2"
+                space={{ base: "8px", md: "16px" }}
+                mt="15px"
             >
                 <QuestionButton onPress={() => handleResponse("yes")}>
                     Yes

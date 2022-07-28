@@ -66,11 +66,16 @@ const ForceLoginScreen = ({ navigation, route }: Props) => {
                 <FormControl isInvalid={isInvalid}>
                     <Input
                         value={username}
+                        variant="underlined"
                         onChangeText={handleChange}
                         placeholder="Enter Your Username"
+                        fontFamily={"sf-pro"}
+                        fontSize={{ base: "md", md: "lg" }}
+                        placeholderTextColor={"#9AB8BF"}
                         onSubmitEditing={handleLogin}
                         autoFocus
                         editable={!isLoading}
+                        w={{ base: "100%", md: "55%" }}
                     />
                     <FormControl.ErrorMessage
                         alignItems={"flex-start"}
@@ -79,7 +84,7 @@ const ForceLoginScreen = ({ navigation, route }: Props) => {
                         {error}
                     </FormControl.ErrorMessage>
                 </FormControl>
-                <Spacer my={1} />
+                <Spacer my={"15px"} />
                 <QuestionButton onPress={handleLogin} isLoading={isLoading}>
                     Login
                 </QuestionButton>

@@ -18,6 +18,7 @@ const QuestionButton = ({ onPress, children, isLoading = false }: Props) => {
             borderRadius={4}
             flex={1}
             minH={"45px"}
+            w={{ base: "100%", md: "200px" }}
         >
             {children}
         </Button>

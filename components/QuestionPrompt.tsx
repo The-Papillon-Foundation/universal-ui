@@ -7,7 +7,7 @@ type Props = {
 
 const QuestionPrompt = ({ children }: Props) => {
     return (
-        <Text fontFamily="sf-pro" fontSize={["lg", "2xl"]}>
+        <Text fontFamily="sf-pro" fontSize={["lg", "3xl"]}>
             {children}
         </Text>
     );

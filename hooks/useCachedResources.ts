@@ -8,7 +8,9 @@ import { url } from "../constants/Urls";
 import { StylesJson } from "../types";
 
 export let customTheme = extendTheme({
+    components: {},
     colors: {
+        primary: theme.colors.cyan,
         landing_page_background: "",
         copyright_text: "",
         about_text: "",
@@ -40,6 +42,7 @@ export let customAssets: {
 
 const applyRemoteStyles = (stylesJson: StylesJson) => {
     customTheme = extendTheme({
+        ...customTheme,
         colors: {
             landing_page_background: stylesJson.colors.landing_page_background,
             copyright_text: stylesJson.colors.copyright_text,

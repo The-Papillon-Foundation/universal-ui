@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { MutableRefObject, useEffect, useRef, useState } from "react";
 import { Module, RootStackParamList } from "../types";
-import { ArrowForwardIcon, Button, Text, View } from "native-base";
+import { View as RNVIEW } from "react-native";
+import { ArrowForwardIcon, Button, View } from "native-base";
 import Question from "./Question";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -19,6 +20,7 @@ const QuestionStack = ({ module, navigable, onFinish }: Props) => {
         useNavigation<
             StackNavigationProp<RootStackParamList, "Process" | "Eligibility">
         >();
+    const containerRef = useRef<MutableRefObject<typeof View>>(null);
 
     const goBack = () => {
         if (questionIndex == 0) return;
@@ -53,7 +55,7 @@ const QuestionStack = ({ module, navigable, onFinish }: Props) => {
     };
 
     return (
-        <View flex={1}>
+        <View flex={1} ref={containerRef}>
             <View flex={10} justifyContent={"center"}>
                 <Question
                     card={module.card_groups[groupIndex].cards[questionIndex]}
@@ -64,7 +66,6 @@ const QuestionStack = ({ module, navigable, onFinish }: Props) => {
                 />
             </View>
 
-            <View my={"15px"} />
             <View
                 flex={1}
                 px={"10px"}
@@ -76,6 +77,9 @@ const QuestionStack = ({ module, navigable, onFinish }: Props) => {
             >
                 {navigable && (
                     <Button
+                        position={{ base: undefined, md: "absolute" }}
+                        left={{ md: -100 }}
+                        top={{ md: -200 }}
                         w="56px"
                         h="56px"
                         borderRadius={"50%"}
@@ -89,6 +93,9 @@ const QuestionStack = ({ module, navigable, onFinish }: Props) => {
                 )}
                 {navigable && (
                     <Button
+                        position={{ base: undefined, md: "absolute" }}
+                        right={{ md: -100 }}
+                        top={{ md: -200 }}
                         w="56px"
                         h="56px"
                         borderRadius={"50%"}
