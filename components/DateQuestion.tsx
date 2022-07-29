@@ -44,6 +44,11 @@ const DateQuestion = ({ prompt, handleResponse }: Props) => {
                             colors: { text: "#9AB8BF" },
                             fonts: { regular: { fontFamily: "sf-pro" } },
                         }}
+                        onSubmitEditing={() => {
+                            if (inputDate != undefined) {
+                                handleResponse(inputDate);
+                            }
+                        }}
                     />
                 </View>
 
