@@ -1,7 +1,6 @@
 import { StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { Button, Radio, Stack, Text } from "native-base";
-import { customTheme } from "../papillon-design-system/custom-theme";
 import QuestionPrompt from "./QuestionPrompt";
 import QuestionButton from "./QuestionButton";
 

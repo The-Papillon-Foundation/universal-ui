@@ -17,7 +17,6 @@ import {
     View,
     WarningOutlineIcon,
 } from "native-base";
-import { customTheme } from "../papillon-design-system/custom-theme";
 import {
     AddressAutocompleteFeature,
     AddressAutocompleteResponse,
@@ -25,6 +24,7 @@ import {
 import * as yup from "yup";
 import states from "../assets/data/states.json";
 import QuestionButton from "./QuestionButton";
+import { customTheme } from "../hooks/useCachedResources";
 
 type Props = {
     prompt: string;
@@ -251,9 +251,7 @@ const AddressQuestion = ({ prompt, handleResponse }: Props) => {
                             key={index}
                         >
                             <View
-                                borderColor={
-                                    customTheme.colors["button-surface"]
-                                }
+                                borderColor={customTheme.colors.button_surface}
                                 borderWidth={1}
                                 borderRadius={5}
                                 my={2}
