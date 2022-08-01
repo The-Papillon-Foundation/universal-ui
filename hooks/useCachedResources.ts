@@ -27,6 +27,7 @@ export let customTheme = extendTheme({
         arrow_button: "",
         placeholder_question_text: "",
         question_bottom_outline: "",
+        info_card_title: "",
     },
     fonts: {
         default: "",
@@ -65,6 +66,7 @@ const applyRemoteStyles = (stylesJson: StylesJson) => {
             placeholder_question_text:
                 stylesJson.colors.placeholder_question_text,
             question_bottom_outline: stylesJson.colors.question_bottom_outline,
+            info_card_title: stylesJson.colors.info_card_title,
         },
         fonts: {
             default: stylesJson.fonts.default,
@@ -104,6 +106,7 @@ export default function useCachedResources() {
                     "sf-pro-medium": require("../assets/fonts/SF-PRO/SF-Pro-Display-Medium.otf"),
                     "sf-pro-bold": require("../assets/fonts/SF-PRO/SF-Pro-Display-Bold.otf"),
                     "poppins-bold": require("../assets/fonts/POPPINS/Poppins-Bold.ttf"),
+                    "poppins-semibold": require("../assets/fonts/POPPINS/Poppins-SemiBold.ttf"),
                     "poppins-medium": require("../assets/fonts/POPPINS/Poppins-Medium.ttf"),
                 });
                 const stylesResponse = await fetch(
