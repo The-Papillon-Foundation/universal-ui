@@ -62,7 +62,7 @@ const Navbar = (props: Props) => {
     });
     const navigation = useNavigation();
     const [expanded, setExpanded] = useState(false);
-    const [mobileMenuButtonProps, api] = useSpring(() => ({ height: "0%" }));
+    const [mobileMenuButtonProps, api] = useSpring(() => ({ height: 0 }));
 
     return (
         <>
@@ -109,7 +109,7 @@ const Navbar = (props: Props) => {
                                     const newE = !e;
 
                                     api.stop();
-                                    api.start({ height: newE ? "30%" : "0%" });
+                                    api.start({ height: newE ? 175 : 0 });
 
                                     return newE;
                                 })
