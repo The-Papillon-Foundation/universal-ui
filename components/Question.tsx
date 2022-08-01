@@ -9,6 +9,7 @@ import { WorkflowContext } from "../contexts/WorkflowContext";
 import { QuestionCard, QuestionGroup } from "../types";
 import DateQuestion from "./DateQuestion";
 import AddressQuestion, { AddressFieldObject } from "./AddressQuestion";
+import InfoCard from "./InfoCard";
 
 interface Props {
     card: QuestionCard;
@@ -36,7 +37,9 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                 goNext(card.on_false);
             } else {
                 goIneligible({
-                    message: `Because you answered no on the previous question: \n${card.question.prompt}`,
+                    message: `Because you answered no on the previous question: \n${
+                        card.question!.prompt
+                    }`,
                 });
             }
         }
@@ -54,12 +57,12 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
 
         // There are passing arguments and the value doesn't pass
         if (
-            card.question.pass != undefined &&
+            card.question!.pass != undefined &&
             typeof value == "string" &&
-            !card.question.pass.includes(value)
+            !card.question!.pass.includes(value)
         ) {
             goIneligible({
-                message: `The only valid answers to this question are: ${card.question.pass.join(
+                message: `The only valid answers to this question are: ${card.question!.pass.join(
                     ", "
                 )}`,
             });
@@ -74,7 +77,21 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
         goNext(card.on_true);
     };
 
+    const handleInfoCardResponse = () => {
+        goNext(card.next!);
+    };
+
     const renderSwitch = () => {
+        if (!card.question) {
+            if (!card.text) return;
+            return (
+                <InfoCard
+                    text={card.text}
+                    title={card.title}
+                    handleResponse={handleInfoCardResponse}
+                />
+            );
+        }
         try {
             switch (card.question.type) {
                 case "TrueOrFalse":

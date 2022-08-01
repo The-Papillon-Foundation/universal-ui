@@ -52,7 +52,10 @@ export interface Question {
 
 export type QuestionCard = {
     id: string;
-    question: Question;
+    question?: Question;
+    text?: string;
+    title?: string;
+    next?: string;
     on_true: string | null;
     on_false: "exit";
 };
