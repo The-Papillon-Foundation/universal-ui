@@ -28,6 +28,9 @@ export let customTheme = extendTheme({
         placeholder_question_text: "",
         question_bottom_outline: "",
         info_card_title: "",
+        home_screen_navbar_background: "",
+        home_screen_navbar_title: "",
+        home_screen_navbar_item: "",
     },
     fonts: {
         default: "",
@@ -67,6 +70,11 @@ const applyRemoteStyles = (stylesJson: StylesJson) => {
                 stylesJson.colors.placeholder_question_text,
             question_bottom_outline: stylesJson.colors.question_bottom_outline,
             info_card_title: stylesJson.colors.info_card_title,
+            home_screen_navbar_background:
+                stylesJson.colors.home_screen_navbar_background,
+            home_screen_navbar_title:
+                stylesJson.colors.home_screen_navbar_title,
+            home_screen_navbar_item: stylesJson.colors.home_screen_navbar_item,
         },
         fonts: {
             default: stylesJson.fonts.default,
