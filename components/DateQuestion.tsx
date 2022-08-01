@@ -1,9 +1,9 @@
 import React from "react";
 import { Button, Stack, Text, useBreakpointValue, View } from "native-base";
 import { DatePickerInput } from "react-native-paper-dates";
-import { customTheme } from "../papillon-design-system/custom-theme";
 import QuestionPrompt from "./QuestionPrompt";
 import QuestionButton from "./QuestionButton";
+import { customTheme } from "../hooks/useCachedResources";
 
 type Props = {
     prompt: string;
@@ -28,7 +28,9 @@ const DateQuestion = ({ prompt, handleResponse }: Props) => {
                         value={inputDate}
                         onChange={(d) => setInputDate(d)}
                         inputMode="start"
-                        activeUnderlineColor={customTheme.colors.cyan[600]}
+                        activeUnderlineColor={
+                            customTheme.colors.question_bottom_outline
+                        }
                         withModal={false}
                         withDateFormatInLabel={false}
                         style={{
@@ -41,7 +43,10 @@ const DateQuestion = ({ prompt, handleResponse }: Props) => {
                         mode="flat" //(see react-native-paper docs)
                         autoFocus
                         theme={{
-                            colors: { text: "#9AB8BF" },
+                            colors: {
+                                text: customTheme.colors
+                                    .placeholder_question_text,
+                            },
                             fonts: { regular: { fontFamily: "sf-pro" } },
                         }}
                         onSubmitEditing={() => {

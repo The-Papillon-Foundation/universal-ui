@@ -25,6 +25,8 @@ export let customTheme = extendTheme({
         hamburger: "",
         button_surface: "",
         arrow_button: "",
+        placeholder_question_text: "",
+        question_bottom_outline: "",
     },
     fonts: {
         default: "",
@@ -60,6 +62,9 @@ const applyRemoteStyles = (stylesJson: StylesJson) => {
             hamburger: stylesJson.colors.hamburger,
             button_surface: stylesJson.colors.button_surface,
             arrow_button: stylesJson.colors.arrow_button,
+            placeholder_question_text:
+                stylesJson.colors.placeholder_question_text,
+            question_bottom_outline: stylesJson.colors.question_bottom_outline,
         },
         fonts: {
             default: stylesJson.fonts.default,

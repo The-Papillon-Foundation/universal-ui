@@ -1,9 +1,9 @@
 import { Platform, StyleSheet } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Input, Spacer, Stack, Text, View } from "native-base";
-import { customTheme } from "../papillon-design-system/custom-theme";
 import QuestionButton from "./QuestionButton";
 import QuestionPrompt from "./QuestionPrompt";
+import { customTheme } from "../hooks/useCachedResources";
 
 type Props = {
     prompt: string;
@@ -36,7 +36,9 @@ const TextInputQuestion = ({ prompt, handleResponse }: Props) => {
                     placeholder={prompt}
                     fontFamily={"sf-pro"}
                     fontSize={{ base: "md", md: "lg" }}
-                    placeholderTextColor={"#9AB8BF"}
+                    placeholderTextColor={
+                        customTheme.colors.placeholder_question_text
+                    }
                     onSubmitEditing={() => {
                         setValue("");
                         handleResponse(value);
