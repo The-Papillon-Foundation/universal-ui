@@ -1,14 +1,164 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import React, { useContext, useEffect } from "react";
-import { Image, Text, View } from "native-base";
+import {
+    Heading,
+    Image,
+    ScrollView,
+    Text,
+    useBreakpointValue,
+    View,
+    Spinner,
+} from "native-base";
 import { useDocumentUpload } from "../hooks/useDocumentUpload";
-import { ActivityIndicator } from "react-native-paper";
 import { useDocumentDownload } from "../hooks/useDocumentDownload";
 import { useLogin } from "../hooks/useLogin";
 import { GlobalContext } from "../contexts/GlobalContext";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types";
 import { customAssets, customTheme } from "../hooks/useCachedResources";
+import HomeNavBar from "../components/HomeNavBar";
+import CaseCard from "../components/CaseCard";
+
+export const casesRes = [
+    {
+        name: "Jimmy's 2020 case",
+        createdAt: "2022-07-20",
+        updatedAt: "2022-08-02",
+        caseNumber: 123456789154,
+        sessionId: "12as3d5g1a65r155re5",
+        completion: 50.0,
+        cardGroups: [
+            {
+                completion: 100.0,
+                name: "Some group name 1",
+                questions: {
+                    "question-id-1": {
+                        user: "user-provided-answer",
+                    },
+                    "question-id-2": {
+                        user: null,
+                    },
+                },
+            },
+            {
+                completion: 50.0,
+                name: "Some group name 1",
+                questions: {
+                    "question-id-1": {
+                        user: "user-provided-answer",
+                    },
+                    "question-id-2": {
+                        user: null,
+                    },
+                },
+            },
+            {
+                completion: 0.0,
+                name: "Some group name 2",
+                questions: {
+                    "question-id-1": {
+                        user: "user-provided-answer",
+                    },
+                    "question-id-2": {
+                        user: null,
+                    },
+                },
+            },
+        ],
+    },
+    {
+        name: "Jimmy's 2000 case",
+        createdAt: "2022-07-20",
+        updatedAt: "2022-08-02",
+        caseNumber: 123456789123,
+        sessionId: "12as3d5g1a65r155re5",
+        completion: 100.0,
+        cardGroups: [
+            {
+                completion: 100.0,
+                name: "Some group name 1",
+                questions: {
+                    "question-id-1": {
+                        user: "user-provided-answer",
+                    },
+                    "question-id-2": {
+                        user: null,
+                    },
+                },
+            },
+            {
+                completion: 50.0,
+                name: "Some group name 1",
+                questions: {
+                    "question-id-1": {
+                        user: "user-provided-answer",
+                    },
+                    "question-id-2": {
+                        user: null,
+                    },
+                },
+            },
+            {
+                completion: 0.0,
+                name: "Some group name 2",
+                questions: {
+                    "question-id-1": {
+                        user: "user-provided-answer",
+                    },
+                    "question-id-2": {
+                        user: null,
+                    },
+                },
+            },
+        ],
+    },
+    {
+        name: "Jimmy's 2000 case",
+        createdAt: "2022-07-20",
+        updatedAt: "2022-08-02",
+        caseNumber: 1234567893453,
+        sessionId: "12as3d5g1a65r155re5",
+        completion: 100.0,
+        cardGroups: [
+            {
+                completion: 100.0,
+                name: "Some group name 1",
+                questions: {
+                    "question-id-1": {
+                        user: "user-provided-answer",
+                    },
+                    "question-id-2": {
+                        user: null,
+                    },
+                },
+            },
+            {
+                completion: 50.0,
+                name: "Some group name 1",
+                questions: {
+                    "question-id-1": {
+                        user: "user-provided-answer",
+                    },
+                    "question-id-2": {
+                        user: null,
+                    },
+                },
+            },
+            {
+                completion: 0.0,
+                name: "Some group name 2",
+                questions: {
+                    "question-id-1": {
+                        user: "user-provided-answer",
+                    },
+                    "question-id-2": {
+                        user: null,
+                    },
+                },
+            },
+        ],
+    },
+];
 
 type Props = {
     navigation: StackNavigationProp<RootStackParamList, "Home">;
@@ -36,6 +186,14 @@ const HomeScreen = ({ navigation }: Props) => {
     const review = () => {
         navigation.navigate("Review");
     };
+    const screenSize = useBreakpointValue({
+        base: "base",
+        md: "md",
+    });
+
+    const goToCase = (caseNumber: number) => {
+        navigation.push("Case", { caseNumber });
+    };
 
     useEffect(() => {
         if (checkedForSession && sessionId == "") {
@@ -44,50 +202,71 @@ const HomeScreen = ({ navigation }: Props) => {
     }, [checkedForSession, sessionId]);
 
     if (checkedForSession == false) {
-        return <ActivityIndicator color="gray" size="large" />;
+        return <Spinner color="trueGray.600" size="lg" />;
     }
 
     return (
-        <View>
-            <View
-                style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    paddingHorizontal: 50,
-                    paddingVertical: 20,
-                }}
-                backgroundColor={
-                    customTheme.colors.home_screen_navbar_background
-                }
-                borderBottomRadius={"40px"}
-            >
-                <View flexDirection={"row"} alignItems="center">
-                    <Text
-                        color={customTheme.colors.home_screen_navbar_title}
-                        fontFamily={"sf-pro-bold"}
-                        fontSize="2xl"
+        <View flex={1}>
+            <HomeNavBar />
+            {/* Content */}
+            <View flex={1} justifyContent={["start", "center"]}>
+                <View
+                    marginX={{ base: "25px", md: "50px" }}
+                    mt={{ base: "20px", md: 0 }}
+                >
+                    <Heading
+                        fontSize={"2xl"}
+                        fontFamily="sf-pro-bold"
+                        color={"trueGray.700"}
+                        mb={"25px"}
                     >
-                        Hello, {userId}.
-                    </Text>
-                    <Text
-                        ml="20px"
-                        fontFamily={"sf-pro-medium"}
-                        fontSize={"lg"}
-                        color={customTheme.colors.home_screen_navbar_item}
-                        onPress={logout}
-                        textDecorationLine="underline"
+                        My Cases
+                    </Heading>
+                    <ScrollView
+                        w={"100%"}
+                        horizontal={screenSize == "base" ? false : true}
+                        showsHorizontalScrollIndicator={false}
                     >
-                        Logout
-                    </Text>
-                </View>
-                <View>
-                    <Image
-                        source={{ uri: customAssets.image_urls.logo as string }}
-                        width={{ base: 50, md: 75 }}
-                        height={undefined}
-                        style={{ aspectRatio: 1 }}
-                        alt={"Company logo"}
-                    />
+                        {casesRes.map((user_case) => (
+                            <CaseCard
+                                onPress={() => goToCase(user_case.caseNumber)}
+                                completion={user_case.completion}
+                                title={user_case.name}
+                            >
+                                {/* case # */}
+                                <Text
+                                    fontSize={"sm"}
+                                    fontFamily="sf-pro-bold"
+                                    color={
+                                        customTheme.colors.case_card_case_number
+                                    }
+                                >
+                                    Case {user_case.caseNumber}
+                                </Text>
+                                {/* dates */}
+                                <Text
+                                    mt={"10px"}
+                                    fontFamily={"sf-pro"}
+                                    color={customTheme.colors.case_card_dates}
+                                    fontSize={"xs"}
+                                >
+                                    <Text>
+                                        Date Created:{" "}
+                                        {new Date(
+                                            user_case.createdAt
+                                        ).toLocaleDateString()}
+                                    </Text>
+                                    {"\n"}
+                                    <Text>
+                                        Date Updated:{" "}
+                                        {new Date(
+                                            user_case.updatedAt
+                                        ).toLocaleDateString()}
+                                    </Text>
+                                </Text>
+                            </CaseCard>
+                        ))}
+                    </ScrollView>
                 </View>
             </View>
         </View>
@@ -147,14 +326,12 @@ const HomeScreen = ({ navigation }: Props) => {
     //             <Heading>Review your answers</Heading>
     //             <Button onPress={review}>Review</Button>
     //         </View>
-    //         <View>
-    //             <Heading>Clear your session data</Heading>
-    //             <Button onPress={logout}>Logout</Button>
-    //         </View>
     //     </View>
     // );
 };
 
 export default HomeScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    dateText: {},
+});

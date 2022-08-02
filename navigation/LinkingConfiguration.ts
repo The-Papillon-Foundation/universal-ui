@@ -20,6 +20,7 @@ const linking: LinkingOptions<RootStackParamList> = {
             CreateUser: "create-user",
             Process: "process",
             Home: "home",
+            Case: "case",
             Ineligible: "ineligible",
             Review: "review",
             Debug: "debug",

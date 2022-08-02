@@ -11,6 +11,7 @@ import {
     GlobalContext,
     GlobalContextProvider,
 } from "../contexts/GlobalContext";
+import CaseOverviewScreen from "../screens/CaseOverviewScreen";
 import CreateUserScreen from "../screens/CreateUserScreen";
 import DetermineWorkflow from "../screens/DetermineWorkflow";
 import EligibilityScreen from "../screens/EligibilityScreen";
@@ -61,6 +62,7 @@ function RootNavigator() {
             <Stack.Screen name="Loading" component={Loading} />
             <Stack.Screen name="Landing" component={LandingScreen} />
             <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Case" component={CaseOverviewScreen} />
 
             <Stack.Screen
                 name="DetermineWorkflow"
