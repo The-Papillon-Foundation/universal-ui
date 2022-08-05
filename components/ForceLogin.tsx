@@ -8,7 +8,6 @@ import {
     View,
     WarningOutlineIcon,
 } from "native-base";
-import { WorkflowContext } from "../contexts/WorkflowContext";
 import { useLogin } from "../hooks/useLogin";
 import * as yup from "yup";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -27,8 +26,8 @@ const userCreationSchema = yup.object().shape({
 });
 
 type Props = {
-    navigation: StackNavigationProp<RootStackParamList, "CreateUser">;
-    route: RouteProp<RootStackParamList, "CreateUser">;
+    navigation: StackNavigationProp<RootStackParamList, "CreateUser" | "Login">;
+    route: RouteProp<RootStackParamList, "CreateUser" | "Login">;
 };
 
 const ForceLoginScreen = ({ navigation, route }: Props) => {
@@ -48,9 +47,13 @@ const ForceLoginScreen = ({ navigation, route }: Props) => {
             .validate({ username })
             .then(() => {
                 login(username);
-                navigation.navigate("Process", {
-                    stateName: route.params.stateName,
-                });
+                if (route.name == "Login") {
+                    navigation.navigate("Home");
+                } else if (route.name == "CreateUser") {
+                    navigation.navigate("Process", {
+                        stateName: route.params!.stateName,
+                    });
+                }
             })
             .catch((err) => {
                 setIsInvalid(true);
@@ -60,9 +63,7 @@ const ForceLoginScreen = ({ navigation, route }: Props) => {
     return (
         <View>
             <View>
-                <QuestionPrompt>
-                    You must log in to continue the process
-                </QuestionPrompt>
+                <QuestionPrompt>Log in</QuestionPrompt>
                 <Spacer my={2} />
                 <FormControl isInvalid={isInvalid}>
                     <Input

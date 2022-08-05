@@ -18,6 +18,7 @@ const linking: LinkingOptions<RootStackParamList> = {
             DetermineWorkflow: "determine-workflow",
             Eligibility: "eligibility",
             CreateUser: "create-user",
+            Login: "login",
             Process: "process",
             Home: "home",
             Case: "case",

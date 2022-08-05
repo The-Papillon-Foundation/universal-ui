@@ -17,6 +17,7 @@ export type RootStackParamList = {
     Loading: undefined;
     Landing: undefined;
     Home: undefined;
+    Login: undefined;
     Case: { caseNumber: number };
     DetermineWorkflow: undefined;
     Eligibility: { stateName: string };

@@ -214,7 +214,7 @@ const HomeScreen = ({ navigation }: Props) => {
     };
 
     useEffect(() => {
-        if (checkedForSession && sessionId == "") {
+        if (checkedForSession && userId == "") {
             navigation.navigate("Landing");
         }
     }, [checkedForSession, sessionId]);
