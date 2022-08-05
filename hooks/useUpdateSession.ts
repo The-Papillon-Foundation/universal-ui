@@ -4,26 +4,30 @@ import { url } from "../constants/Urls";
 import { GlobalContext } from "../contexts/GlobalContext";
 
 const updateSession = async (
-    update: {
-        [key: string]: number | string | {};
-    },
+    questionId: string,
+    response: any,
     sessionId: string
 ) => {
-    const res = await fetch(`${url}/workflow-sessions`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            sessionStateUpdate: update,
-            sessionId,
-        }),
-    });
+    const res = await fetch(
+        `${url}/workflow-sessions/${sessionId}/questions/${questionId}`,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                user: response,
+            }),
+        }
+    );
     console.log(res.url, res.status);
     return res.json();
 };
 
 export const useUpdateSession = () => {
     const { sessionId } = useContext(GlobalContext);
-    return { updateSession: (update: {}) => updateSession(update, sessionId) };
+    return {
+        updateSession: (questionId: string, response: any) =>
+            updateSession(questionId, response, sessionId),
+    };
 };

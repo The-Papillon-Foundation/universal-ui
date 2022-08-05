@@ -24,7 +24,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
     const { updateSession } = useUpdateSession();
 
     const handleYesOrNoResponse = (response: "yes" | "no") => {
-        updateSession({ [card.id]: response });
+        updateSession(card.id, response);
         if (response == "yes") {
             if (card.on_true == "exit") {
                 goIneligible({ message: "" });
@@ -47,13 +47,13 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
 
     const handleAddressResponse = (addressFieldObject: AddressFieldObject) => {
         // input is already validated
-        updateSession({ [card.id]: addressFieldObject });
+        updateSession(card.id, addressFieldObject);
         goNext(card.on_true);
     };
 
     const handleTextInputResponse = (value: string | Date) => {
         if (value == "") return;
-        updateSession({ [card.id]: value });
+        updateSession(card.id, value);
 
         // There are passing arguments and the value doesn't pass
         if (
@@ -73,7 +73,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
 
     const handleMultipleChoiceResponse = (value: string) => {
         if (value == "") return;
-        updateSession({ [card.id]: value });
+        updateSession(card.id, value);
         goNext(card.on_true);
     };
 
