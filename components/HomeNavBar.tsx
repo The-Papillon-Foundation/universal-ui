@@ -1,13 +1,17 @@
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { Image, Text, View } from "native-base";
 import React, { useContext } from "react";
 import { GlobalContext } from "../contexts/GlobalContext";
 import { customAssets, customTheme } from "../hooks/useCachedResources";
 import { useLogin } from "../hooks/useLogin";
+import { RootStackParamList } from "../types";
 
 type Props = {};
 
 const HomeNavBar = (props: Props) => {
     const { logout } = useLogin();
+    const navigation =
+        useNavigation<NavigationProp<RootStackParamList, "Home">>();
     const { sessionId, userId, checkedForSession } = useContext(GlobalContext);
     return (
         <View
@@ -33,7 +37,10 @@ const HomeNavBar = (props: Props) => {
                     fontFamily={"sf-pro-medium"}
                     fontSize={"lg"}
                     color={customTheme.colors.home_screen_navbar_item}
-                    onPress={logout}
+                    onPress={() => {
+                        logout();
+                        navigation.navigate("Landing");
+                    }}
                     textDecorationLine="underline"
                 >
                     Logout

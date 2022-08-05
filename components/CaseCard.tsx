@@ -5,7 +5,7 @@ import { customTheme } from "../hooks/useCachedResources";
 import StatusCard from "./StatusCard";
 
 type Props = {
-    children: React.ReactNode;
+    children?: React.ReactNode;
     onPress: () => void;
     completion: number;
     title: string;
@@ -24,8 +24,8 @@ export default function CaseCard({
     return (
         <TouchableOpacity
             style={{
-                marginRight: screenSize == "base" ? 0 : 30,
                 marginBottom: screenSize == "base" ? 15 : 0,
+                flex: 1,
             }}
             onPress={onPress}
         >
@@ -34,7 +34,7 @@ export default function CaseCard({
                 borderWidth={"2px"}
                 borderRadius={"32px"}
                 w={{ base: "100%", md: "350px" }}
-                h={"195px"}
+                h={"200px"}
                 backgroundColor={customTheme.colors.case_card_background}
                 padding={"15px"}
             >

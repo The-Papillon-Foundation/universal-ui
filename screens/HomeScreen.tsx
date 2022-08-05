@@ -30,7 +30,9 @@ export const casesRes = [
         cardGroups: [
             {
                 completion: 100.0,
-                name: "Some group name 1",
+                name: "Law Enforcement Records",
+                description:
+                    "Follow the steps to obtain arrest record information from DPS.",
                 questions: {
                     "question-id-1": {
                         user: "user-provided-answer",
@@ -42,7 +44,9 @@ export const casesRes = [
             },
             {
                 completion: 50.0,
-                name: "Some group name 1",
+                name: "Court Records",
+                description:
+                    "Follow the steps to obtain arrest record information from DPS.",
                 questions: {
                     "question-id-1": {
                         user: "user-provided-answer",
@@ -54,7 +58,9 @@ export const casesRes = [
             },
             {
                 completion: 0.0,
-                name: "Some group name 2",
+                name: "Review and Sign",
+                description:
+                    "Review and sign your documents before mailing them out.",
                 questions: {
                     "question-id-1": {
                         user: "user-provided-answer",
@@ -76,7 +82,9 @@ export const casesRes = [
         cardGroups: [
             {
                 completion: 100.0,
-                name: "Some group name 1",
+                name: "Law Enforcement Records",
+                description:
+                    "Follow the steps to obtain arrest record information from DPS.",
                 questions: {
                     "question-id-1": {
                         user: "user-provided-answer",
@@ -88,7 +96,9 @@ export const casesRes = [
             },
             {
                 completion: 50.0,
-                name: "Some group name 1",
+                name: "Court Records",
+                description:
+                    "Follow the steps to obtain arrest record information from DPS.",
                 questions: {
                     "question-id-1": {
                         user: "user-provided-answer",
@@ -100,7 +110,9 @@ export const casesRes = [
             },
             {
                 completion: 0.0,
-                name: "Some group name 2",
+                name: "Review and Sign",
+                description:
+                    "Review and sign your documents before mailing them out.",
                 questions: {
                     "question-id-1": {
                         user: "user-provided-answer",
@@ -122,7 +134,9 @@ export const casesRes = [
         cardGroups: [
             {
                 completion: 100.0,
-                name: "Some group name 1",
+                name: "Law Enforcement Records",
+                description:
+                    "Follow the steps to obtain arrest record information from DPS.",
                 questions: {
                     "question-id-1": {
                         user: "user-provided-answer",
@@ -134,7 +148,9 @@ export const casesRes = [
             },
             {
                 completion: 50.0,
-                name: "Some group name 1",
+                name: "Court Records",
+                description:
+                    "Follow the steps to obtain arrest record information from DPS.",
                 questions: {
                     "question-id-1": {
                         user: "user-provided-answer",
@@ -146,7 +162,9 @@ export const casesRes = [
             },
             {
                 completion: 0.0,
-                name: "Some group name 2",
+                name: "Review and Sign",
+                description:
+                    "Review and sign your documents before mailing them out.",
                 questions: {
                     "question-id-1": {
                         user: "user-provided-answer",
@@ -228,43 +246,50 @@ const HomeScreen = ({ navigation }: Props) => {
                         showsHorizontalScrollIndicator={false}
                     >
                         {casesRes.map((user_case) => (
-                            <CaseCard
-                                onPress={() => goToCase(user_case.caseNumber)}
-                                completion={user_case.completion}
-                                title={user_case.name}
-                            >
-                                {/* case # */}
-                                <Text
-                                    fontSize={"sm"}
-                                    fontFamily="sf-pro-bold"
-                                    color={
-                                        customTheme.colors.case_card_case_number
+                            <View marginRight={{ base: 0, md: "30px" }}>
+                                <CaseCard
+                                    onPress={() =>
+                                        goToCase(user_case.caseNumber)
                                     }
+                                    completion={user_case.completion}
+                                    title={user_case.name}
                                 >
-                                    Case {user_case.caseNumber}
-                                </Text>
-                                {/* dates */}
-                                <Text
-                                    mt={"10px"}
-                                    fontFamily={"sf-pro"}
-                                    color={customTheme.colors.case_card_dates}
-                                    fontSize={"xs"}
-                                >
-                                    <Text>
-                                        Date Created:{" "}
-                                        {new Date(
-                                            user_case.createdAt
-                                        ).toLocaleDateString()}
+                                    {/* case # */}
+                                    <Text
+                                        fontSize={"sm"}
+                                        fontFamily="sf-pro-bold"
+                                        color={
+                                            customTheme.colors
+                                                .case_card_case_number
+                                        }
+                                    >
+                                        Case {user_case.caseNumber}
                                     </Text>
-                                    {"\n"}
-                                    <Text>
-                                        Date Updated:{" "}
-                                        {new Date(
-                                            user_case.updatedAt
-                                        ).toLocaleDateString()}
+                                    {/* dates */}
+                                    <Text
+                                        mt={"10px"}
+                                        fontFamily={"sf-pro"}
+                                        color={
+                                            customTheme.colors.case_card_dates
+                                        }
+                                        fontSize={"xs"}
+                                    >
+                                        <Text>
+                                            Date Created:{" "}
+                                            {new Date(
+                                                user_case.createdAt
+                                            ).toLocaleDateString()}
+                                        </Text>
+                                        {"\n"}
+                                        <Text>
+                                            Date Updated:{" "}
+                                            {new Date(
+                                                user_case.updatedAt
+                                            ).toLocaleDateString()}
+                                        </Text>
                                     </Text>
-                                </Text>
-                            </CaseCard>
+                                </CaseCard>
+                            </View>
                         ))}
                     </ScrollView>
                 </View>
