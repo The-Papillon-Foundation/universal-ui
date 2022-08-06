@@ -5,11 +5,11 @@ import { Platform } from "react-native";
 import { url } from "../constants/Urls";
 import { GlobalContext } from "../contexts/GlobalContext";
 
-export const useDocumentDownload = () => {
+export const useDocumentDownload = (sessionId: string) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
-    const { sessionId, userId } = useContext(GlobalContext);
+    const { userId } = useContext(GlobalContext);
     const [progress, setProgress] = useState(0);
     const [documentLink, setDocumentLink] = useState("");
 
@@ -18,6 +18,14 @@ export const useDocumentDownload = () => {
             downloadProgress.totalBytesWritten /
             downloadProgress.totalBytesExpectedToWrite;
         setProgress(progress);
+    };
+
+    const clearDownload = () => {
+        setDocumentLink("");
+        setError("");
+        setSuccess(false);
+        setProgress(0);
+        setIsLoading(false);
     };
 
     const downloadDocument = async () => {
@@ -71,5 +79,6 @@ export const useDocumentDownload = () => {
         downloadDocument,
         documentLink,
         progress,
+        clearDownload,
     };
 };

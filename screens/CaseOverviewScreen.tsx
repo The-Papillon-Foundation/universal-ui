@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { RootStackParamList } from "../types";
 import { StackScreenProps } from "@react-navigation/stack";
 import HomeNavBar from "../components/HomeNavBar";
@@ -6,7 +6,10 @@ import { casesRes, findStateNameByAbbrev } from "./HomeScreen";
 import {
     Button,
     CheckCircleIcon,
+    Heading,
+    Modal,
     ScrollView,
+    Spacer,
     Stack,
     Text,
     useBreakpointValue,
@@ -18,6 +21,9 @@ import { ActivityIndicator, TouchableOpacity } from "react-native";
 import CaseCard from "../components/CaseCard";
 import useGetCase from "../hooks/useGetCase";
 import states from "../assets/data/states.json";
+import { useDocumentUpload } from "../hooks/useDocumentUpload";
+import { useDocumentDownload } from "../hooks/useDocumentDownload";
+import { ProgressBar } from "react-native-paper";
 
 type Props = StackScreenProps<RootStackParamList, "Case">;
 
@@ -33,7 +39,7 @@ const DocumentManagementButton = ({
     screenSize: string;
 }) => (
     <View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onPress}>
             <View
                 w={{ base: "100%", md: "195px" }}
                 h={{ base: undefined, md: "160px" }}
@@ -75,10 +81,30 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
     const { isLoading, error, currentCase } = useGetCase(
         route.params.sessionId
     );
+    const {
+        openDocumentPicker,
+        isLoading: isDocumentUploading,
+        isUploaded,
+        uploadDocument,
+        documentSelected,
+        documentResult,
+        clearUpload,
+    } = useDocumentUpload();
+    const {
+        isLoading: isDownloadLoading,
+        prepareDownload,
+        progress: downloadProgress,
+        downloadDocument,
+        documentLink,
+        clearDownload,
+    } = useDocumentDownload(route.params.sessionId);
+
     const screenSize = useBreakpointValue({
         base: "base",
         md: "md",
     });
+    const [openUploadModal, setOpenUploadModal] = useState(false);
+    const [openDownloadModal, setOpenDownloadModal] = useState(false);
 
     return (
         <View flex={1}>
@@ -135,7 +161,9 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                     mt="25px"
                                 >
                                     <DocumentManagementButton
-                                        onPress={() => {}}
+                                        onPress={() => {
+                                            setOpenUploadModal(true);
+                                        }}
                                         iconName="upload-outline"
                                         instructionText="Upload files"
                                         screenSize={screenSize}
@@ -147,7 +175,9 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                         screenSize={screenSize}
                                     />
                                     <DocumentManagementButton
-                                        onPress={() => {}}
+                                        onPress={() => {
+                                            setOpenDownloadModal(true);
+                                        }}
                                         iconName="download-outline"
                                         instructionText="Download file"
                                         screenSize={screenSize}
@@ -370,6 +400,81 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                     )}
                 </View>
             </ScrollView>
+            <Modal
+                isOpen={openUploadModal}
+                onClose={() => {
+                    setOpenUploadModal(false);
+                    clearUpload();
+                }}
+            >
+                <View
+                    backgroundColor={"white"}
+                    p={"55px"}
+                    borderRadius={"10px"}
+                >
+                    <Heading>Upload a document</Heading>
+                    {isLoading && (
+                        <ActivityIndicator color="grey" size="large" />
+                    )}
+
+                    {!documentSelected && (
+                        <Button onPress={openDocumentPicker}>
+                            Pick document
+                        </Button>
+                    )}
+                    {documentSelected && documentResult?.type == "success" && (
+                        <>
+                            <Heading>{documentResult.name}</Heading>
+                            <Spacer my={1} />
+                            {!isUploaded && (
+                                <Button onPress={uploadDocument}>
+                                    Upload document
+                                </Button>
+                            )}
+                            {isUploaded && (
+                                <Text color="success.500" textAlign={"center"}>
+                                    Your document has been successfully
+                                    uploaded.
+                                </Text>
+                            )}
+                        </>
+                    )}
+                </View>
+            </Modal>
+            <Modal
+                isOpen={openDownloadModal}
+                onClose={() => {
+                    setOpenDownloadModal(false);
+                    clearDownload();
+                }}
+            >
+                <View
+                    backgroundColor={"white"}
+                    p={"55px"}
+                    borderRadius={"10px"}
+                >
+                    <Heading>Download your document</Heading>
+                    {documentLink == "" ? (
+                        <Button onPress={prepareDownload}>
+                            {isDownloadLoading ? (
+                                <ActivityIndicator color="white" />
+                            ) : (
+                                "Prepare Download"
+                            )}
+                            {downloadProgress > 0 && (
+                                <ProgressBar progress={downloadProgress} />
+                            )}
+                        </Button>
+                    ) : (
+                        <Button
+                            onPress={downloadDocument}
+                            bgColor={"success.600"}
+                        >
+                            Download pdf
+                        </Button>
+                    )}
+                </View>
+            </Modal>
         </View>
     );
 };

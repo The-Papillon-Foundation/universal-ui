@@ -9,8 +9,6 @@ import {
     View,
     Spinner,
 } from "native-base";
-import { useDocumentUpload } from "../hooks/useDocumentUpload";
-import { useDocumentDownload } from "../hooks/useDocumentDownload";
 import { useLogin } from "../hooks/useLogin";
 import { GlobalContext } from "../contexts/GlobalContext";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -308,63 +306,6 @@ const HomeScreen = ({ navigation }: Props) => {
             </View>
         </View>
     );
-
-    // return (
-    //     <View
-    //         py={50}
-    //         flex={1}
-    //         justifyContent="space-around"
-    //         alignItems={"center"}
-    //     >
-    //         <View>
-    //             <Heading>Upload a document</Heading>
-    //             {isLoading && <ActivityIndicator color="grey" size="large" />}
-
-    //             {!documentSelected && (
-    //                 <Button onPress={openDocumentPicker}>Pick document</Button>
-    //             )}
-    //             {documentSelected && documentResult?.type == "success" && (
-    //                 <>
-    //                     <Heading>{documentResult.name}</Heading>
-    //                     <Spacer my={1} />
-    //                     {!isUploaded && (
-    //                         <Button onPress={uploadDocument}>
-    //                             Upload document
-    //                         </Button>
-    //                     )}
-    //                     {isUploaded && (
-    //                         <Text color="success.500" textAlign={"center"}>
-    //                             Your document has been successfully uploaded.
-    //                         </Text>
-    //                     )}
-    //                 </>
-    //             )}
-    //         </View>
-    //         <View>
-    //             <Heading>Download your document</Heading>
-    //             {documentLink == "" ? (
-    //                 <Button onPress={prepareDownload}>
-    //                     {isDownloadLoading ? (
-    //                         <ActivityIndicator color="white" />
-    //                     ) : (
-    //                         "Prepare Download"
-    //                     )}
-    //                     {downloadProgress > 0 && (
-    //                         <ProgressBar progress={downloadProgress} />
-    //                     )}
-    //                 </Button>
-    //             ) : (
-    //                 <Button onPress={downloadDocument} bgColor={"success.600"}>
-    //                     Download pdf
-    //                 </Button>
-    //             )}
-    //         </View>
-    //         <View>
-    //             <Heading>Review your answers</Heading>
-    //             <Button onPress={review}>Review</Button>
-    //         </View>
-    //     </View>
-    // );
 };
 
 export default HomeScreen;
@@ -372,23 +313,3 @@ export default HomeScreen;
 const styles = StyleSheet.create({
     dateText: {},
 });
-
-// const {
-//     openDocumentPicker,
-//     isLoading,
-//     isUploaded,
-//     uploadDocument,
-//     documentSelected,
-//     documentResult,
-// } = useDocumentUpload();
-// const {
-//     isLoading: isDownloadLoading,
-//     prepareDownload,
-//     progress: downloadProgress,
-//     downloadDocument,
-//     documentLink,
-// } = useDocumentDownload();
-
-// const review = () => {
-//     navigation.navigate("Review");
-// };
