@@ -23,6 +23,12 @@ export const useDocumentUpload = () => {
         });
     };
 
+    const clearUpload = () => {
+        setIsUploaded(false);
+        setDocumentResult(null);
+        setIsLoading(false);
+    };
+
     const uploadDocument = async () => {
         if (documentResult == null)
             return alert("must select document to upload");
@@ -40,8 +46,8 @@ export const useDocumentUpload = () => {
                     headers: {
                         "Content-Type": "multipart/form-data",
                         "Content-Length": documentResult.size?.toString() || "",
-                        "X-Papillon-User-Id": userId,
-                        "X-Papillon-File-Name": documentResult.name,
+                        "x-papillon-user-id": userId,
+                        "x-papillon-file-name": documentResult.name,
                     },
                     body: data,
                 });
@@ -63,5 +69,6 @@ export const useDocumentUpload = () => {
         isUploaded,
         documentSelected: documentResult ? true : false,
         uploadDocument,
+        clearUpload,
     };
 };

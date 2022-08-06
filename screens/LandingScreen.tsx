@@ -13,8 +13,8 @@ const LandingScreen = () => {
     const navigation =
         useNavigation<StackNavigationProp<RootStackParamList, "Landing">>();
 
-    const navigateToHomeScreen = () => {
-        navigation.push("Home");
+    const navigateToLogin = () => {
+        navigation.push("Login");
     };
 
     const navigateToDetermineWorkflowScreen = () => {
@@ -79,7 +79,7 @@ const LandingScreen = () => {
                         flex={1}
                         color={"white"}
                         bgColor={customTheme.colors.login_button_surface}
-                        onPress={navigateToHomeScreen}
+                        onPress={navigateToLogin}
                     >
                         Login
                     </Button>

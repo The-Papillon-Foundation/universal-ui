@@ -19,6 +19,7 @@ export const useLogin = () => {
         setUserId(userId);
         AsyncStorage.setItem(userIdKey, userId);
         try {
+            // create user
             const res = await fetch(`${url}/users`, {
                 method: "POST",
                 headers: {
@@ -30,16 +31,19 @@ export const useLogin = () => {
             });
             console.log(res.status, res.url);
             if (res.ok) {
-                const res2 = await fetch(`${url}/workflow-sessions`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        sessionId,
-                        userId,
-                    }),
-                });
+                // attach user to sessionId
+                const res2 = await fetch(
+                    `${url}/workflow-sessions/${sessionId}/questions/set-user`,
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            userId,
+                        }),
+                    }
+                );
                 console.log(res2.status, res2.url);
             }
         } catch (error) {

@@ -8,7 +8,6 @@ import { url } from "../constants/Urls";
 import { StylesJson } from "../types";
 
 export let customTheme = extendTheme({
-    components: {},
     colors: {
         primary: theme.colors.cyan,
         landing_page_background: "",
@@ -28,6 +27,20 @@ export let customTheme = extendTheme({
         placeholder_question_text: "",
         question_bottom_outline: "",
         info_card_title: "",
+        home_screen_navbar_background: "",
+        home_screen_navbar_title: "",
+        home_screen_navbar_item: "",
+        complete_status_background: "",
+        complete_status_text: "",
+        in_progress_status_background: "",
+        not_started_status_background: "",
+        incomplete_status_text: "",
+        case_card_background: "",
+        case_card_border: "",
+        case_horizontal_divider: "",
+        case_card_title: "",
+        case_card_case_number: "",
+        case_card_dates: "",
     },
     fonts: {
         default: "",
@@ -67,6 +80,25 @@ const applyRemoteStyles = (stylesJson: StylesJson) => {
                 stylesJson.colors.placeholder_question_text,
             question_bottom_outline: stylesJson.colors.question_bottom_outline,
             info_card_title: stylesJson.colors.info_card_title,
+            home_screen_navbar_background:
+                stylesJson.colors.home_screen_navbar_background,
+            home_screen_navbar_title:
+                stylesJson.colors.home_screen_navbar_title,
+            home_screen_navbar_item: stylesJson.colors.home_screen_navbar_item,
+            complete_status_background:
+                stylesJson.colors.complete_status_background,
+            complete_status_text: stylesJson.colors.complete_status_text,
+            in_progress_status_background:
+                stylesJson.colors.in_progress_status_background,
+            not_started_status_background:
+                stylesJson.colors.not_started_status_background,
+            incomplete_status_text: stylesJson.colors.incomplete_status_text,
+            case_card_background: stylesJson.colors.case_card_background,
+            case_card_border: stylesJson.colors.case_card_border,
+            case_horizontal_divider: stylesJson.colors.case_horizontal_divider,
+            case_card_title: stylesJson.colors.case_card_title,
+            case_card_case_number: stylesJson.colors.case_card_case_number,
+            case_card_dates: stylesJson.colors.case_card_dates,
         },
         fonts: {
             default: stylesJson.fonts.default,
@@ -103,6 +135,7 @@ export default function useCachedResources() {
                     ...FontAwesome.font,
                     "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf"),
                     "sf-pro": require("../assets/fonts/SF-PRO/SF-Pro-Display-Regular.otf"),
+                    "sf-pro-semibold": require("../assets/fonts/SF-PRO/SF-Pro-Display-Semibold.otf"),
                     "sf-pro-medium": require("../assets/fonts/SF-PRO/SF-Pro-Display-Medium.otf"),
                     "sf-pro-bold": require("../assets/fonts/SF-PRO/SF-Pro-Display-Bold.otf"),
                     "poppins-bold": require("../assets/fonts/POPPINS/Poppins-Bold.ttf"),
