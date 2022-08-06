@@ -18,7 +18,7 @@ export type RootStackParamList = {
     Landing: undefined;
     Home: undefined;
     Login: undefined;
-    Case: { caseNumber: number };
+    Case: { sessionId: string };
     DetermineWorkflow: undefined;
     Eligibility: { stateName: string };
     CreateUser: { stateName: string };
@@ -172,4 +172,52 @@ export interface Rank {
 export interface Geometry {
     type: string;
     coordinates: number[];
+}
+
+// User types
+export interface UserInfo {
+    addressZip: string | undefined;
+    addressStreet: string | undefined;
+    userNameLast: string | undefined;
+    addressState: string | undefined;
+    userNameFirst: string | undefined;
+    userNameMiddle: string | undefined;
+    cellPhone: string | undefined;
+    email: string | undefined;
+    addressCity: string | undefined;
+}
+
+export interface User {
+    documents: string[];
+    workflowSessions: string[];
+    userId: string;
+    userInfo: UserInfo;
+}
+
+// Workflow Session Types
+export interface Questions {
+    [key: string]: any;
+}
+
+export interface CardGroup {
+    completion: string;
+    description: string;
+    module: string;
+    name: string;
+    questions: Questions;
+}
+
+export interface SessionState {
+    cardGroups: CardGroup[];
+    completion: string;
+}
+
+export interface WorkflowSession {
+    caseNumber: any;
+    createdAt: number;
+    sessionId: string;
+    sessionState: SessionState;
+    updatedAt: number;
+    userId: string;
+    workflowId: string;
 }

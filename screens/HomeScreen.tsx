@@ -15,9 +15,11 @@ import { useLogin } from "../hooks/useLogin";
 import { GlobalContext } from "../contexts/GlobalContext";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types";
-import { customAssets, customTheme } from "../hooks/useCachedResources";
+import { customTheme } from "../hooks/useCachedResources";
 import HomeNavBar from "../components/HomeNavBar";
 import CaseCard from "../components/CaseCard";
+import useGetCases from "../hooks/useGetCases";
+import states from "../assets/data/states.json";
 
 export const casesRes = [
     {
@@ -178,39 +180,36 @@ export const casesRes = [
     },
 ];
 
+export const findStateNameByAbbrev = (abbrev: string) => {
+    const stateName = Object.keys(states).find(
+        (stateName) => (states as any)[stateName] === abbrev
+    );
+    return stateName || "";
+};
+
+export const unixToHumanReadableDate = (unixTimestamp: number) => {
+    // replace the . with 0
+    let timestamp = 1000 * unixTimestamp;
+    let date = new Date(timestamp).toLocaleDateString();
+    return date;
+};
+
 type Props = {
     navigation: StackNavigationProp<RootStackParamList, "Home">;
 };
 
 const HomeScreen = ({ navigation }: Props) => {
-    const {
-        openDocumentPicker,
-        isLoading,
-        isUploaded,
-        uploadDocument,
-        documentSelected,
-        documentResult,
-    } = useDocumentUpload();
-    const {
-        isLoading: isDownloadLoading,
-        prepareDownload,
-        progress: downloadProgress,
-        downloadDocument,
-        documentLink,
-    } = useDocumentDownload();
     const { logout } = useLogin();
     const { sessionId, userId, checkedForSession } = useContext(GlobalContext);
+    const { isLoading, error, cases } = useGetCases();
 
-    const review = () => {
-        navigation.navigate("Review");
-    };
     const screenSize = useBreakpointValue({
         base: "base",
         md: "md",
     });
 
-    const goToCase = (caseNumber: number) => {
-        navigation.push("Case", { caseNumber });
+    const goToCase = (sessionId: string) => {
+        navigation.push("Case", { sessionId });
     };
 
     useEffect(() => {
@@ -228,71 +227,84 @@ const HomeScreen = ({ navigation }: Props) => {
             <HomeNavBar />
             {/* Content */}
             <View flex={1} justifyContent={["start", "center"]}>
-                <View
-                    marginX={{ base: "25px", md: "50px" }}
-                    mt={{ base: "20px", md: 0 }}
-                >
-                    <Heading
-                        fontSize={"2xl"}
-                        fontFamily="sf-pro-bold"
-                        color={"trueGray.700"}
-                        mb={"25px"}
+                {error && <Text>{JSON.stringify(error)}</Text>}
+                {cases != undefined && (
+                    <View
+                        marginX={{ base: "25px", md: "50px" }}
+                        mt={{ base: "20px", md: 0 }}
                     >
-                        My Cases
-                    </Heading>
-                    <ScrollView
-                        w={"100%"}
-                        horizontal={screenSize == "base" ? false : true}
-                        showsHorizontalScrollIndicator={false}
-                    >
-                        {casesRes.map((user_case) => (
-                            <View marginRight={{ base: 0, md: "30px" }}>
-                                <CaseCard
-                                    onPress={() =>
-                                        goToCase(user_case.caseNumber)
-                                    }
-                                    completion={user_case.completion}
-                                    title={user_case.name}
+                        <Heading
+                            fontSize={"2xl"}
+                            fontFamily="sf-pro-bold"
+                            color={"trueGray.700"}
+                            mb={"25px"}
+                        >
+                            My Cases
+                        </Heading>
+                        <ScrollView
+                            w={"100%"}
+                            horizontal={screenSize == "base" ? false : true}
+                            showsHorizontalScrollIndicator={false}
+                        >
+                            {cases.map((user_case) => (
+                                <View
+                                    key={JSON.stringify(user_case)}
+                                    marginRight={{ base: 0, md: "30px" }}
                                 >
-                                    {/* case # */}
-                                    <Text
-                                        fontSize={"sm"}
-                                        fontFamily="sf-pro-bold"
-                                        color={
-                                            customTheme.colors
-                                                .case_card_case_number
+                                    <CaseCard
+                                        onPress={() =>
+                                            goToCase(user_case.sessionId)
                                         }
-                                    >
-                                        Case {user_case.caseNumber}
-                                    </Text>
-                                    {/* dates */}
-                                    <Text
-                                        mt={"10px"}
-                                        fontFamily={"sf-pro"}
-                                        color={
-                                            customTheme.colors.case_card_dates
+                                        completion={
+                                            user_case.sessionState.completion
                                         }
-                                        fontSize={"xs"}
+                                        title={findStateNameByAbbrev(
+                                            user_case.workflowId
+                                        )}
                                     >
-                                        <Text>
-                                            Date Created:{" "}
-                                            {new Date(
-                                                user_case.createdAt
-                                            ).toLocaleDateString()}
+                                        {/* case # */}
+                                        <Text
+                                            fontSize={"sm"}
+                                            fontFamily="sf-pro-bold"
+                                            color={
+                                                customTheme.colors
+                                                    .case_card_case_number
+                                            }
+                                        >
+                                            Case{" "}
+                                            {user_case.caseNumber ||
+                                                "number unknown"}
                                         </Text>
-                                        {"\n"}
-                                        <Text>
-                                            Date Updated:{" "}
-                                            {new Date(
-                                                user_case.updatedAt
-                                            ).toLocaleDateString()}
+                                        {/* dates */}
+                                        <Text
+                                            mt={"10px"}
+                                            fontFamily={"sf-pro"}
+                                            color={
+                                                customTheme.colors
+                                                    .case_card_dates
+                                            }
+                                            fontSize={"xs"}
+                                        >
+                                            <Text>
+                                                Date Created:{" "}
+                                                {unixToHumanReadableDate(
+                                                    user_case.createdAt
+                                                )}
+                                            </Text>
+                                            {"\n"}
+                                            <Text>
+                                                Date Updated:{" "}
+                                                {unixToHumanReadableDate(
+                                                    user_case.updatedAt
+                                                )}
+                                            </Text>
                                         </Text>
-                                    </Text>
-                                </CaseCard>
-                            </View>
-                        ))}
-                    </ScrollView>
-                </View>
+                                    </CaseCard>
+                                </View>
+                            ))}
+                        </ScrollView>
+                    </View>
+                )}
             </View>
         </View>
     );
@@ -360,3 +372,23 @@ export default HomeScreen;
 const styles = StyleSheet.create({
     dateText: {},
 });
+
+// const {
+//     openDocumentPicker,
+//     isLoading,
+//     isUploaded,
+//     uploadDocument,
+//     documentSelected,
+//     documentResult,
+// } = useDocumentUpload();
+// const {
+//     isLoading: isDownloadLoading,
+//     prepareDownload,
+//     progress: downloadProgress,
+//     downloadDocument,
+//     documentLink,
+// } = useDocumentDownload();
+
+// const review = () => {
+//     navigation.navigate("Review");
+// };

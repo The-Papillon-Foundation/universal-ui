@@ -2,7 +2,7 @@ import React from "react";
 import { RootStackParamList } from "../types";
 import { StackScreenProps } from "@react-navigation/stack";
 import HomeNavBar from "../components/HomeNavBar";
-import { casesRes } from "./HomeScreen";
+import { casesRes, findStateNameByAbbrev } from "./HomeScreen";
 import {
     Button,
     CheckCircleIcon,
@@ -14,8 +14,10 @@ import {
 } from "native-base";
 import { customTheme } from "../hooks/useCachedResources";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native";
+import { ActivityIndicator, TouchableOpacity } from "react-native";
 import CaseCard from "../components/CaseCard";
+import useGetCase from "../hooks/useGetCase";
+import states from "../assets/data/states.json";
 
 type Props = StackScreenProps<RootStackParamList, "Case">;
 
@@ -70,10 +72,9 @@ const DocumentManagementButton = ({
 );
 
 const CaseOverviewScreen = ({ navigation, route }: Props) => {
-    const currentCase =
-        casesRes[
-            casesRes.findIndex((c) => c.caseNumber == route.params.caseNumber)
-        ];
+    const { isLoading, error, currentCase } = useGetCase(
+        route.params.sessionId
+    );
     const screenSize = useBreakpointValue({
         base: "base",
         md: "md",
@@ -96,7 +97,12 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                     >
                         Back to My Cases
                     </Text>
-                    {currentCase ? (
+                    {isLoading && (
+                        <ActivityIndicator
+                            style={{ alignSelf: "center", marginTop: "25%" }}
+                        />
+                    )}
+                    {currentCase && (
                         <>
                             <View>
                                 <Text
@@ -104,7 +110,9 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                     fontSize="2xl"
                                     color={customTheme.colors.case_card_title}
                                 >
-                                    {currentCase.name}
+                                    {findStateNameByAbbrev(
+                                        currentCase.workflowId
+                                    )}
                                 </Text>
                                 <Text
                                     fontSize={"md"}
@@ -159,9 +167,10 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                     direction={{ base: "column", md: "row" }}
                                     flexWrap={{ md: "wrap" }}
                                 >
-                                    {currentCase.cardGroups.map(
+                                    {currentCase.sessionState.cardGroups.map(
                                         (cg, index, cgs) => (
                                             <View
+                                                key={index}
                                                 w={{
                                                     base: "100%",
                                                     md: "375px",
@@ -225,14 +234,15 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                                         }
                                                         borderColor={
                                                             index == 0 &&
-                                                            cg.completion == 100
+                                                            cg.completion ==
+                                                                "1.0"
                                                                 ? customTheme
                                                                       .colors
                                                                       .case_horizontal_divider
                                                                 : index != 0 &&
                                                                   cgs[index - 1]
                                                                       .completion ==
-                                                                      100
+                                                                      "1.0"
                                                                 ? customTheme
                                                                       .colors
                                                                       .case_horizontal_divider
@@ -244,17 +254,18 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                                         width={"20px"}
                                                         borderRadius={"30px"}
                                                         borderWidth={
-                                                            cg.completion == 100
+                                                            cg.completion ==
+                                                            "1.0"
                                                                 ? undefined
                                                                 : "3px"
                                                         }
                                                         borderColor={
                                                             cg.completion ==
-                                                                100 ||
+                                                                "1.0" ||
                                                             (index != 0 &&
                                                                 cgs[index - 1]
                                                                     .completion ==
-                                                                    100)
+                                                                    "1.0")
                                                                 ? customTheme
                                                                       .colors
                                                                       .case_horizontal_divider
@@ -263,7 +274,7 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                                         alignItems="center"
                                                     >
                                                         {cg.completion ==
-                                                            100 && (
+                                                            "1.0" && (
                                                             <CheckCircleIcon
                                                                 size="35px"
                                                                 color={
@@ -299,7 +310,8 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                                                 : undefined
                                                         }
                                                         borderColor={
-                                                            cg.completion == 100
+                                                            cg.completion ==
+                                                            "1.0"
                                                                 ? customTheme
                                                                       .colors
                                                                       .case_horizontal_divider
@@ -326,20 +338,24 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                                         <Button
                                                             w="50%"
                                                             bgColor={
-                                                                cg.completion ==
-                                                                100
+                                                                Number(
+                                                                    cg.completion
+                                                                ) == 1
                                                                     ? "teal.500"
-                                                                    : cg.completion >
-                                                                      0
+                                                                    : Number(
+                                                                          cg.completion
+                                                                      ) > 0
                                                                     ? "cyan.800"
                                                                     : "cyan.600"
                                                             }
                                                         >
-                                                            {cg.completion ==
-                                                            100
+                                                            {Number(
+                                                                cg.completion
+                                                            ) == 100
                                                                 ? "Review"
-                                                                : cg.completion >
-                                                                  0
+                                                                : Number(
+                                                                      cg.completion
+                                                                  ) > 0
                                                                 ? "Continue"
                                                                 : "Start"}
                                                         </Button>
@@ -351,10 +367,6 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                 </Stack>
                             </View>
                         </>
-                    ) : (
-                        <View>
-                            Case {route.params.caseNumber} does not exist.
-                        </View>
                     )}
                 </View>
             </ScrollView>

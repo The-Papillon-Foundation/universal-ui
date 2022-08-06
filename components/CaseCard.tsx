@@ -7,7 +7,7 @@ import StatusCard from "./StatusCard";
 type Props = {
     children?: React.ReactNode;
     onPress: () => void;
-    completion: number;
+    completion: string;
     title: string;
 };
 
@@ -50,6 +50,8 @@ export default function CaseCard({
                     fontFamily={"poppins-bold"}
                     fontSize="xl"
                     color={customTheme.colors.case_card_title}
+                    noOfLines={1}
+                    adjustsFontSizeToFit={true}
                 >
                     {title}
                 </Text>
