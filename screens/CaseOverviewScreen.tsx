@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { RootStackParamList } from "../types";
 import { StackScreenProps } from "@react-navigation/stack";
 import HomeNavBar from "../components/HomeNavBar";
-import { casesRes, findStateNameByAbbrev } from "./HomeScreen";
+import { findStateNameByAbbrev } from "./HomeScreen";
 import {
     Button,
     CheckCircleIcon,
@@ -20,7 +20,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ActivityIndicator, TouchableOpacity } from "react-native";
 import CaseCard from "../components/CaseCard";
 import useGetCase from "../hooks/useGetCase";
-import states from "../assets/data/states.json";
 import { useDocumentUpload } from "../hooks/useDocumentUpload";
 import { useDocumentDownload } from "../hooks/useDocumentDownload";
 import { ProgressBar } from "react-native-paper";

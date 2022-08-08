@@ -32,10 +32,6 @@ const EligibilityScreen = ({ route, navigation }: Props) => {
         });
     };
 
-    useEffect(() => {
-        if (eligibilityModule) console.log(eligibilityModule);
-    }, [eligibilityModule]);
-
     return (
         <ScreenWithNavbar>
             <QuestionContainer>
