@@ -70,9 +70,17 @@ function RootNavigator() {
                 name="DetermineWorkflow"
                 component={DetermineWorkflow}
             />
-            <Stack.Screen name="Eligibility" component={EligibilityScreen} />
+            <Stack.Screen
+                name="Eligibility"
+                component={EligibilityScreen}
+                initialParams={{ questionIndex: 0, groupIndex: 0 }}
+            />
             <Stack.Screen name="CreateUser" component={CreateUserScreen} />
-            <Stack.Screen name="Process" component={ProcessScreen} />
+            <Stack.Screen
+                name="Process"
+                component={ProcessScreen}
+                initialParams={{ questionIndex: 0, groupIndex: 0 }}
+            />
             <Stack.Screen name="Review" component={ReviewScreen} />
             <Stack.Screen
                 name="Ineligible"
