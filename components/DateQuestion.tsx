@@ -1,9 +1,11 @@
 import React from "react";
-import { Button, Stack, Text, useBreakpointValue, View } from "native-base";
-import { DatePickerInput } from "react-native-paper-dates";
+import { Stack, useBreakpointValue, View } from "native-base";
+import { DatePickerInput, DatePickerModal } from "react-native-paper-dates";
 import QuestionPrompt from "./QuestionPrompt";
 import QuestionButton from "./QuestionButton";
 import { customTheme } from "../hooks/useCachedResources";
+import { Button } from "react-native-paper";
+import { Fontisto } from "@expo/vector-icons";
 
 type Props = {
     prompt: string;
@@ -11,26 +13,39 @@ type Props = {
 };
 
 const DateQuestion = ({ prompt, handleResponse }: Props) => {
-    const [inputDate, setInputDate] = React.useState<Date | undefined>(
-        undefined
+    const [date, setDate] = React.useState<Date | undefined>(new Date());
+    const [open, setOpen] = React.useState(false);
+
+    const onDismissSingle = React.useCallback(() => {
+        setOpen(false);
+    }, [setOpen]);
+
+    const onConfirmSingle = React.useCallback(
+        (params) => {
+            setOpen(false);
+            setDate(params.date);
+        },
+        [setOpen, setDate]
     );
     const dateFontSize = useBreakpointValue({
         base: 18,
         md: 20,
     });
+
+    const submitDate = () => {
+        date && handleResponse(date);
+        setDate(new Date());
+    };
     return (
         <>
             <QuestionPrompt>{prompt}</QuestionPrompt>
             <Stack space="2.5" mt="2">
-                <View w={{ base: "100%", md: "55%" }}>
+                <View w={{ base: "100%", md: "55%" }} flexDirection="row">
                     <DatePickerInput
                         locale="en"
-                        value={inputDate}
-                        onChange={(d) => setInputDate(d)}
+                        value={date}
+                        onChange={(d) => setDate(d)}
                         inputMode="start"
-                        activeUnderlineColor={
-                            customTheme.colors.question_bottom_outline
-                        }
                         withModal={false}
                         withDateFormatInLabel={false}
                         style={{
@@ -42,30 +57,27 @@ const DateQuestion = ({ prompt, handleResponse }: Props) => {
                         }}
                         mode="flat" //(see react-native-paper docs)
                         autoFocus
-                        theme={{
-                            colors: {
-                                text: customTheme.colors
-                                    .placeholder_question_text,
-                            },
-                            fonts: { regular: { fontFamily: "sf-pro" } },
-                        }}
-                        onSubmitEditing={() => {
-                            if (inputDate != undefined) {
-                                handleResponse(inputDate);
-                            }
-                        }}
+                        onSubmitEditing={submitDate}
+                    />
+                    <Fontisto
+                        onPress={() => setOpen(true)}
+                        name="date"
+                        size={24}
+                        color={customTheme.colors.cyan[700]}
                     />
                 </View>
 
-                {/* </View> */}
-                <QuestionButton
-                    onPress={() => {
-                        if (inputDate != undefined) handleResponse(inputDate);
-                    }}
-                >
-                    Submit
-                </QuestionButton>
+                <QuestionButton onPress={submitDate}>Submit</QuestionButton>
             </Stack>
+            <DatePickerModal
+                locale="en"
+                label="Select a date"
+                mode="single"
+                visible={open}
+                onDismiss={onDismissSingle}
+                date={date}
+                onConfirm={onConfirmSingle}
+            />
         </>
     );
 };
