@@ -197,8 +197,13 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                     direction={{ base: "column", md: "row" }}
                                     flexWrap={{ md: "wrap" }}
                                 >
-                                    {currentCase.sessionState.cardGroups.map(
-                                        (cg, index, cgs) => (
+                                    {currentCase.sessionState.cardGroups
+                                        .filter(
+                                            (cg) =>
+                                                cg.module !=
+                                                "eligibility_module"
+                                        )
+                                        .map((cg, index, cgs) => (
                                             <View
                                                 key={index}
                                                 w={{
@@ -366,6 +371,18 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                                     </Text>
                                                     <View mt="12px">
                                                         <Button
+                                                            onPress={() => {
+                                                                navigation.push(
+                                                                    "Process",
+                                                                    {
+                                                                        stateName:
+                                                                            currentCase.workflowId,
+                                                                        questionIndex: 0, // Object.keys(cg.questions).findIndex((question) =>cg.questions[question].user !=null)
+                                                                        groupIndex:
+                                                                            index,
+                                                                    }
+                                                                );
+                                                            }}
                                                             w="50%"
                                                             bgColor={
                                                                 Number(
@@ -381,7 +398,7 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                                         >
                                                             {Number(
                                                                 cg.completion
-                                                            ) == 100
+                                                            ) == 1
                                                                 ? "Review"
                                                                 : Number(
                                                                       cg.completion
@@ -392,8 +409,7 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                                     </View>
                                                 </CaseCard>
                                             </View>
-                                        )
-                                    )}
+                                        ))}
                                 </Stack>
                             </View>
                         </>

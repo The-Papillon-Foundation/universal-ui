@@ -3,7 +3,7 @@ import { Module, RootStackParamList } from "../types";
 import { View as RNVIEW } from "react-native";
 import { ArrowForwardIcon, Button, View } from "native-base";
 import Question from "./Question";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { customTheme } from "../hooks/useCachedResources";
 
@@ -14,23 +14,38 @@ type Props = {
 };
 
 const QuestionStack = ({ module, navigable, onFinish }: Props) => {
-    const [groupIndex, setGroupIndex] = useState(0);
-    const [questionIndex, setQuestionIndex] = useState(0);
     const navigation =
         useNavigation<
             StackNavigationProp<RootStackParamList, "Process" | "Eligibility">
         >();
+    const route = useRoute<RouteProp<RootStackParamList, "Process">>();
+    const { questionIndex, groupIndex } = route.params;
     const containerRef = useRef<MutableRefObject<typeof View>>(null);
 
     const goBack = () => {
-        if (questionIndex == 0) return;
-        else setQuestionIndex((questionIndex) => questionIndex - 1);
+        if (questionIndex == 0 && groupIndex == 0) return;
+        if (questionIndex == 0 && groupIndex > 0) {
+            navigation.setParams({
+                ...route.params,
+                groupIndex: groupIndex - 1,
+                questionIndex: module.card_groups[groupIndex].cards.length - 1,
+            });
+        } else {
+            navigation.setParams({
+                ...route.params,
+                questionIndex: Number(questionIndex) - 1,
+            });
+        }
     };
 
     const skipQuestion = () => {
         if (questionIndex >= module.card_groups[groupIndex].cards.length - 1)
             return;
-        else setQuestionIndex((questionIndex) => questionIndex + 1);
+        else
+            navigation.setParams({
+                ...route.params,
+                questionIndex: Number(questionIndex) + 1,
+            });
     };
 
     const goNext = (id: string | null) => {
@@ -39,14 +54,20 @@ const QuestionStack = ({ module, navigable, onFinish }: Props) => {
                 // All groups answered
                 onFinish();
             } else {
-                setQuestionIndex(0);
-                setGroupIndex((groupIndex) => groupIndex + 1);
+                navigation.setParams({
+                    ...route.params,
+                    questionIndex: 0,
+                    groupIndex: Number(groupIndex) + 1,
+                });
             }
         } else {
             const questionIndex = module.card_groups[
                 groupIndex
             ].cards.findIndex((c) => c.id == id);
-            setQuestionIndex(questionIndex);
+            navigation.setParams({
+                ...route.params,
+                questionIndex,
+            });
         }
     };
 

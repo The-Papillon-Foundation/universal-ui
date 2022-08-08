@@ -44,7 +44,11 @@ const DetermineWorkflow = ({ navigation }: Props) => {
             ) != -1
         ) {
             // Workflow exists
-            navigation.navigate("Eligibility", { stateName: state });
+            navigation.navigate("Eligibility", {
+                stateName: state,
+                questionIndex: 0,
+                groupIndex: 0,
+            });
         } else {
             // Workflow doesn't exist
             navigation.navigate("Ineligible", {

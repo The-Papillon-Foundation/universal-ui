@@ -20,9 +20,13 @@ export type RootStackParamList = {
     Login: undefined;
     Case: { sessionId: string };
     DetermineWorkflow: undefined;
-    Eligibility: { stateName: string };
+    Eligibility: {
+        stateName: string;
+        groupIndex: number;
+        questionIndex: number;
+    };
     CreateUser: { stateName: string };
-    Process: { stateName: string };
+    Process: { stateName: string; groupIndex: number; questionIndex: number };
     Review: undefined;
     Modal: undefined;
     NotFound: undefined;

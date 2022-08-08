@@ -52,6 +52,8 @@ const ForceLoginScreen = ({ navigation, route }: Props) => {
                 } else if (route.name == "CreateUser") {
                     navigation.navigate("Process", {
                         stateName: route.params!.stateName,
+                        questionIndex: 0,
+                        groupIndex: 0,
                     });
                 }
             })
