@@ -49,7 +49,13 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
     >;
 
 export interface Question {
-    type: "TrueOrFalse" | "Address" | "MultipleChoice" | "Text" | "Date";
+    type:
+        | "TrueOrFalse"
+        | "YesOrNo"
+        | "Address"
+        | "MultipleChoice"
+        | "Text"
+        | "Date";
     prompt: string;
     pass: string[];
     options: string[];
