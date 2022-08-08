@@ -55,7 +55,7 @@ const HomeScreen = ({ navigation }: Props) => {
         if (checkedForSession && userId == "") {
             navigation.navigate("Landing");
         }
-    }, [checkedForSession, sessionId]);
+    }, [checkedForSession]);
 
     if (checkedForSession == false) {
         return <Spinner color="trueGray.600" size="lg" />;
