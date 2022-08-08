@@ -1,0 +1,78 @@
+import { StyleSheet } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Input, Stack } from "native-base";
+import QuestionButton from "./QuestionButton";
+import QuestionPrompt from "./QuestionPrompt";
+import { customTheme } from "../hooks/useCachedResources";
+
+type Props = {
+    prompt: string;
+    handleResponse: (value: string) => void;
+};
+
+const PhoneNumberQuestion = ({ prompt, handleResponse }: Props) => {
+    const [value, setValue] = useState("");
+    const inputElement = useRef<{ focus: () => void }>(null);
+
+    const formatPhoneNumber = (pn: string) => {};
+
+    const handleChange = (text: string) => {
+        if (value.includes(text)) return setValue(text);
+        text = text.replace(/\D/g, "");
+        text = text.substring(0, 10);
+        let formatted = "";
+        if (text.length > 2) {
+            formatted =
+                "(" + text.substring(0, 3) + ") " + text.substring(3, 6);
+        }
+        if (text.length > 5) {
+            formatted += "-" + text.substring(6);
+        }
+        setValue(formatted || text);
+    };
+
+    const submitPhoneNumber = () => {
+        let strippedPhoneNumber = value.replaceAll(/\D/g, "");
+        handleResponse(strippedPhoneNumber);
+        setValue("");
+    };
+
+    useEffect(() => {
+        if (inputElement.current) {
+            inputElement.current.focus();
+        }
+    }, [prompt]);
+
+    return (
+        <>
+            <QuestionPrompt>{prompt}</QuestionPrompt>
+            <Stack direction={"column"} space="24px" mt="2">
+                <Input
+                    ref={inputElement}
+                    value={value}
+                    onChangeText={handleChange}
+                    variant="underlined"
+                    placeholder={"(123) 867-5309"}
+                    keyboardType="number-pad"
+                    fontFamily={"sf-pro"}
+                    fontSize={{ base: "md", md: "lg" }}
+                    paddingX={0}
+                    textAlign="center"
+                    placeholderTextColor={
+                        customTheme.colors.placeholder_question_text
+                    }
+                    onSubmitEditing={submitPhoneNumber}
+                    w={{ base: "100%", md: undefined }}
+                    alignSelf={{ md: "flex-start" }}
+                    alignItems={"center"}
+                    autoFocus
+                />
+                <QuestionButton onPress={submitPhoneNumber}>Ok</QuestionButton>
+            </Stack>
+        </>
+    );
+};
+
+export default PhoneNumberQuestion;
+
+const styles = StyleSheet.create({});
