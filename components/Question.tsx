@@ -10,6 +10,7 @@ import { QuestionCard, QuestionGroup } from "../types";
 import DateQuestion from "./DateQuestion";
 import AddressQuestion, { AddressFieldObject } from "./AddressQuestion";
 import InfoCard from "./InfoCard";
+import TrueOrFalseQuestion from "./TrueOrFalseQuestion";
 
 interface Props {
     card: QuestionCard;
@@ -38,6 +39,32 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
             } else {
                 goIneligible({
                     message: `Because you answered no on the previous question: \n${
+                        card.question!.prompt
+                    }`,
+                });
+            }
+        }
+    };
+
+    const handleTrueOrFalseResponse = (response: "true" | "false") => {
+        updateSession(card.id, response);
+        if (response == "true") {
+            if (card.on_true == "exit") {
+                goIneligible({
+                    message: `Because you answered true on the previous question: \n${
+                        card.question!.prompt
+                    }`,
+                });
+                return;
+            }
+
+            goNext(card.on_true);
+        } else {
+            if (card.on_false != "exit") {
+                goNext(card.on_false);
+            } else {
+                goIneligible({
+                    message: `Because you answered false on the previous question: \n${
                         card.question!.prompt
                     }`,
                 });
@@ -94,11 +121,18 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
         }
         try {
             switch (card.question.type) {
-                case "TrueOrFalse":
+                case "YesOrNo":
                     return (
                         <YesOrNoQuestion
                             prompt={card.question.prompt}
                             handleResponse={handleYesOrNoResponse}
+                        />
+                    );
+                case "TrueOrFalse":
+                    return (
+                        <TrueOrFalseQuestion
+                            prompt={card.question.prompt}
+                            handleResponse={handleTrueOrFalseResponse}
                         />
                     );
                 case "Address":
