@@ -6,7 +6,7 @@ import QuestionPrompt from "./QuestionPrompt";
 
 type Props = {
     prompt: string;
-    handleResponse: (response: "yes" | "no") => void;
+    handleResponse: (response: boolean) => void;
 };
 
 const YesOrNoQuestion = ({ prompt, handleResponse }: Props) => {
@@ -20,10 +20,10 @@ const YesOrNoQuestion = ({ prompt, handleResponse }: Props) => {
                 space={{ base: "8px", md: "16px" }}
                 mt="15px"
             >
-                <QuestionButton onPress={() => handleResponse("yes")}>
+                <QuestionButton onPress={() => handleResponse(true)}>
                     Yes
                 </QuestionButton>
-                <QuestionButton onPress={() => handleResponse("no")}>
+                <QuestionButton onPress={() => handleResponse(false)}>
                     No
                 </QuestionButton>
             </Stack>

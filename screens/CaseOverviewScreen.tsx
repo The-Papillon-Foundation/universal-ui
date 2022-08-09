@@ -376,7 +376,20 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                                                     {
                                                                         stateName:
                                                                             currentCase.workflowId,
-                                                                        questionIndex: 0, // Object.keys(cg.questions).findIndex((question) =>cg.questions[question].user !=null)
+                                                                        questionIndex:
+                                                                            Math.max(
+                                                                                cg.questions.findIndex(
+                                                                                    (
+                                                                                        question
+                                                                                    ) =>
+                                                                                        question
+                                                                                            .answers
+                                                                                            .user ==
+                                                                                        null
+                                                                                ) -
+                                                                                    1,
+                                                                                0
+                                                                            ),
                                                                         groupIndex:
                                                                             index,
                                                                     }

@@ -6,7 +6,7 @@ import QuestionPrompt from "./QuestionPrompt";
 
 type Props = {
     prompt: string;
-    handleResponse: (response: "true" | "false") => void;
+    handleResponse: (response: boolean) => void;
 };
 
 const TrueOrFalseQuestion = ({ prompt, handleResponse }: Props) => {
@@ -20,10 +20,10 @@ const TrueOrFalseQuestion = ({ prompt, handleResponse }: Props) => {
                 space={{ base: "8px", md: "16px" }}
                 mt="15px"
             >
-                <QuestionButton onPress={() => handleResponse("true")}>
+                <QuestionButton onPress={() => handleResponse(true)}>
                     True
                 </QuestionButton>
-                <QuestionButton onPress={() => handleResponse("false")}>
+                <QuestionButton onPress={() => handleResponse(false)}>
                     False
                 </QuestionButton>
             </Stack>
