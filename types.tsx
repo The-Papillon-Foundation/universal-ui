@@ -55,7 +55,8 @@ export interface Question {
         | "Address"
         | "MultipleChoice"
         | "Text"
-        | "Date";
+        | "Date"
+        | "PhoneNumber";
     prompt: string;
     pass: string[];
     options: string[];
@@ -205,16 +206,14 @@ export interface User {
 }
 
 // Workflow Session Types
-export interface Questions {
-    [key: string]: any;
-}
+export type QuestionAnswer = { id: string; answers: { user: any } };
 
 export interface CardGroup {
     completion: string;
     description: string;
     module: string;
     name: string;
-    questions: Questions;
+    questions: QuestionAnswer[];
 }
 
 export interface SessionState {

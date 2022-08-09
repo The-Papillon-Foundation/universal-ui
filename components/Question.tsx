@@ -11,6 +11,7 @@ import DateQuestion from "./DateQuestion";
 import AddressQuestion, { AddressFieldObject } from "./AddressQuestion";
 import InfoCard from "./InfoCard";
 import TrueOrFalseQuestion from "./TrueOrFalseQuestion";
+import PhoneNumberQuestion from "./PhoneNumberQuestion";
 
 interface Props {
     card: QuestionCard;
@@ -24,9 +25,9 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
     const { setFinishedCardGroups } = useContext(WorkflowContext);
     const { updateSession } = useUpdateSession();
 
-    const handleYesOrNoResponse = (response: "yes" | "no") => {
+    const handleYesOrNoResponse = (response: boolean) => {
         updateSession(card.id, response);
-        if (response == "yes") {
+        if (response == true) {
             if (card.on_true == "exit") {
                 goIneligible({ message: "" });
                 return;
@@ -46,9 +47,9 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
         }
     };
 
-    const handleTrueOrFalseResponse = (response: "true" | "false") => {
+    const handleTrueOrFalseResponse = (response: boolean) => {
         updateSession(card.id, response);
-        if (response == "true") {
+        if (response == true) {
             if (card.on_true == "exit") {
                 goIneligible({
                     message: `Because you answered true on the previous question: \n${
@@ -145,6 +146,13 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                 case "Text":
                     return (
                         <TextInputQuestion
+                            prompt={card.question.prompt}
+                            handleResponse={handleTextInputResponse}
+                        />
+                    );
+                case "PhoneNumber":
+                    return (
+                        <PhoneNumberQuestion
                             prompt={card.question.prompt}
                             handleResponse={handleTextInputResponse}
                         />
