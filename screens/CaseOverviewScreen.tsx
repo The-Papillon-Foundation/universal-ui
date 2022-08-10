@@ -23,6 +23,7 @@ import useGetCase from "../hooks/useGetCase";
 import { useDocumentUpload } from "../hooks/useDocumentUpload";
 import { useDocumentDownload } from "../hooks/useDocumentDownload";
 import { ProgressBar } from "react-native-paper";
+import { CalendarTick, Folder2 } from "iconsax-react-native";
 
 type Props = StackScreenProps<RootStackParamList, "Case">;
 
@@ -147,7 +148,10 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                     mx={{ base: "15px", md: "50px" }}
                 >
                     {/* Top Bar with mode selection */}
-                    <View flexDirection={"row"} justifyContent="space-between">
+                    <View
+                        flexDirection={{ base: "column", md: "row" }}
+                        justifyContent={{ md: "space-between" }}
+                    >
                         {/* Navigation and Case information */}
                         <View>
                             <Text
@@ -190,7 +194,7 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                             </View>
                         </View>
                         {/* Mode selector */}
-                        <View>
+                        <View alignSelf={{ base: "center", md: undefined }}>
                             <View
                                 bgColor={
                                     customTheme.colors
@@ -210,14 +214,44 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                                 ? "white"
                                                 : undefined
                                         }
+                                        shadow={
+                                            mode == CaseMode.timeline
+                                                ? 3
+                                                : undefined
+                                        }
+                                        style={{
+                                            shadowColor: "#526971",
+                                            shadowOpacity: 0.15,
+                                        }}
                                         width="143px"
                                         height="45px"
                                         alignItems={"center"}
                                         justifyContent="center"
                                         marginRight="5px"
                                         borderRadius={"15px"}
+                                        flexDirection="row"
+                                        opacity={
+                                            mode == CaseMode.timeline ? 1 : 0.5
+                                        }
                                     >
-                                        <Text>Timeline</Text>
+                                        <CalendarTick
+                                            color={
+                                                customTheme.colors
+                                                    .case_card_title
+                                            }
+                                            variant="Outline"
+                                            size={24}
+                                        />
+                                        <Text
+                                            ml="5px"
+                                            color={
+                                                customTheme.colors
+                                                    .case_card_title
+                                            }
+                                            fontFamily={"manrope-extrabold"}
+                                        >
+                                            Timeline
+                                        </Text>
                                     </View>
                                 </TouchableOpacity>
                                 <TouchableOpacity
@@ -229,14 +263,44 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                                 ? "white"
                                                 : undefined
                                         }
+                                        shadow={
+                                            mode == CaseMode.documents
+                                                ? 3
+                                                : undefined
+                                        }
+                                        style={{
+                                            shadowColor: "#526971",
+                                            shadowOpacity: 0.15,
+                                        }}
                                         width="143px"
                                         height="45px"
                                         alignItems={"center"}
                                         justifyContent="center"
                                         marginLeft="5px"
                                         borderRadius={"15px"}
+                                        flexDirection="row"
+                                        opacity={
+                                            mode == CaseMode.documents ? 1 : 0.5
+                                        }
                                     >
-                                        <Text>Documents</Text>
+                                        <Folder2
+                                            color={
+                                                customTheme.colors
+                                                    .case_card_title
+                                            }
+                                            variant="Outline"
+                                            size={24}
+                                        />
+                                        <Text
+                                            ml="5px"
+                                            fontFamily={"manrope-extrabold"}
+                                            color={
+                                                customTheme.colors
+                                                    .case_card_title
+                                            }
+                                        >
+                                            Documents
+                                        </Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -423,12 +487,7 @@ const CaseCardGroup = ({
             md: "375px",
         }}
         alignItems={{
-            md:
-                index == 0
-                    ? "flex-start"
-                    : cgs.length - 1 == index
-                    ? "flex-end"
-                    : "center",
+            md: "center",
         }}
         flexDirection={{
             base: "row",

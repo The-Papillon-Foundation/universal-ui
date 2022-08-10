@@ -27,7 +27,7 @@ const HomeNavBar = (props: Props) => {
             <View flexDirection={"row"} alignItems="center">
                 <Text
                     color={customTheme.colors.home_screen_navbar_title}
-                    fontFamily={"sf-pro-bold"}
+                    fontFamily={"manrope-semibold"}
                     fontSize="2xl"
                 >
                     Hello, {userId}.

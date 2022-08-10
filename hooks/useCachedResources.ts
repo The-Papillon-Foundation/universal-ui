@@ -183,6 +183,8 @@ export default function useCachedResources() {
                     "poppins-bold": require("../assets/fonts/POPPINS/Poppins-Bold.ttf"),
                     "poppins-semibold": require("../assets/fonts/POPPINS/Poppins-SemiBold.ttf"),
                     "poppins-medium": require("../assets/fonts/POPPINS/Poppins-Medium.ttf"),
+                    "manrope-extrabold": require("../assets/fonts/MANROPE/Manrope-ExtraBold.ttf"),
+                    "manrope-semibold": require("../assets/fonts/MANROPE/Manrope-SemiBold.ttf"),
                 });
                 const stylesResponse = await fetch(
                     `${url}/styles/${styleName}`
