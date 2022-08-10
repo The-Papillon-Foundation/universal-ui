@@ -26,7 +26,7 @@ export default function CaseCard({
             style={{
                 marginBottom: screenSize == "base" ? 15 : 0,
                 flex: 1,
-                padding: 5,
+                padding: 16,
             }}
             onPress={onPress}
         >
@@ -44,6 +44,7 @@ export default function CaseCard({
                         height: 4,
                     },
                     shadowRadius: 16,
+                    zIndex: 100,
                 }}
             >
                 <StatusCard percentage={completion} />
