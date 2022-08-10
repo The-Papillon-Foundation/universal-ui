@@ -26,6 +26,7 @@ export default function CaseCard({
             style={{
                 marginBottom: screenSize == "base" ? 15 : 0,
                 flex: 1,
+                padding: 5,
             }}
             onPress={onPress}
         >
@@ -35,7 +36,6 @@ export default function CaseCard({
                 h={"200px"}
                 backgroundColor={customTheme.colors.case_card_background}
                 padding={"15px"}
-                m={5}
                 style={{
                     shadowColor: "#526971",
                     shadowOpacity: 0.2,
@@ -74,7 +74,11 @@ export default function CaseCard({
                     style={{ flex: 1, width: "100%" }}
                     fontSize={"xl"}
                     noOfLines={1}
-                    color={customTheme.colors.case_card_title}
+                    color={
+                        Number(completion) != 0
+                            ? customTheme.colors.case_card_title
+                            : "#59B5D2"
+                    }
                     adjustsFontSizeToFit={true}
                     minimumFontScale={0.01}
                 >
