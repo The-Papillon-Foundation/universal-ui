@@ -106,7 +106,13 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
     const [openDownloadModal, setOpenDownloadModal] = useState(false);
 
     return (
-        <View flex={1}>
+        <View
+            flex={1}
+            backgroundColor={{
+                base: customTheme.colors.light[100],
+                md: "#FFF",
+            }}
+        >
             <HomeNavBar />
             <ScrollView>
                 <View
@@ -195,6 +201,11 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                     flex={1}
                                     direction={{ base: "column", md: "row" }}
                                     flexWrap={{ md: "wrap" }}
+                                    backgroundColor={{
+                                        base: undefined,
+                                        md: customTheme.colors.light[100],
+                                    }}
+                                    borderRadius="24px"
                                 >
                                     {currentCase.sessionState.cardGroups
                                         .filter(
