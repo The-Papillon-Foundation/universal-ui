@@ -4,6 +4,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { extendTheme, theme } from "native-base";
 import { ColorType } from "native-base/lib/typescript/components/types";
 import { useEffect, useState } from "react";
+import { DefaultTheme } from "react-native-paper";
 import { url } from "../constants/Urls";
 import { StylesJson } from "../types";
 
@@ -41,6 +42,14 @@ export let customTheme = extendTheme({
         case_card_title: "",
         case_card_case_number: "",
         case_card_dates: "",
+        case_overview_screen_mobile_background: "",
+        case_overview_screen_timeline_desktop_background: "",
+        case_overview_screen_desktop_background: "",
+        document_management_button_background: "",
+        document_management_button_border: "",
+        document_management_button_icon: "",
+        incomplete_status_bar: "",
+        instruction_text: "",
     },
     fonts: {
         default: "",
@@ -48,6 +57,8 @@ export let customTheme = extendTheme({
         "question-text": "",
     },
 });
+
+export let customPaperTheme = DefaultTheme;
 export let customAssets: {
     image_urls: { [key: string]: ColorType };
     copy: { [key: string]: string };
@@ -57,9 +68,11 @@ export let customAssets: {
 };
 
 const applyRemoteStyles = (stylesJson: StylesJson) => {
+    console.log(stylesJson);
     customTheme = extendTheme({
         ...customTheme,
         colors: {
+            primary: stylesJson.colors.primary,
             landing_page_background: stylesJson.colors.landing_page_background,
             copyright_text: stylesJson.colors.copyright_text,
             about_text: stylesJson.colors.about_text,
@@ -99,6 +112,21 @@ const applyRemoteStyles = (stylesJson: StylesJson) => {
             case_card_title: stylesJson.colors.case_card_title,
             case_card_case_number: stylesJson.colors.case_card_case_number,
             case_card_dates: stylesJson.colors.case_card_dates,
+            case_overview_screen_mobile_background:
+                stylesJson.colors.case_overview_screen_mobile_background,
+            case_overview_screen_timeline_desktop_background:
+                stylesJson.colors
+                    .case_overview_screen_timeline_desktop_background,
+            case_overview_screen_desktop_background:
+                stylesJson.colors.case_overview_screen_desktop_background,
+            document_management_button_background:
+                stylesJson.colors.document_management_button_background,
+            document_management_button_border:
+                stylesJson.colors.document_management_button_border,
+            document_management_button_icon:
+                stylesJson.colors.document_management_button_icon,
+            incomplete_status_bar: stylesJson.colors.incomplete_status_bar,
+            instruction_text: stylesJson.colors.instruction_text,
         },
         fonts: {
             default: stylesJson.fonts.default,
@@ -116,6 +144,20 @@ const applyRemoteStyles = (stylesJson: StylesJson) => {
             copy: {
                 organization_name: "Papillon Foundation",
             },
+        },
+    };
+    customPaperTheme = {
+        ...DefaultTheme,
+        colors: {
+            ...DefaultTheme.colors,
+            primary: customTheme.colors.button_surface,
+            disabled: "gray",
+            text: customTheme.colors.info_card_title,
+        },
+        fonts: {
+            ...DefaultTheme.fonts,
+            regular: { fontFamily: "sf-pro" },
+            medium: { fontFamily: "sf-pro-medium" },
         },
     };
 };

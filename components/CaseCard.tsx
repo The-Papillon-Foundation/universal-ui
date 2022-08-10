@@ -65,23 +65,21 @@ export default function CaseCard({
                             Number(completion) >= 1 ? undefined : "1px"
                         }
                         borderRightRadius={"30px"}
-                        borderColor={"#CFFAFE"}
+                        borderColor={customTheme.colors.incomplete_status_bar}
                     />
                 </View>
 
                 {/* title */}
                 <Text
                     fontFamily={"poppins-bold"}
-                    style={{ flex: 1, width: "100%" }}
+                    style={{ width: "100%" }}
                     fontSize={"xl"}
-                    noOfLines={1}
                     color={
                         Number(completion) != 0
                             ? customTheme.colors.case_card_title
-                            : "#59B5D2"
+                            : customTheme.colors.incomplete_status_bar
                     }
                     adjustsFontSizeToFit={true}
-                    minimumFontScale={0.01}
                 >
                     {title}
                 </Text>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { RootStackParamList } from "../types";
+import { CardGroup, RootStackParamList } from "../types";
 import { StackScreenProps } from "@react-navigation/stack";
 import HomeNavBar from "../components/HomeNavBar";
 import { findStateNameByAbbrev } from "./HomeScreen";
@@ -44,8 +44,12 @@ const DocumentManagementButton = ({
                 h={{ base: undefined, md: "160px" }}
                 borderRadius={"40px"}
                 borderWidth="8px"
-                borderColor={"blueGray.300"}
-                backgroundColor="blueGray.100"
+                borderColor={
+                    customTheme.colors.document_management_button_border
+                }
+                backgroundColor={
+                    customTheme.colors.document_management_button_background
+                }
                 justifyContent={"center"}
                 alignItems="center"
                 shadow={"5"}
@@ -58,7 +62,7 @@ const DocumentManagementButton = ({
                 <MaterialCommunityIcons
                     name={iconName as any}
                     size={screenSize == "base" ? 50 : 80}
-                    color={customTheme.colors.blueGray[400]}
+                    color={customTheme.colors.document_management_button_icon}
                 />
             </View>
         </TouchableOpacity>
@@ -66,7 +70,7 @@ const DocumentManagementButton = ({
             <Text
                 fontFamily="sf-pro-bold"
                 fontSize={{ base: "sm", md: "lg" }}
-                color="darkBlue.800"
+                color={customTheme.colors.instruction_text}
                 textAlign="center"
                 mt={"20px"}
             >
@@ -76,10 +80,16 @@ const DocumentManagementButton = ({
     </View>
 );
 
+enum CaseMode {
+    timeline = 0,
+    documents = 1,
+}
+
 const CaseOverviewScreen = ({ navigation, route }: Props) => {
     const { isLoading, error, currentCase } = useGetCase(
         route.params.sessionId
     );
+    const [mode, setMode] = useState<CaseMode>(CaseMode.timeline);
     const {
         openDocumentPicker,
         isLoading: isDocumentUploading,
@@ -105,12 +115,29 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
     const [openUploadModal, setOpenUploadModal] = useState(false);
     const [openDownloadModal, setOpenDownloadModal] = useState(false);
 
+    const goToCardGroup = (
+        cg: CardGroup,
+        index: number,
+        workflowId: string
+    ) => {
+        navigation.push("Process", {
+            stateName: workflowId,
+            questionIndex: Math.max(
+                cg.questions.findIndex(
+                    (question) => question.answers.user == null
+                ) - 1,
+                0
+            ),
+            groupIndex: index,
+        });
+    };
+
     return (
         <View
             flex={1}
             backgroundColor={{
-                base: customTheme.colors.light[100],
-                md: "#FFF",
+                base: customTheme.colors.case_overview_screen_mobile_background,
+                md: customTheme.colors.case_overview_screen_desktop_background,
             }}
         >
             <HomeNavBar />
@@ -119,15 +146,102 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                     mt={{ base: "25px", md: "42px" }}
                     mx={{ base: "15px", md: "50px" }}
                 >
-                    <Text
-                        textDecorationLine={"underline"}
-                        fontFamily="sf-pro-medium"
-                        fontSize="lg"
-                        color="trueGray.600"
-                        onPress={() => navigation.pop()}
-                    >
-                        Back to My Cases
-                    </Text>
+                    {/* Top Bar with mode selection */}
+                    <View flexDirection={"row"} justifyContent="space-between">
+                        {/* Navigation and Case information */}
+                        <View>
+                            <Text
+                                textDecorationLine={"underline"}
+                                fontFamily="sf-pro-medium"
+                                fontSize="lg"
+                                color="trueGray.600"
+                                onPress={() => navigation.pop()}
+                            >
+                                Back to My Cases
+                            </Text>
+                            <View mb="25px">
+                                {currentCase != undefined && (
+                                    <>
+                                        {" "}
+                                        <Text
+                                            fontFamily={"poppins-bold"}
+                                            fontSize="2xl"
+                                            color={
+                                                customTheme.colors
+                                                    .case_card_title
+                                            }
+                                        >
+                                            {findStateNameByAbbrev(
+                                                currentCase.workflowId
+                                            )}
+                                        </Text>
+                                        <Text
+                                            fontSize={"md"}
+                                            fontFamily="sf-pro-bold"
+                                            color={
+                                                customTheme.colors
+                                                    .case_card_case_number
+                                            }
+                                        >
+                                            Case {currentCase.caseNumber}
+                                        </Text>
+                                    </>
+                                )}
+                            </View>
+                        </View>
+                        {/* Mode selector */}
+                        <View>
+                            <View
+                                bgColor={
+                                    customTheme.colors
+                                        .case_overview_screen_mobile_background
+                                }
+                                flexDirection="row"
+                                alignItems={"center"}
+                                padding="10px"
+                                borderRadius={"22px"}
+                            >
+                                <TouchableOpacity
+                                    onPress={() => setMode(CaseMode.timeline)}
+                                >
+                                    <View
+                                        bgColor={
+                                            mode == CaseMode.timeline
+                                                ? "white"
+                                                : undefined
+                                        }
+                                        width="143px"
+                                        height="45px"
+                                        alignItems={"center"}
+                                        justifyContent="center"
+                                        marginRight="5px"
+                                        borderRadius={"15px"}
+                                    >
+                                        <Text>Timeline</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() => setMode(CaseMode.documents)}
+                                >
+                                    <View
+                                        bgColor={
+                                            mode == CaseMode.documents
+                                                ? "white"
+                                                : undefined
+                                        }
+                                        width="143px"
+                                        height="45px"
+                                        alignItems={"center"}
+                                        justifyContent="center"
+                                        marginLeft="5px"
+                                        borderRadius={"15px"}
+                                    >
+                                        <Text>Documents</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
                     {isLoading && (
                         <ActivityIndicator
                             style={{ alignSelf: "center", marginTop: "25%" }}
@@ -135,306 +249,79 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                     )}
                     {currentCase && (
                         <>
-                            <View>
-                                <Text
-                                    fontFamily={"poppins-bold"}
-                                    fontSize="2xl"
-                                    color={customTheme.colors.case_card_title}
-                                >
-                                    {findStateNameByAbbrev(
-                                        currentCase.workflowId
-                                    )}
-                                </Text>
-                                <Text
-                                    fontSize={"md"}
-                                    fontFamily="sf-pro-bold"
-                                    color={
-                                        customTheme.colors.case_card_case_number
-                                    }
-                                >
-                                    Case {currentCase.caseNumber}
-                                </Text>
-                            </View>
-                            <View>
-                                <Text fontFamily={"sf-pro-medium"}>
-                                    Document Management
-                                </Text>
-                                <Stack
-                                    direction={"row"}
-                                    justifyContent="space-around"
-                                    mx={{ base: "25px", md: "50px" }}
-                                    mt="25px"
-                                >
-                                    <DocumentManagementButton
-                                        onPress={() => {
-                                            setOpenUploadModal(true);
+                            {mode == CaseMode.documents && (
+                                <View>
+                                    <Stack
+                                        direction={"row"}
+                                        justifyContent="space-around"
+                                        mx={{ base: "25px", md: "50px" }}
+                                        mt="25px"
+                                    >
+                                        <DocumentManagementButton
+                                            onPress={() => {
+                                                setOpenUploadModal(true);
+                                            }}
+                                            iconName="upload-outline"
+                                            instructionText="Upload files"
+                                            screenSize={screenSize}
+                                        />
+                                        <DocumentManagementButton
+                                            onPress={() => {}}
+                                            iconName="file-document-outline"
+                                            instructionText="Review your form"
+                                            screenSize={screenSize}
+                                        />
+                                        <DocumentManagementButton
+                                            onPress={() => {
+                                                setOpenDownloadModal(true);
+                                            }}
+                                            iconName="download-outline"
+                                            instructionText="Download file"
+                                            screenSize={screenSize}
+                                        />
+                                    </Stack>
+                                </View>
+                            )}
+                            {mode == CaseMode.timeline && (
+                                <View>
+                                    <Stack
+                                        justifyContent={{ md: "center" }}
+                                        flex={1}
+                                        direction={{
+                                            base: "column",
+                                            md: "row",
                                         }}
-                                        iconName="upload-outline"
-                                        instructionText="Upload files"
-                                        screenSize={screenSize}
-                                    />
-                                    <DocumentManagementButton
-                                        onPress={() => {}}
-                                        iconName="file-document-outline"
-                                        instructionText="Review your form"
-                                        screenSize={screenSize}
-                                    />
-                                    <DocumentManagementButton
-                                        onPress={() => {
-                                            setOpenDownloadModal(true);
+                                        flexWrap={{ md: "wrap" }}
+                                        backgroundColor={{
+                                            base: undefined,
+                                            md: customTheme.colors
+                                                .case_overview_screen_timeline_desktop_background,
                                         }}
-                                        iconName="download-outline"
-                                        instructionText="Download file"
-                                        screenSize={screenSize}
-                                    />
-                                </Stack>
-                            </View>
-                            <View>
-                                <Text
-                                    my={{ base: "15px" }}
-                                    fontFamily={"sf-pro-medium"}
-                                >
-                                    Question Groups
-                                </Text>
-                                <Stack
-                                    justifyContent={{ md: "center" }}
-                                    flex={1}
-                                    direction={{ base: "column", md: "row" }}
-                                    flexWrap={{ md: "wrap" }}
-                                    backgroundColor={{
-                                        base: undefined,
-                                        md: customTheme.colors.light[100],
-                                    }}
-                                    borderRadius="24px"
-                                >
-                                    {currentCase.sessionState.cardGroups
-                                        .filter(
-                                            (cg) =>
-                                                cg.module !=
-                                                "eligibility_module"
-                                        )
-                                        .map((cg, index, cgs) => (
-                                            <View
-                                                key={index}
-                                                w={{
-                                                    base: "100%",
-                                                    md: "375px",
-                                                }}
-                                                alignItems={{
-                                                    md:
-                                                        index == 0
-                                                            ? "flex-start"
-                                                            : cgs.length - 1 ==
-                                                              index
-                                                            ? "flex-end"
-                                                            : "center",
-                                                }}
-                                                flexDirection={{
-                                                    base: "row",
-                                                    md: "column",
-                                                }}
-                                            >
-                                                <View
-                                                    my={{ base: 0, md: "24px" }}
-                                                    pr={{
-                                                        base: "10px",
-                                                        md: undefined,
-                                                    }}
-                                                    w={{
-                                                        base: undefined,
-                                                        md: "100%",
-                                                    }}
-                                                    h={{
-                                                        base: "100%",
-                                                        md: undefined,
-                                                    }}
-                                                    flexDirection={{
-                                                        base: "column",
-                                                        md: "row",
-                                                    }}
-                                                    alignItems="center"
-                                                >
-                                                    <View
-                                                        flex={1}
-                                                        height={{
-                                                            base: undefined,
-                                                            md: "1px",
-                                                        }}
-                                                        width={{
-                                                            base: "1px",
-                                                            md: undefined,
-                                                        }}
-                                                        borderLeftWidth={{
-                                                            base: "3px",
-                                                            md: undefined,
-                                                        }}
-                                                        borderTopWidth={{
-                                                            base: undefined,
-                                                            md: "3px",
-                                                        }}
-                                                        borderLeftRadius={
-                                                            index == 0
-                                                                ? "30px"
-                                                                : undefined
-                                                        }
-                                                        borderColor={
-                                                            index == 0 &&
-                                                            cg.completion ==
-                                                                "1.0"
-                                                                ? customTheme
-                                                                      .colors
-                                                                      .case_horizontal_divider
-                                                                : index != 0 &&
-                                                                  cgs[index - 1]
-                                                                      .completion ==
-                                                                      "1.0"
-                                                                ? customTheme
-                                                                      .colors
-                                                                      .case_horizontal_divider
-                                                                : "#C5E7EF"
-                                                        }
-                                                    />
-                                                    <View
-                                                        height={"20px"}
-                                                        width={"20px"}
-                                                        borderRadius={"30px"}
-                                                        borderWidth={
-                                                            cg.completion ==
-                                                            "1.0"
-                                                                ? undefined
-                                                                : "3px"
-                                                        }
-                                                        borderColor={
-                                                            cg.completion ==
-                                                                "1.0" ||
-                                                            (index != 0 &&
-                                                                cgs[index - 1]
-                                                                    .completion ==
-                                                                    "1.0")
-                                                                ? customTheme
-                                                                      .colors
-                                                                      .case_horizontal_divider
-                                                                : "#C5E7EF"
-                                                        }
-                                                        alignItems="center"
-                                                    >
-                                                        {cg.completion ==
-                                                            "1.0" && (
-                                                            <CheckCircleIcon
-                                                                size="35px"
-                                                                color={
-                                                                    customTheme
-                                                                        .colors
-                                                                        .case_horizontal_divider
-                                                                }
-                                                            />
-                                                        )}
-                                                    </View>
-                                                    <View
-                                                        flex={1}
-                                                        height={{
-                                                            base: undefined,
-                                                            md: "1px",
-                                                        }}
-                                                        width={{
-                                                            base: "1px",
-                                                            md: undefined,
-                                                        }}
-                                                        borderLeftWidth={{
-                                                            base: "3px",
-                                                            md: undefined,
-                                                        }}
-                                                        borderTopWidth={{
-                                                            base: undefined,
-                                                            md: "3px",
-                                                        }}
-                                                        borderRightRadius={
-                                                            cgs.length - 1 ==
-                                                            index
-                                                                ? "30px"
-                                                                : undefined
-                                                        }
-                                                        borderColor={
-                                                            cg.completion ==
-                                                            "1.0"
-                                                                ? customTheme
-                                                                      .colors
-                                                                      .case_horizontal_divider
-                                                                : "#C5E7EF"
-                                                        }
-                                                    />
-                                                </View>
-
-                                                <CaseCard
-                                                    onPress={() => {}}
-                                                    completion={cg.completion}
-                                                    title={cg.name}
-                                                >
-                                                    <Text
-                                                        fontFamily={
-                                                            "sf-pro-medium"
-                                                        }
-                                                        fontSize="sm"
-                                                        color="trueGray.400"
-                                                    >
-                                                        {cg.description}
-                                                    </Text>
-                                                    <View mt="12px">
-                                                        <Button
-                                                            onPress={() => {
-                                                                navigation.push(
-                                                                    "Process",
-                                                                    {
-                                                                        stateName:
-                                                                            currentCase.workflowId,
-                                                                        questionIndex:
-                                                                            Math.max(
-                                                                                cg.questions.findIndex(
-                                                                                    (
-                                                                                        question
-                                                                                    ) =>
-                                                                                        question
-                                                                                            .answers
-                                                                                            .user ==
-                                                                                        null
-                                                                                ) -
-                                                                                    1,
-                                                                                0
-                                                                            ),
-                                                                        groupIndex:
-                                                                            index,
-                                                                    }
-                                                                );
-                                                            }}
-                                                            w="50%"
-                                                            bgColor={
-                                                                Number(
-                                                                    cg.completion
-                                                                ) == 1
-                                                                    ? "teal.500"
-                                                                    : Number(
-                                                                          cg.completion
-                                                                      ) > 0
-                                                                    ? "cyan.800"
-                                                                    : "cyan.600"
-                                                            }
-                                                        >
-                                                            {Number(
-                                                                cg.completion
-                                                            ) == 1
-                                                                ? "Review"
-                                                                : Number(
-                                                                      cg.completion
-                                                                  ) > 0
-                                                                ? "Continue"
-                                                                : "Start"}
-                                                        </Button>
-                                                    </View>
-                                                </CaseCard>
-                                            </View>
-                                        ))}
-                                </Stack>
-                            </View>
+                                        borderRadius="24px"
+                                    >
+                                        {currentCase.sessionState.cardGroups
+                                            .filter(
+                                                (cg) =>
+                                                    cg.module !=
+                                                    "eligibility_module"
+                                            )
+                                            .map((cg, index, cgs) => (
+                                                <CaseCardGroup
+                                                    cg={cg}
+                                                    cgs={cgs}
+                                                    index={index}
+                                                    onPress={() =>
+                                                        goToCardGroup(
+                                                            cg,
+                                                            index,
+                                                            currentCase.workflowId
+                                                        )
+                                                    }
+                                                />
+                                            ))}
+                                    </Stack>
+                                </View>
+                            )}
                         </>
                     )}
                 </View>
@@ -517,5 +404,164 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
         </View>
     );
 };
+
+const CaseCardGroup = ({
+    index,
+    cg,
+    cgs,
+    onPress,
+}: {
+    index: number;
+    cg: CardGroup;
+    cgs: CardGroup[];
+    onPress: () => void;
+}) => (
+    <View
+        key={index}
+        w={{
+            base: "100%",
+            md: "375px",
+        }}
+        alignItems={{
+            md:
+                index == 0
+                    ? "flex-start"
+                    : cgs.length - 1 == index
+                    ? "flex-end"
+                    : "center",
+        }}
+        flexDirection={{
+            base: "row",
+            md: "column",
+        }}
+    >
+        <View
+            my={{
+                base: 0,
+                md: "24px",
+            }}
+            pr={{
+                base: "10px",
+                md: undefined,
+            }}
+            w={{
+                base: undefined,
+                md: "100%",
+            }}
+            h={{
+                base: "100%",
+                md: undefined,
+            }}
+            flexDirection={{
+                base: "column",
+                md: "row",
+            }}
+            alignItems="center"
+        >
+            <View
+                flex={1}
+                height={{
+                    base: undefined,
+                    md: "1px",
+                }}
+                width={{
+                    base: "1px",
+                    md: undefined,
+                }}
+                borderLeftWidth={{
+                    base: "3px",
+                    md: undefined,
+                }}
+                borderTopWidth={{
+                    base: undefined,
+                    md: "3px",
+                }}
+                borderLeftRadius={index == 0 ? "30px" : undefined}
+                borderColor={
+                    index == 0 && cg.completion == "1.0"
+                        ? customTheme.colors.case_horizontal_divider
+                        : index != 0 && cgs[index - 1].completion == "1.0"
+                        ? customTheme.colors.case_horizontal_divider
+                        : customTheme.colors.incomplete_status_bar
+                }
+            />
+            <View
+                height={"20px"}
+                width={"20px"}
+                borderRadius={"30px"}
+                borderWidth={cg.completion == "1.0" ? undefined : "3px"}
+                borderColor={
+                    cg.completion == "1.0" ||
+                    (index != 0 && cgs[index - 1].completion == "1.0")
+                        ? customTheme.colors.case_horizontal_divider
+                        : customTheme.colors.incomplete_status_bar
+                }
+                alignItems="center"
+            >
+                {cg.completion == "1.0" && (
+                    <CheckCircleIcon
+                        size="35px"
+                        color={customTheme.colors.case_horizontal_divider}
+                    />
+                )}
+            </View>
+            <View
+                flex={1}
+                height={{
+                    base: undefined,
+                    md: "1px",
+                }}
+                width={{
+                    base: "1px",
+                    md: undefined,
+                }}
+                borderLeftWidth={{
+                    base: "3px",
+                    md: undefined,
+                }}
+                borderTopWidth={{
+                    base: undefined,
+                    md: "3px",
+                }}
+                borderRightRadius={cgs.length - 1 == index ? "30px" : undefined}
+                borderColor={
+                    cg.completion == "1.0"
+                        ? customTheme.colors.case_horizontal_divider
+                        : customTheme.colors.incomplete_status_bar
+                }
+            />
+        </View>
+
+        <CaseCard onPress={() => {}} completion={cg.completion} title={cg.name}>
+            <Text
+                fontFamily={"sf-pro-medium"}
+                fontSize="sm"
+                color="trueGray.400"
+            >
+                {cg.description}
+            </Text>
+            <View mt="12px">
+                <Button
+                    onPress={onPress}
+                    w="50%"
+                    bgColor={
+                        Number(cg.completion) == 1
+                            ? customTheme.colors.signup_button_surface
+                            : Number(cg.completion) > 0
+                            ? customTheme.colors
+                                  .mobile_question_screen_background
+                            : customTheme.colors.case_horizontal_divider
+                    }
+                >
+                    {Number(cg.completion) == 1
+                        ? "Review"
+                        : Number(cg.completion) > 0
+                        ? "Continue"
+                        : "Start"}
+                </Button>
+            </View>
+        </CaseCard>
+    </View>
+);
 
 export default CaseOverviewScreen;

@@ -63,7 +63,7 @@ const DateQuestion = ({ prompt, handleResponse }: Props) => {
                         onPress={() => setOpen(true)}
                         name="date"
                         size={24}
-                        color={customTheme.colors.cyan[700]}
+                        color={customTheme.colors.about_text}
                     />
                 </View>
 
