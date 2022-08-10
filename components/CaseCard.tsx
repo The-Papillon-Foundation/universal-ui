@@ -30,28 +30,53 @@ export default function CaseCard({
             onPress={onPress}
         >
             <View
-                borderColor={customTheme.colors.case_card_border}
-                borderWidth={"2px"}
                 borderRadius={"32px"}
                 w={{ base: "100%", md: "350px" }}
                 h={"200px"}
                 backgroundColor={customTheme.colors.case_card_background}
                 padding={"15px"}
+                m={5}
+                style={{
+                    shadowColor: "#526971",
+                    shadowOpacity: 0.2,
+                    shadowOffset: {
+                        width: 0,
+                        height: 4,
+                    },
+                    shadowRadius: 16,
+                }}
             >
                 <StatusCard percentage={completion} />
-                <View
-                    my="7.5px"
-                    borderWidth={"1px"}
-                    borderRadius={"30px"}
-                    borderColor={customTheme.colors.case_horizontal_divider}
-                />
+                <View flexDirection={"row"}>
+                    <View
+                        my="7.5px"
+                        width={`${Number(completion) * 100}%`}
+                        borderWidth={
+                            Number(completion) === 0 ? undefined : "1px"
+                        }
+                        borderLeftRadius={"30px"}
+                        borderColor={customTheme.colors.case_horizontal_divider}
+                    />
+                    <View
+                        my="7.5px"
+                        width={`${100 - Number(completion) * 100}%`}
+                        borderWidth={
+                            Number(completion) >= 1 ? undefined : "1px"
+                        }
+                        borderRightRadius={"30px"}
+                        borderColor={"#CFFAFE"}
+                    />
+                </View>
+
                 {/* title */}
                 <Text
                     fontFamily={"poppins-bold"}
-                    fontSize="xl"
-                    color={customTheme.colors.case_card_title}
+                    style={{ flex: 1, width: "100%" }}
+                    fontSize={"xl"}
                     noOfLines={1}
+                    color={customTheme.colors.case_card_title}
                     adjustsFontSizeToFit={true}
+                    minimumFontScale={0.01}
                 >
                     {title}
                 </Text>
