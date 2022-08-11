@@ -68,7 +68,6 @@ export let customAssets: {
 };
 
 const applyRemoteStyles = (stylesJson: StylesJson) => {
-    console.log(stylesJson);
     customTheme = extendTheme({
         ...customTheme,
         colors: {
