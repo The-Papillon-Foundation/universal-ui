@@ -437,17 +437,7 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                     <View
                                         alignItems={"center"}
                                         justifyContent="center"
-                                    >
-                                        <Image
-                                            alt="An image of your id."
-                                            source={require("../assets/images/dummy-data/id-card.png")}
-                                            style={{
-                                                width: "100%",
-                                                aspectRatio: 0.75,
-                                                resizeMode: "contain",
-                                            }}
-                                        />
-                                    </View>
+                                    ></View>
                                 </View>
                                 <View>
                                     <View
@@ -474,21 +464,7 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                             base: "column",
                                             md: "row",
                                         }}
-                                    >
-                                        {Array(3)
-                                            .fill(0)
-                                            .map((_) => (
-                                                <Image
-                                                    alt="An image of your id."
-                                                    source={require("../assets/images/dummy-data/document-card.png")}
-                                                    style={{
-                                                        width: "100%",
-                                                        aspectRatio: 0.75,
-                                                        resizeMode: "contain",
-                                                    }}
-                                                />
-                                            ))}
-                                    </View>
+                                    ></View>
                                 </View>
                             </ScrollView>
                         ) : null}
