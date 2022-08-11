@@ -18,11 +18,10 @@ const HomeNavBar = (props: Props) => {
             style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                paddingHorizontal: 50,
-                paddingVertical: 20,
             }}
+            paddingY={{ base: "20px", md: "20px" }}
+            paddingX={{ base: "25px", md: "50px" }}
             backgroundColor={customTheme.colors.home_screen_navbar_background}
-            borderBottomRadius={"40px"}
         >
             <View flexDirection={"row"} alignItems="center">
                 <Text
@@ -35,7 +34,7 @@ const HomeNavBar = (props: Props) => {
                 <Text
                     ml="20px"
                     fontFamily={"sf-pro-medium"}
-                    fontSize={"lg"}
+                    fontSize={{ base: "sm", md: "lg" }}
                     color={customTheme.colors.home_screen_navbar_item}
                     onPress={() => {
                         logout();
