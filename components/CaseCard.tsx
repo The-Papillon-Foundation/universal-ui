@@ -26,31 +26,59 @@ export default function CaseCard({
             style={{
                 marginBottom: screenSize == "base" ? 15 : 0,
                 flex: 1,
+                padding: 16,
             }}
             onPress={onPress}
         >
             <View
-                borderColor={customTheme.colors.case_card_border}
-                borderWidth={"2px"}
                 borderRadius={"32px"}
                 w={{ base: "100%", md: "350px" }}
                 h={"200px"}
                 backgroundColor={customTheme.colors.case_card_background}
                 padding={"15px"}
+                style={{
+                    shadowColor: "#526971",
+                    shadowOpacity: 0.2,
+                    shadowOffset: {
+                        width: 0,
+                        height: 4,
+                    },
+                    shadowRadius: 16,
+                    zIndex: 100,
+                }}
             >
                 <StatusCard percentage={completion} />
-                <View
-                    my="7.5px"
-                    borderWidth={"1px"}
-                    borderRadius={"30px"}
-                    borderColor={customTheme.colors.case_horizontal_divider}
-                />
+                <View flexDirection={"row"}>
+                    <View
+                        my="7.5px"
+                        width={`${Number(completion) * 100}%`}
+                        borderWidth={
+                            Number(completion) === 0 ? undefined : "1px"
+                        }
+                        borderLeftRadius={"30px"}
+                        borderColor={customTheme.colors.case_horizontal_divider}
+                    />
+                    <View
+                        my="7.5px"
+                        width={`${100 - Number(completion) * 100}%`}
+                        borderWidth={
+                            Number(completion) >= 1 ? undefined : "1px"
+                        }
+                        borderRightRadius={"30px"}
+                        borderColor={customTheme.colors.incomplete_status_bar}
+                    />
+                </View>
+
                 {/* title */}
                 <Text
                     fontFamily={"poppins-bold"}
-                    fontSize="xl"
-                    color={customTheme.colors.case_card_title}
-                    noOfLines={1}
+                    style={{ width: "100%" }}
+                    fontSize={"xl"}
+                    color={
+                        Number(completion) != 0
+                            ? customTheme.colors.case_card_title
+                            : customTheme.colors.incomplete_status_bar
+                    }
                     adjustsFontSizeToFit={true}
                 >
                     {title}
