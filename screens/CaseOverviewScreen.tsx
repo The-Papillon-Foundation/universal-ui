@@ -91,7 +91,7 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
     const { isLoading, error, currentCase } = useGetCase(
         route.params.sessionId
     );
-    const [mode, setMode] = useState<CaseMode>(CaseMode.documents);
+    const [mode, setMode] = useState<CaseMode>(CaseMode.timeline);
     const {
         openDocumentPicker,
         isLoading: isDocumentUploading,
@@ -310,7 +310,7 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                 )}
                 {currentCase && (
                     <View flex={1} mb={"15px"}>
-                        {mode == CaseMode.documents && screenSize == "md" ? (
+                        {mode == CaseMode.documents && (
                             <View
                                 flex={1}
                                 backgroundColor={{
@@ -352,17 +352,7 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                         alignItems={"center"}
                                         justifyContent="center"
                                         p="20px"
-                                    >
-                                        <Image
-                                            alt="An image of your id."
-                                            source={require("../assets/images/dummy-data/id-card.png")}
-                                            style={{
-                                                width: "100%",
-                                                aspectRatio: 0.75,
-                                                resizeMode: "contain",
-                                            }}
-                                        />
-                                    </View>
+                                    ></View>
                                 </View>
                                 <View flex={3}>
                                     <View
@@ -391,83 +381,10 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                             md: "row",
                                         }}
                                         p="20px"
-                                    >
-                                        {Array(3)
-                                            .fill(0)
-                                            .map((_) => (
-                                                <Image
-                                                    alt="An image of your id."
-                                                    source={require("../assets/images/dummy-data/document-card.png")}
-                                                    style={{
-                                                        width: "30%",
-                                                        aspectRatio: 0.75,
-                                                        resizeMode: "contain",
-                                                    }}
-                                                />
-                                            ))}
-                                    </View>
+                                    ></View>
                                 </View>
                             </View>
-                        ) : mode == CaseMode.documents ? (
-                            <ScrollView>
-                                <View
-                                    borderRightWidth={{
-                                        base: undefined,
-                                        md: "2px",
-                                    }}
-                                    borderColor={"#FFF"}
-                                >
-                                    <View
-                                        p="20px"
-                                        borderBottomWidth="2px"
-                                        borderColor={"#FFF"}
-                                    >
-                                        <Text
-                                            ml="5px"
-                                            color={
-                                                customTheme.colors
-                                                    .case_card_title
-                                            }
-                                            fontFamily={"manrope-extrabold"}
-                                            fontSize="lg"
-                                        >
-                                            Identification
-                                        </Text>
-                                    </View>
-                                    <View
-                                        alignItems={"center"}
-                                        justifyContent="center"
-                                    ></View>
-                                </View>
-                                <View>
-                                    <View
-                                        p="20px"
-                                        borderBottomWidth="2px"
-                                        borderColor={"#FFF"}
-                                    >
-                                        <Text
-                                            ml="5px"
-                                            color={
-                                                customTheme.colors
-                                                    .case_card_title
-                                            }
-                                            fontFamily={"manrope-extrabold"}
-                                            fontSize="lg"
-                                        >
-                                            Forms
-                                        </Text>
-                                    </View>
-                                    <View
-                                        alignItems={"center"}
-                                        justifyContent="center"
-                                        flexDirection={{
-                                            base: "column",
-                                            md: "row",
-                                        }}
-                                    ></View>
-                                </View>
-                            </ScrollView>
-                        ) : null}
+                        )}
                         {mode == CaseMode.timeline && (
                             <ScrollView
                                 flex={1}
