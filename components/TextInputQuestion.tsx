@@ -4,6 +4,7 @@ import { Button, Input, Spacer, Stack, Text, View } from "native-base";
 import QuestionButton from "./QuestionButton";
 import QuestionPrompt from "./QuestionPrompt";
 import { customTheme } from "../hooks/useCachedResources";
+import CustomTextInput from "./CustomTextInput";
 
 type Props = {
     prompt: string;
@@ -28,23 +29,15 @@ const TextInputQuestion = ({ prompt, handleResponse }: Props) => {
         <>
             <QuestionPrompt>{prompt}</QuestionPrompt>
             <Stack direction={"column"} space="24px" mt="2">
-                <Input
+                <CustomTextInput
                     ref={inputElement}
                     value={value}
-                    onChangeText={handleChange}
-                    variant="underlined"
                     placeholder={prompt}
-                    fontFamily={"sf-pro"}
-                    fontSize={{ base: "md", md: "lg" }}
-                    placeholderTextColor={
-                        customTheme.colors.placeholder_question_text
-                    }
+                    onChangeText={handleChange}
                     onSubmitEditing={() => {
                         setValue("");
                         handleResponse(value);
                     }}
-                    w={{ base: "100%", md: "55%" }}
-                    autoFocus
                 />
                 <QuestionButton
                     onPress={() => {
