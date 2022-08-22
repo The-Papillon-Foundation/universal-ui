@@ -30,7 +30,7 @@ const TextInputQuestion = ({ prompt, handleResponse }: Props) => {
             <QuestionPrompt>{prompt}</QuestionPrompt>
             <Stack direction={"column"} space="24px" mt="2">
                 <CustomTextInput
-                    ref={inputElement}
+                    innerRef={inputElement}
                     value={value}
                     placeholder={prompt}
                     onChangeText={handleChange}

@@ -1,39 +1,46 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { Input } from "native-base";
+import { FormControl, Input } from "native-base";
 import { customTheme } from "../hooks/useCachedResources";
 
 type Props = {
-    ref?: React.RefObject<{
+    innerRef?: React.RefObject<{
         focus: () => void;
     }>;
+    label?: string;
     value: string;
     onChangeText: (value: string) => void;
-    onSubmitEditing: () => void;
+    onSubmitEditing?: () => void;
     placeholder: string;
 };
 
 const CustomTextInput = ({
-    ref,
+    innerRef,
     value,
     onChangeText,
     placeholder,
     onSubmitEditing,
+    label,
 }: Props) => {
     return (
-        <Input
-            ref={ref}
-            value={value}
-            onChangeText={onChangeText}
-            variant="underlined"
-            placeholder={placeholder}
-            fontFamily={"sf-pro"}
-            fontSize={{ base: "md", md: "lg" }}
-            placeholderTextColor={customTheme.colors.placeholder_question_text}
-            onSubmitEditing={onSubmitEditing}
-            w={{ base: "100%", md: "55%" }}
-            autoFocus
-        />
+        <FormControl>
+            {label && <FormControl.Label>{label}</FormControl.Label>}
+            <Input
+                ref={innerRef}
+                value={value}
+                onChangeText={onChangeText}
+                variant="underlined"
+                placeholder={placeholder}
+                fontFamily={"sf-pro"}
+                fontSize={{ base: "md", md: "lg" }}
+                placeholderTextColor={
+                    customTheme.colors.placeholder_question_text
+                }
+                onSubmitEditing={onSubmitEditing}
+                w={{ base: "100%", md: "55%" }}
+                autoFocus
+            />
+        </FormControl>
     );
 };
 

@@ -6,6 +6,7 @@ import QuestionButton from "./QuestionButton";
 import { customTheme } from "../hooks/useCachedResources";
 import { Button } from "react-native-paper";
 import { Fontisto } from "@expo/vector-icons";
+import CustomDatePicker from "./CustomDatePicker";
 
 type Props = {
     prompt: string;
@@ -13,7 +14,7 @@ type Props = {
 };
 
 const DateQuestion = ({ prompt, handleResponse }: Props) => {
-    const [date, setDate] = React.useState<Date | undefined>(new Date());
+    const [date, setDate] = React.useState<Date>(new Date());
     const [open, setOpen] = React.useState(false);
 
     const onDismissSingle = React.useCallback(() => {
@@ -40,44 +41,16 @@ const DateQuestion = ({ prompt, handleResponse }: Props) => {
         <>
             <QuestionPrompt>{prompt}</QuestionPrompt>
             <Stack space="2.5" mt="2">
-                <View w={{ base: "100%", md: "55%" }} flexDirection="row">
-                    <DatePickerInput
-                        locale="en"
+                <View w={{ base: "90%", md: "55%" }} flexDirection="row">
+                    <CustomDatePicker
                         value={date}
-                        onChange={(d) => setDate(d)}
-                        inputMode="start"
-                        withModal={false}
-                        withDateFormatInLabel={false}
-                        style={{
-                            backgroundColor: "transparent",
-                            textAlign: "center",
-                            height: 40,
-                            justifyContent: "center",
-                            fontSize: dateFontSize,
-                        }}
-                        mode="flat" //(see react-native-paper docs)
-                        autoFocus
+                        onChange={(d: Date | undefined) => d && setDate(d)}
                         onSubmitEditing={submitDate}
-                    />
-                    <Fontisto
-                        onPress={() => setOpen(true)}
-                        name="date"
-                        size={24}
-                        color={customTheme.colors.about_text}
                     />
                 </View>
 
                 <QuestionButton onPress={submitDate}>Submit</QuestionButton>
             </Stack>
-            <DatePickerModal
-                locale="en"
-                label="Select a date"
-                mode="single"
-                visible={open}
-                onDismiss={onDismissSingle}
-                date={date}
-                onConfirm={onConfirmSingle}
-            />
         </>
     );
 };
