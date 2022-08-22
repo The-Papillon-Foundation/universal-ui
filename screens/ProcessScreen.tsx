@@ -5,7 +5,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import useWorkflow from "../hooks/useWorkflow";
 import { useCreateSession } from "../hooks/useCreateSession";
 import QuestionStack from "../components/QuestionStack";
-import { ActivityIndicator } from "react-native-paper";
+import { Spinner } from "native-base";
 import { customTheme } from "../hooks/useCachedResources";
 import { View } from "native-base";
 import useProcessModules from "../hooks/useProcessModules";
@@ -33,7 +33,7 @@ const ProcessScreen = ({ route, navigation }: Props) => {
         <ScreenWithNavbar>
             <QuestionContainer>
                 {isLoading && (
-                    <ActivityIndicator
+                    <Spinner
                         size="large"
                         color={customTheme.colors.primary[500]}
                     />

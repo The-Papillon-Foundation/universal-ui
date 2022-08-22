@@ -1,8 +1,7 @@
 import { View, Text, ScrollView, Platform } from "react-native";
 import React from "react";
 import { useReview } from "../hooks/useReview";
-import { ActivityIndicator } from "react-native-paper";
-import { Button } from "native-base";
+import { Button, Spinner } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types";
 
@@ -25,7 +24,7 @@ const ReviewScreen = ({ navigation }: Props) => {
             <Button onPress={() => navigation.navigate("Home")}>Go Home</Button>
             <View style={{ flex: 1, padding: 15 }}>
                 {error && <Text>{JSON.stringify(error)}</Text>}
-                {loading && <ActivityIndicator color="grey" />}
+                {loading && <Spinner color="grey" />}
                 {notSignedIn && (
                     <Text>You are not signed in. Go back to Landing.</Text>
                 )}
@@ -44,7 +43,7 @@ const ReviewScreen = ({ navigation }: Props) => {
                                         >
                                             <View style={{ margin: 10 }}>
                                                 <Text>
-                                                    {card.question.prompt}
+                                                    {card.question!.prompt}
                                                 </Text>
                                             </View>
                                             <View style={{ margin: 10 }}>
@@ -73,7 +72,7 @@ const ReviewScreen = ({ navigation }: Props) => {
                                         >
                                             <View style={{ margin: 10 }}>
                                                 <Text>
-                                                    {card.question.prompt}
+                                                    {card.question!.prompt}
                                                 </Text>
                                             </View>
                                             <View style={{ margin: 10 }}>

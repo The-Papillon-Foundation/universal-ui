@@ -2,9 +2,7 @@ import React from "react";
 import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "../types";
 import { StackNavigationProp } from "@react-navigation/stack";
-import useWorkflow from "../hooks/useWorkflow";
 import { useCreateSession } from "../hooks/useCreateSession";
-import { ActivityIndicator } from "react-native-paper";
 import { customTheme } from "../hooks/useCachedResources";
 import { View } from "native-base";
 import ForceLoginScreen from "../components/ForceLogin";
@@ -21,7 +19,11 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
     useCreateSession(route.params.stateName!);
 
     const onFinish = () => {
-        navigation.navigate("Process", { stateName: route.params.stateName });
+        navigation.navigate("Process", {
+            stateName: route.params.stateName,
+            groupIndex: 0,
+            questionIndex: 0,
+        });
     };
 
     return (

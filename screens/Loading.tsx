@@ -1,9 +1,9 @@
 import { View, Text } from "react-native";
 import React, { useContext, useEffect } from "react";
-import { ActivityIndicator } from "react-native-paper";
 import { GlobalContext } from "../contexts/GlobalContext";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types";
+import { Spinner } from "native-base";
 
 type Props = {
     navigation: StackNavigationProp<RootStackParamList, "Loading">;
@@ -25,7 +25,7 @@ const Loading = ({ navigation }: Props) => {
 
     return (
         <View>
-            <ActivityIndicator color="grey" />
+            <Spinner color="grey" />
         </View>
     );
 };
