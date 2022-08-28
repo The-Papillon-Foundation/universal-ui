@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "../types";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { customTheme } from "../hooks/useCachedResources";
-import { View } from "native-base";
-import ForceLoginScreen from "../components/ForceLogin";
+import {
+    FormControl,
+    Input,
+    Spacer,
+    View,
+    WarningOutlineIcon,
+} from "native-base";
 import Navbar from "../components/Navbar";
 import QuestionContainer from "../components/QuestionContainer";
+import { useLogin } from "../hooks/useLogin";
+import QuestionPrompt from "../components/QuestionPrompt";
+import QuestionButton from "../components/QuestionButton";
+import { userCreationSchema } from "../validation/user-validation";
 
 type Props = {
     route: RouteProp<RootStackParamList, "Login">;
@@ -14,6 +23,30 @@ type Props = {
 };
 
 const LoginScreen = ({ route, navigation }: Props) => {
+    const [username, setUsername] = useState("");
+    const { isLoading, login } = useLogin();
+    const [isInvalid, setIsInvalid] = useState(false);
+    const [error, setError] = useState("");
+
+    const handleChange = (value: string) => {
+        setUsername(value);
+    };
+
+    const handleLogin = () => {
+        setIsInvalid(false);
+        setError("");
+        userCreationSchema
+            .validate({ username })
+            .then(() => {
+                login(username);
+
+                navigation.navigate("Home");
+            })
+            .catch((err) => {
+                setIsInvalid(true);
+                setError(err.errors);
+            });
+    };
     return (
         <View
             flex={1}
@@ -25,7 +58,43 @@ const LoginScreen = ({ route, navigation }: Props) => {
             <Navbar />
             <View flex={1} justifyContent="center" alignItems="center">
                 <QuestionContainer>
-                    <ForceLoginScreen navigation={navigation} route={route} />
+                    <View>
+                        <View>
+                            <QuestionPrompt>Log in</QuestionPrompt>
+                            <Spacer my={2} />
+                            <FormControl isInvalid={isInvalid}>
+                                <Input
+                                    value={username}
+                                    variant="underlined"
+                                    onChangeText={handleChange}
+                                    placeholder="Enter Your Username"
+                                    fontFamily={"sf-pro"}
+                                    fontSize={{ base: "md", md: "lg" }}
+                                    placeholderTextColor={
+                                        customTheme.colors
+                                            .placeholder_question_text
+                                    }
+                                    onSubmitEditing={handleLogin}
+                                    autoFocus
+                                    editable={!isLoading}
+                                    w={{ base: "100%", md: "55%" }}
+                                />
+                                <FormControl.ErrorMessage
+                                    alignItems={"flex-start"}
+                                    leftIcon={<WarningOutlineIcon size="xs" />}
+                                >
+                                    {error}
+                                </FormControl.ErrorMessage>
+                            </FormControl>
+                            <Spacer my={"15px"} />
+                            <QuestionButton
+                                onPress={handleLogin}
+                                isLoading={isLoading}
+                            >
+                                Login
+                            </QuestionButton>
+                        </View>
+                    </View>
                 </QuestionContainer>
             </View>
         </View>
