@@ -48,20 +48,20 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
         NativeStackScreenProps<RootStackParamList>
     >;
 
-export interface Question {
-    type:
-        | "TrueOrFalse"
-        | "YesOrNo"
-        | "Address"
-        | "MultipleChoice"
-        | "Text"
-        | "Date"
-        | "PhoneNumber";
-    prompt: string;
-    pass: string[];
-    options: string[];
-    fail: null;
-}
+export type Question =
+    | {
+          type: "TrueOrFalse" | "YesOrNo" | "Address" | "Date" | "PhoneNumber";
+          prompt: string;
+          options: string[];
+          fail: null;
+      }
+    | {
+          type: "MultipleChoice" | "Text";
+          pass: string[];
+          prompt: string;
+          options: string[];
+          fail: null;
+      };
 
 export type QuestionCard = {
     id: string;
