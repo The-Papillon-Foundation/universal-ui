@@ -65,6 +65,7 @@ const HomeScreen = ({ navigation }: Props) => {
         <View flex={1}>
             <HomeNavBar />
             {/* Content */}
+            {isLoading && <Spinner color="trueGray.600" size="lg" mt="10px" />}
             <View flex={1} justifyContent={["start", "center"]}>
                 {error && <Text>{JSON.stringify(error)}</Text>}
                 {cases != undefined && (
@@ -80,6 +81,7 @@ const HomeScreen = ({ navigation }: Props) => {
                         >
                             My Cases
                         </Heading>
+
                         <ScrollView
                             w={"100%"}
                             horizontal={screenSize == "base" ? false : true}
