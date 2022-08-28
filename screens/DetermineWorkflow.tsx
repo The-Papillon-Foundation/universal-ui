@@ -18,9 +18,8 @@ import {
 } from "native-base";
 import states from "../assets/data/states.json";
 import { useDetermineWorkflow } from "../hooks/useDetermineWorkflow";
-import { ActivityIndicator, Platform, TouchableOpacity } from "react-native";
-import { customAssets, customTheme } from "../hooks/useCachedResources";
-import Navbar from "../components/Navbar";
+import { ActivityIndicator } from "react-native";
+import { customTheme } from "../hooks/useCachedResources";
 import ScreenWithNavbar from "../components/ScreenWithNavbar";
 
 interface Props {
