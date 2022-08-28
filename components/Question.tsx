@@ -80,13 +80,14 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
     };
 
     const handleTextInputResponse = (value: string | Date) => {
+        if (!card.question || card.question.type != "Text") return;
         if (value == "") return;
         updateSession(card.id, value);
 
         // There are passing arguments and the value doesn't pass
         if (
-            card.question!.pass != undefined &&
-            typeof value == "string" &&
+            typeof value != "object" &&
+            card.question.pass != undefined &&
             !card.question!.pass.includes(value)
         ) {
             goIneligible({
@@ -100,9 +101,35 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
     };
 
     const handleMultipleChoiceResponse = (value: string) => {
-        if (value == "") return;
+        if (
+            value == "" ||
+            !card.question ||
+            card.question.type != "MultipleChoice"
+        )
+            return;
+
         updateSession(card.id, value);
-        goNext(card.on_true);
+        if (card.question.pass.includes(value)) {
+            if (card.on_true != "exit") {
+                return goNext(card.on_true);
+            } else {
+                return goIneligible({
+                    message: `Because you answered ${value} on the previous question: \n${
+                        card.question!.prompt
+                    }`,
+                });
+            }
+        } else {
+            if (card.on_false != "exit") {
+                return goNext(card.on_false);
+            } else {
+                return goIneligible({
+                    message: `Because you answered ${value} on the previous question: \n${
+                        card.question!.prompt
+                    }`,
+                });
+            }
+        }
     };
 
     const handleInfoCardResponse = () => {
@@ -176,7 +203,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                     return (
                         <Text>
                             Unable to find this type of question:
-                            {card.question.type}
+                            {card.id}
                         </Text>
                     );
             }
