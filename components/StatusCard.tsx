@@ -2,8 +2,6 @@ import { Text, View } from "native-base";
 import React from "react";
 import { customTheme } from "../hooks/useCachedResources";
 
-type Props = {};
-
 const percentageToStatus = (percentage: string) =>
     Number(percentage) == 1.0
         ? "Completed"
