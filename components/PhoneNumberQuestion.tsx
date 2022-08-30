@@ -4,13 +4,15 @@ import { Input, Stack } from "native-base";
 import QuestionButton from "./QuestionButton";
 import QuestionPrompt from "./QuestionPrompt";
 import { customTheme } from "../hooks/useCachedResources";
+import QuestionHeader from "./QuestionHeader";
 
 type Props = {
     prompt: string;
+    help?: string;
     handleResponse: (value: string) => void;
 };
 
-const PhoneNumberQuestion = ({ prompt, handleResponse }: Props) => {
+const PhoneNumberQuestion = ({ prompt, help, handleResponse }: Props) => {
     const [value, setValue] = useState("");
     const inputElement = useRef<{ focus: () => void }>(null);
 
@@ -45,7 +47,7 @@ const PhoneNumberQuestion = ({ prompt, handleResponse }: Props) => {
 
     return (
         <>
-            <QuestionPrompt>{prompt}</QuestionPrompt>
+            <QuestionHeader prompt={prompt} help={help} />
             <Stack direction={"column"} space="24px" mt="2">
                 <Input
                     ref={inputElement}

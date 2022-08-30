@@ -1,18 +1,18 @@
-import { StyleSheet } from "react-native";
 import React from "react";
-import { Spacer, Stack } from "native-base";
+import { Stack } from "native-base";
 import QuestionButton from "./QuestionButton";
-import QuestionPrompt from "./QuestionPrompt";
+import QuestionHeader from "./QuestionHeader";
 
 type Props = {
     prompt: string;
+    help?: string;
     handleResponse: (response: boolean) => void;
 };
 
-const YesOrNoQuestion = ({ prompt, handleResponse }: Props) => {
+const YesOrNoQuestion = ({ prompt, help, handleResponse }: Props) => {
     return (
         <>
-            <QuestionPrompt>{prompt}</QuestionPrompt>
+            <QuestionHeader prompt={prompt} help={help} />
             <Stack
                 direction={{ base: "column", md: "row" }}
                 w={{ base: "100%", md: "40%" }}
@@ -32,5 +32,3 @@ const YesOrNoQuestion = ({ prompt, handleResponse }: Props) => {
 };
 
 export default YesOrNoQuestion;
-
-const styles = StyleSheet.create({});
