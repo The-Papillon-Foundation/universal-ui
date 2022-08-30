@@ -1,8 +1,6 @@
-import { StyleSheet } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { Input, Stack } from "native-base";
 import QuestionButton from "./QuestionButton";
-import QuestionPrompt from "./QuestionPrompt";
 import { customTheme } from "../hooks/useCachedResources";
 import QuestionHeader from "./QuestionHeader";
 
@@ -15,8 +13,6 @@ type Props = {
 const PhoneNumberQuestion = ({ prompt, help, handleResponse }: Props) => {
     const [value, setValue] = useState("");
     const inputElement = useRef<{ focus: () => void }>(null);
-
-    const formatPhoneNumber = (pn: string) => {};
 
     const handleChange = (text: string) => {
         if (value.includes(text)) return setValue(text);
@@ -76,5 +72,3 @@ const PhoneNumberQuestion = ({ prompt, help, handleResponse }: Props) => {
 };
 
 export default PhoneNumberQuestion;
-
-const styles = StyleSheet.create({});

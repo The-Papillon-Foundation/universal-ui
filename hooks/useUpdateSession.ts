@@ -1,5 +1,4 @@
-import { useContext, useEffect } from "react";
-import { useQuery } from "react-query";
+import { useContext } from "react";
 import { url } from "../constants/Urls";
 import { GlobalContext } from "../contexts/GlobalContext";
 

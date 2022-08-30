@@ -1,7 +1,5 @@
-import { StyleSheet } from "react-native";
 import React, { useState } from "react";
-import { Button, Radio, Stack, Text } from "native-base";
-import QuestionPrompt from "./QuestionPrompt";
+import { Radio, Stack } from "native-base";
 import QuestionButton from "./QuestionButton";
 import QuestionHeader from "./QuestionHeader";
 
@@ -50,5 +48,3 @@ const MultipleChoiceQuestion = ({
 };
 
 export default MultipleChoiceQuestion;
-
-const styles = StyleSheet.create({});

@@ -1,20 +1,8 @@
 import { Camera, CameraCapturedPicture } from "expo-camera";
 import * as DocumentPicker from "expo-document-picker";
-import React, {
-    MutableRefObject,
-    useContext,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { url } from "../constants/Urls";
 import { GlobalContext } from "../contexts/GlobalContext";
-
-const documentPickerOptions: DocumentPicker.DocumentPickerOptions = {
-    type: "application/pdf",
-    multiple: false,
-};
-
 const blobToBase64 = (blob: Blob) => {
     return new Promise((resolve: (value: string) => void, _) => {
         const reader = new FileReader();
@@ -49,7 +37,7 @@ export const useIdUpload = () => {
     const handleSubmit = async () => {
         // TODO
         try {
-            let res = await fetch(`${url}/users/${userId}/attributes`, {
+            await fetch(`${url}/users/${userId}/attributes`, {
                 method: "PUT",
             });
         } catch (error) {

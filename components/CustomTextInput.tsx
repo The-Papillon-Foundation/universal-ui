@@ -1,4 +1,3 @@
-import { View, Text } from "react-native";
 import React from "react";
 import { FormControl, Input } from "native-base";
 import { customTheme } from "../hooks/useCachedResources";

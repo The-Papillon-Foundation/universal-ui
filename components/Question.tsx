@@ -1,10 +1,9 @@
 import { Text } from "react-native";
-import React, { useContext } from "react";
+import React from "react";
 import YesOrNoQuestion from "./YesOrNoQuestion";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 import TextInputQuestion from "./TextInputQuestion";
 import { useUpdateSession } from "../hooks/useUpdateSession";
-import { WorkflowContext } from "../contexts/WorkflowContext";
 import { QuestionCard, QuestionGroup } from "../types";
 import DateQuestion from "./DateQuestion";
 import AddressQuestion, { AddressFieldObject } from "./AddressQuestion";
@@ -21,7 +20,6 @@ interface Props {
 }
 
 const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
-    const { setFinishedCardGroups } = useContext(WorkflowContext);
     const { updateSession } = useUpdateSession();
 
     const handleYesOrNoResponse = (response: boolean) => {

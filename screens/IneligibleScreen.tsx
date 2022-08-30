@@ -1,4 +1,4 @@
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp } from "@react-navigation/native";
 import { Center, Container, Heading, Text } from "native-base";
 import { RootStackParamList } from "../types";
 

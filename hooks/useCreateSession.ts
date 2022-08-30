@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useQuery } from "react-query";
 import { url } from "../constants/Urls";
 import { GlobalContext } from "../contexts/GlobalContext";
@@ -21,7 +21,7 @@ const fetchCreateSession = async (workflowId: string) => {
 
 export const useCreateSession = (workflowId: string) => {
     const { sessionId, setSessionId } = useContext(GlobalContext);
-    const { isLoading, error, data } = useQuery(
+    const { isLoading, data } = useQuery(
         "createSession",
         () => fetchCreateSession(workflowId),
         { enabled: sessionId == "" }

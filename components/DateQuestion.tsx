@@ -1,19 +1,16 @@
 import React from "react";
 import { Stack, useBreakpointValue, View } from "native-base";
-import { DatePickerInput, DatePickerModal } from "react-native-paper-dates";
-import QuestionPrompt from "./QuestionPrompt";
 import QuestionButton from "./QuestionButton";
-import { customTheme } from "../hooks/useCachedResources";
-import { Button } from "react-native-paper";
-import { Fontisto } from "@expo/vector-icons";
 import CustomDatePicker from "./CustomDatePicker";
+import QuestionHeader from "./QuestionHeader";
 
 type Props = {
     prompt: string;
+    help?: string;
     handleResponse: (value: Date) => void;
 };
 
-const DateQuestion = ({ prompt, handleResponse }: Props) => {
+const DateQuestion = ({ prompt, help, handleResponse }: Props) => {
     const [date, setDate] = React.useState<Date>(new Date());
     const [open, setOpen] = React.useState(false);
 
@@ -39,7 +36,7 @@ const DateQuestion = ({ prompt, handleResponse }: Props) => {
     };
     return (
         <>
-            <QuestionPrompt>{prompt}</QuestionPrompt>
+            <QuestionHeader prompt={prompt} help={help} />
             <Stack space="2.5" mt="2">
                 <View w={{ base: "90%", md: "55%" }} flexDirection="row">
                     <CustomDatePicker

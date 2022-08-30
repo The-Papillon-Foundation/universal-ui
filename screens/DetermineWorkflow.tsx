@@ -2,20 +2,7 @@ import React, { useState } from "react";
 import QuestionContainer from "../components/QuestionContainer";
 import { RootStackParamList } from "../types";
 import { StackNavigationProp } from "@react-navigation/stack";
-import {
-    Box,
-    Button,
-    CheckIcon,
-    Heading,
-    Select,
-    Text,
-    View,
-    HStack,
-    Image,
-    HamburgerIcon,
-    useBreakpointValue,
-    Spacer,
-} from "native-base";
+import { Box, Button, CheckIcon, Heading, Select, Text } from "native-base";
 import states from "../assets/data/states.json";
 import { useDetermineWorkflow } from "../hooks/useDetermineWorkflow";
 import { ActivityIndicator } from "react-native";
@@ -28,10 +15,6 @@ interface Props {
 
 const DetermineWorkflow = ({ navigation }: Props) => {
     const { isLoading, workflows, error } = useDetermineWorkflow();
-    const screenSize = useBreakpointValue({
-        base: "base",
-        md: "md",
-    });
     const [checkingForWorkflow, setCheckingForWorkflow] = useState(false);
     const [state, setState] = useState<string | undefined>();
     const handleResponse = () => {

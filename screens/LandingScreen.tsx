@@ -1,15 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Button, Heading, Image, Stack, Text, View } from "native-base";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types";
-import { GlobalContext } from "../contexts/GlobalContext";
 import { customAssets, customTheme } from "../hooks/useCachedResources";
-import { useWindowDimensions } from "react-native";
 
 const LandingScreen = () => {
-    const { sessionId } = useContext(GlobalContext);
-    const { height, width: deviceWidth } = useWindowDimensions();
     const navigation =
         useNavigation<StackNavigationProp<RootStackParamList, "Landing">>();
 

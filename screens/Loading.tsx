@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { GlobalContext } from "../contexts/GlobalContext";
 import { StackNavigationProp } from "@react-navigation/stack";

@@ -1,12 +1,6 @@
-import {
-    ActivityIndicator,
-    StyleSheet,
-    TouchableOpacity,
-    ScrollView,
-} from "react-native";
+import { ActivityIndicator, TouchableOpacity, ScrollView } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import {
-    Button,
     CheckIcon,
     FormControl,
     Heading,
@@ -15,7 +9,6 @@ import {
     Stack,
     Text,
     View,
-    WarningOutlineIcon,
 } from "native-base";
 import {
     AddressAutocompleteFeature,
@@ -270,5 +263,3 @@ const AddressQuestion = ({ prompt, help, handleResponse }: Props) => {
 };
 
 export default AddressQuestion;
-
-const styles = StyleSheet.create({});

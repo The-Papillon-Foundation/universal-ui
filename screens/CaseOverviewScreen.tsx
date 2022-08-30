@@ -7,80 +7,23 @@ import {
     Button,
     CheckCircleIcon,
     Heading,
-    Image,
     Modal,
     ScrollView,
     Spacer,
     Stack,
     Text,
-    useBreakpointValue,
     View,
 } from "native-base";
 import { customTheme } from "../hooks/useCachedResources";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ActivityIndicator, TouchableOpacity } from "react-native";
 import CaseCard from "../components/CaseCard";
 import useGetCase from "../hooks/useGetCase";
 import { useDocumentUpload } from "../hooks/useDocumentUpload";
 import { useDocumentDownload } from "../hooks/useDocumentDownload";
 import { ProgressBar } from "react-native-paper";
-import { CalendarTick, Folder2, Scroll } from "iconsax-react-native";
+import { CalendarTick, Folder2 } from "iconsax-react-native";
 
 type Props = StackScreenProps<RootStackParamList, "Case">;
-
-const DocumentManagementButton = ({
-    onPress,
-    iconName,
-    instructionText,
-    screenSize,
-}: {
-    onPress: () => void;
-    iconName: string;
-    instructionText: string;
-    screenSize: string;
-}) => (
-    <View>
-        <TouchableOpacity onPress={onPress}>
-            <View
-                w={{ base: "100%", md: "195px" }}
-                h={{ base: undefined, md: "160px" }}
-                borderRadius={"40px"}
-                borderWidth="8px"
-                borderColor={
-                    customTheme.colors.document_management_button_border
-                }
-                backgroundColor={
-                    customTheme.colors.document_management_button_background
-                }
-                justifyContent={"center"}
-                alignItems="center"
-                shadow={"5"}
-                style={{
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowColor: "#3D4A58",
-                    shadowOpacity: 0.2,
-                }}
-            >
-                <MaterialCommunityIcons
-                    name={iconName as any}
-                    size={screenSize == "base" ? 50 : 80}
-                    color={customTheme.colors.document_management_button_icon}
-                />
-            </View>
-        </TouchableOpacity>
-        <View>
-            <Text
-                fontFamily="sf-pro-bold"
-                fontSize={{ base: "sm", md: "lg" }}
-                color={customTheme.colors.instruction_text}
-                textAlign="center"
-                mt={"20px"}
-            >
-                {instructionText}
-            </Text>
-        </View>
-    </View>
-);
 
 enum CaseMode {
     timeline = 0,
@@ -88,13 +31,10 @@ enum CaseMode {
 }
 
 const CaseOverviewScreen = ({ navigation, route }: Props) => {
-    const { isLoading, error, currentCase } = useGetCase(
-        route.params.sessionId
-    );
+    const { isLoading, currentCase } = useGetCase(route.params.sessionId);
     const [mode, setMode] = useState<CaseMode>(CaseMode.timeline);
     const {
         openDocumentPicker,
-        isLoading: isDocumentUploading,
         isUploaded,
         uploadDocument,
         documentSelected,
@@ -110,10 +50,6 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
         clearDownload,
     } = useDocumentDownload(route.params.sessionId);
 
-    const screenSize = useBreakpointValue({
-        base: "base",
-        md: "md",
-    });
     const [openUploadModal, setOpenUploadModal] = useState(false);
     const [openDownloadModal, setOpenDownloadModal] = useState(false);
 
@@ -668,38 +604,3 @@ const CaseCardGroup = ({
 );
 
 export default CaseOverviewScreen;
-
-// old document selection
-{
-    /* <View>
-<Stack
-    direction={"row"}
-    justifyContent="space-around"
-    mx={{ base: "25px", md: "50px" }}
-    mt="25px"
->
-    <DocumentManagementButton
-        onPress={() => {
-            setOpenUploadModal(true);
-        }}
-        iconName="upload-outline"
-        instructionText="Upload files"
-        screenSize={screenSize}
-    />
-    <DocumentManagementButton
-        onPress={() => {}}
-        iconName="file-document-outline"
-        instructionText="Review your form"
-        screenSize={screenSize}
-    />
-    <DocumentManagementButton
-        onPress={() => {
-            setOpenDownloadModal(true);
-        }}
-        iconName="download-outline"
-        instructionText="Download file"
-        screenSize={screenSize}
-    />
-</Stack>
-</View> */
-}

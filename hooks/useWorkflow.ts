@@ -1,5 +1,3 @@
-import { View, Text } from "react-native";
-import React from "react";
 import { useQuery } from "react-query";
 import { WorkflowPayload } from "../types";
 import { url } from "../constants/Urls";
