@@ -52,6 +52,7 @@ export type Question =
     | {
           type: "TrueOrFalse" | "YesOrNo" | "Address" | "Date" | "PhoneNumber";
           prompt: string;
+          help?: string;
           options: string[];
           fail: null;
       }
@@ -59,6 +60,7 @@ export type Question =
           type: "MultipleChoice" | "Text";
           pass: string[];
           prompt: string;
+          help?: string;
           options: string[];
           fail: null;
       };
