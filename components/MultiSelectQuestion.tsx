@@ -1,38 +1,25 @@
-import { GestureResponderEvent, StyleSheet, View } from "react-native";
 import React from "react";
-import {
-    Button,
-    Center,
-    Checkbox,
-    Container,
-    Heading,
-    Radio,
-    Stack,
-    Text,
-} from "native-base";
+import { Checkbox } from "native-base";
 import QuestionContainer from "./QuestionContainer";
-import QuestionPrompt from "./QuestionPrompt";
 import QuestionButton from "./QuestionButton";
+import QuestionHeader from "./QuestionHeader";
 
 type Props = {
-    place: number;
     prompt: string;
+    help: string;
     options: string[];
-    handleResponse: (event: GestureResponderEvent) => void;
+    handleResponse: () => void;
 };
 
 const MultiSelectQuestion = ({
-    place,
     prompt,
+    help,
     options,
     handleResponse,
 }: Props) => {
-    const [inputDate, setInputDate] = React.useState<Date | undefined>(
-        undefined
-    );
     return (
         <QuestionContainer>
-            <QuestionPrompt> {prompt}</QuestionPrompt>
+            <QuestionHeader prompt={prompt} help={help} />
 
             <Checkbox.Group accessibilityLabel="multi-select">
                 {options.map((option) => (
@@ -55,5 +42,3 @@ const MultiSelectQuestion = ({
 };
 
 export default MultiSelectQuestion;
-
-const styles = StyleSheet.create({});

@@ -12,7 +12,7 @@ const HomeNavBar = (props: Props) => {
     const { logout } = useLogin();
     const navigation =
         useNavigation<NavigationProp<RootStackParamList, "Home">>();
-    const { sessionId, userId, checkedForSession } = useContext(GlobalContext);
+    const { userId } = useContext(GlobalContext);
     return (
         <View
             style={{

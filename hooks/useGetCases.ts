@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext } from "react";
 import { useQuery } from "react-query";
 import { url } from "../constants/Urls";
 import { GlobalContext } from "../contexts/GlobalContext";
@@ -21,8 +21,7 @@ const fetchCases = async (userId: string) => {
 };
 
 const useGetCases = () => {
-    const { setUserId, userId, sessionId, setSessionId } =
-        useContext(GlobalContext);
+    const { userId } = useContext(GlobalContext);
     const { isLoading, error, data } = useQuery(
         ["getCases", userId],
         () => fetchCases(userId),

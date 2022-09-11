@@ -1,8 +1,6 @@
-import { Platform, StyleSheet } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
-import { Button, Input, Spacer, Stack, Text, View } from "native-base";
+import React from "react";
+import { Stack, Text } from "native-base";
 import QuestionButton from "./QuestionButton";
-import QuestionPrompt from "./QuestionPrompt";
 import { customTheme } from "../hooks/useCachedResources";
 
 type Props = {
@@ -41,5 +39,3 @@ const InfoCard = ({ text, title, handleResponse }: Props) => {
 };
 
 export default InfoCard;
-
-const styles = StyleSheet.create({});

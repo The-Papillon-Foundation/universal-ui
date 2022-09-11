@@ -1,6 +1,5 @@
-import { StyleSheet } from "react-native";
 import React, { ReactNode } from "react";
-import { Center, Container, View } from "native-base";
+import { View } from "native-base";
 
 type Props = {
     children: ReactNode;
@@ -24,5 +23,3 @@ const QuestionContainer: React.FC<Props> = ({ children }) => {
 };
 
 export default QuestionContainer;
-
-const styles = StyleSheet.create({});

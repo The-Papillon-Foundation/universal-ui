@@ -1,15 +1,12 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
 import React, { useContext, useEffect } from "react";
 import {
     Heading,
-    Image,
     ScrollView,
     Text,
     useBreakpointValue,
     View,
     Spinner,
 } from "native-base";
-import { useLogin } from "../hooks/useLogin";
 import { GlobalContext } from "../contexts/GlobalContext";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types";
@@ -38,8 +35,7 @@ type Props = {
 };
 
 const HomeScreen = ({ navigation }: Props) => {
-    const { logout } = useLogin();
-    const { sessionId, userId, checkedForSession } = useContext(GlobalContext);
+    const { userId, checkedForSession } = useContext(GlobalContext);
     const { isLoading, error, cases } = useGetCases();
 
     const screenSize = useBreakpointValue({
@@ -152,7 +148,3 @@ const HomeScreen = ({ navigation }: Props) => {
 };
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({
-    dateText: {},
-});

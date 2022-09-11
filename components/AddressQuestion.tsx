@@ -1,12 +1,6 @@
-import {
-    ActivityIndicator,
-    StyleSheet,
-    TouchableOpacity,
-    ScrollView,
-} from "react-native";
+import { ActivityIndicator, TouchableOpacity, ScrollView } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import {
-    Button,
     CheckIcon,
     FormControl,
     Heading,
@@ -15,7 +9,6 @@ import {
     Stack,
     Text,
     View,
-    WarningOutlineIcon,
 } from "native-base";
 import {
     AddressAutocompleteFeature,
@@ -25,9 +18,11 @@ import * as yup from "yup";
 import states from "../assets/data/states.json";
 import QuestionButton from "./QuestionButton";
 import { customTheme } from "../hooks/useCachedResources";
+import QuestionHeader from "./QuestionHeader";
 
 type Props = {
     prompt: string;
+    help?: string;
     handleResponse: (addressFieldObject: AddressFieldObject) => void;
 };
 
@@ -48,7 +43,7 @@ const addressSchema = yup.object().shape({
     zip: yup.string().required("Zip Code is a required field."),
 });
 
-const AddressQuestion = ({ prompt, handleResponse }: Props) => {
+const AddressQuestion = ({ prompt, help, handleResponse }: Props) => {
     const [validatingAddress, setValidatingAddress] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const [fields, setFields] = useState<AddressFieldObject>({
@@ -161,7 +156,7 @@ const AddressQuestion = ({ prompt, handleResponse }: Props) => {
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
-            <Heading textAlign={"center"}>{prompt}</Heading>
+            <QuestionHeader prompt={prompt} help={help} />
             <Stack direction={"column"} space="2.5" mt="2" px="8">
                 {Object.keys(fields).map((field_key, index) => (
                     <FormControl
@@ -268,5 +263,3 @@ const AddressQuestion = ({ prompt, handleResponse }: Props) => {
 };
 
 export default AddressQuestion;
-
-const styles = StyleSheet.create({});

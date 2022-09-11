@@ -7,10 +7,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
-import {
-    GlobalContext,
-    GlobalContextProvider,
-} from "../contexts/GlobalContext";
+import { GlobalContextProvider } from "../contexts/GlobalContext";
 import CaseOverviewScreen from "../screens/CaseOverviewScreen";
 import CreateUserScreen from "../screens/CreateUserScreen";
 import DetermineWorkflow from "../screens/DetermineWorkflow";
@@ -28,7 +25,7 @@ import ReviewScreen from "../screens/ReviewScreen";
 import { RootStackParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 
-// import DebugScreen from "../screens/DebugScreen";
+import DebugScreen from "../screens/DebugScreen";
 
 export default function Navigation({
     colorScheme,
@@ -54,7 +51,6 @@ export default function Navigation({
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-    const { checkingForSession } = React.useContext(GlobalContext);
     return (
         <Stack.Navigator
             initialRouteName="Loading"
@@ -92,9 +88,9 @@ function RootNavigator() {
                 component={NotFoundScreen}
                 options={{ title: "Oops!", headerTitleAlign: "center" }}
             />
-            {/* {process.env.NODE_ENV === "development" && (
+            {process.env.NODE_ENV === "development" && (
                 <Stack.Screen name="Debug" component={DebugScreen} />
-            )} */}
+            )}
             <Stack.Group screenOptions={{ presentation: "modal" }}>
                 <Stack.Screen name="Modal" component={ModalScreen} />
             </Stack.Group>

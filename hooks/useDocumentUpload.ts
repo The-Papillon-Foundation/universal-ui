@@ -3,10 +3,10 @@ import { useContext, useState } from "react";
 import { url } from "../constants/Urls";
 import { GlobalContext } from "../contexts/GlobalContext";
 
-const documentPickerOptions: DocumentPicker.DocumentPickerOptions = {
-    type: "application/pdf",
-    multiple: false,
-};
+// const documentPickerOptions: DocumentPicker.DocumentPickerOptions = {
+//     type: "application/pdf",
+//     multiple: false,
+// };
 
 export const useDocumentUpload = () => {
     const { userId } = useContext(GlobalContext);

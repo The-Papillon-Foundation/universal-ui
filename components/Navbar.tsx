@@ -12,7 +12,7 @@ import {
     View,
     VStack,
 } from "native-base";
-import { Platform, TouchableOpacity, Linking, Animated } from "react-native";
+import { Platform, TouchableOpacity, Linking } from "react-native";
 import { customAssets, customTheme } from "../hooks/useCachedResources";
 import { useNavigation } from "@react-navigation/native";
 import { useSpring, animated } from "react-spring";

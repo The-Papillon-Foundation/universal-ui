@@ -1,6 +1,5 @@
-import React, { MutableRefObject, useEffect, useRef, useState } from "react";
+import React, { MutableRefObject, useRef } from "react";
 import { Module, RootStackParamList } from "../types";
-import { View as RNVIEW } from "react-native";
 import { ArrowForwardIcon, Button, View } from "native-base";
 import Question from "./Question";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";

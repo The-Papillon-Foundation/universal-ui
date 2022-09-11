@@ -1,11 +1,9 @@
 import { Text } from "react-native";
-import React, { useContext } from "react";
+import React from "react";
 import YesOrNoQuestion from "./YesOrNoQuestion";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 import TextInputQuestion from "./TextInputQuestion";
-import QuestionContainer from "./QuestionContainer";
 import { useUpdateSession } from "../hooks/useUpdateSession";
-import { WorkflowContext } from "../contexts/WorkflowContext";
 import { QuestionCard, QuestionGroup } from "../types";
 import DateQuestion from "./DateQuestion";
 import AddressQuestion, { AddressFieldObject } from "./AddressQuestion";
@@ -22,7 +20,6 @@ interface Props {
 }
 
 const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
-    const { setFinishedCardGroups } = useContext(WorkflowContext);
     const { updateSession } = useUpdateSession();
 
     const handleYesOrNoResponse = (response: boolean) => {
@@ -153,6 +150,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                     return (
                         <YesOrNoQuestion
                             prompt={card.question.prompt}
+                            help={card.question.help}
                             handleResponse={handleYesOrNoResponse}
                         />
                     );
@@ -160,6 +158,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                     return (
                         <TrueOrFalseQuestion
                             prompt={card.question.prompt}
+                            help={card.question.help}
                             handleResponse={handleTrueOrFalseResponse}
                         />
                     );
@@ -167,6 +166,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                     return (
                         <AddressQuestion
                             prompt={card.question.prompt}
+                            help={card.question.help}
                             handleResponse={handleAddressResponse}
                         />
                     );
@@ -174,6 +174,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                     return (
                         <TextInputQuestion
                             prompt={card.question.prompt}
+                            help={card.question.help}
                             handleResponse={handleTextInputResponse}
                         />
                     );
@@ -181,6 +182,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                     return (
                         <PhoneNumberQuestion
                             prompt={card.question.prompt}
+                            help={card.question.help}
                             handleResponse={handleTextInputResponse}
                         />
                     );
@@ -188,6 +190,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                     return (
                         <DateQuestion
                             prompt={card.question.prompt}
+                            help={card.question.help}
                             handleResponse={handleTextInputResponse}
                         />
                     );
@@ -195,6 +198,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                     return (
                         <MultipleChoiceQuestion
                             prompt={card.question.prompt}
+                            help={card.question.help}
                             options={card.question.options}
                             handleResponse={handleMultipleChoiceResponse}
                         />
