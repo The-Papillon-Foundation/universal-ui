@@ -76,6 +76,12 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
         goNext(card.on_true);
     };
 
+    const handlePhoneNumberResponse = (value: string) => {
+        if (value == "") return;
+        updateSession(card.id, value);
+        goNext(card.on_true);
+    };
+
     const handleTextInputResponse = (value: string | Date) => {
         if (!card.question || card.question.type != "Text") return;
         if (value == "") return;
@@ -183,7 +189,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                         <PhoneNumberQuestion
                             prompt={card.question.prompt}
                             help={card.question.help}
-                            handleResponse={handleTextInputResponse}
+                            handleResponse={handlePhoneNumberResponse}
                         />
                     );
                 case "Date":
