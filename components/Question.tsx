@@ -82,7 +82,12 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
         goNext(card.on_true);
     };
 
-    const handleTextInputResponse = (value: string | Date) => {
+    const handleDateSubmissionResponse = (value: Date) => {
+        updateSession(card.id, value);
+        goNext(card.on_true);
+    };
+
+    const handleTextInputResponse = (value: string) => {
         if (!card.question || card.question.type != "Text") return;
         if (value == "") return;
         updateSession(card.id, value);
@@ -200,7 +205,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                         <DateQuestion
                             prompt={card.question.prompt}
                             help={card.question.help}
-                            handleResponse={handleTextInputResponse}
+                            handleResponse={handleDateSubmissionResponse}
                         />
                     );
                 case "MultipleChoice":
