@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Radio, Stack } from "native-base";
+import { CheckIcon, Select, Stack } from "native-base";
 import QuestionButton from "./QuestionButton";
 import QuestionHeader from "./QuestionHeader";
 
@@ -22,23 +22,26 @@ const MultipleChoiceQuestion = ({
         <>
             <QuestionHeader prompt={prompt} help={help} />
             <Stack space="2.5" mt="2">
-                <Radio.Group
-                    name={prompt}
-                    accessibilityLabel={prompt}
-                    value={value}
-                    onChange={(nextValue) => setValue(nextValue)}
+                <Select
+                    selectedValue={value}
+                    w={{ base: "100%", md: "50%" }}
+                    accessibilityLabel="Select one."
+                    placeholder="Select one."
+                    _selectedItem={{
+                        bg: "teal.600",
+                        endIcon: <CheckIcon size="5" />,
+                    }}
+                    mt={2}
+                    onValueChange={(itemValue) => setValue(itemValue)}
                 >
-                    {options.map((option, index) => (
-                        <Radio
-                            accessibilityLabel={option}
-                            key={option + index}
+                    {options.map((option: string, index) => (
+                        <Select.Item
+                            key={index}
+                            label={option}
                             value={option}
-                            my={1}
-                        >
-                            {option}
-                        </Radio>
+                        />
                     ))}
-                </Radio.Group>
+                </Select>
                 <QuestionButton onPress={() => handleResponse(value)}>
                     Submit
                 </QuestionButton>

@@ -112,6 +112,9 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
             return;
 
         updateSession(card.id, value);
+        if (!card.question.pass) return goNext(card.on_true);
+
+        // if there is a pass array
         if (card.question.pass.includes(value)) {
             if (card.on_true != "exit") {
                 return goNext(card.on_true);
