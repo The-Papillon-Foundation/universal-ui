@@ -23,7 +23,11 @@ const CustomTextInput = ({
 }: Props) => {
     return (
         <FormControl>
-            {label && <FormControl.Label>{label}</FormControl.Label>}
+            {label && (
+                <FormControl.Label pl={"10px"} pt={"10px"}>
+                    {label}
+                </FormControl.Label>
+            )}
             <Input
                 ref={innerRef}
                 value={value}
@@ -35,6 +39,8 @@ const CustomTextInput = ({
                 placeholderTextColor={
                     customTheme.colors.placeholder_question_text
                 }
+                p={"10px"}
+                textTransform={"capitalize"}
                 onSubmitEditing={onSubmitEditing}
                 w={{ base: "100%", md: "55%" }}
                 autoFocus

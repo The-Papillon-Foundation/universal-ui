@@ -21,6 +21,7 @@ export const useIdUpload = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isUploaded, setIsUploaded] = useState(false);
     const [cameraOpen, setCameraOpen] = useState(false);
+    const [documentUri, setDocumentUri] = useState("");
     const cameraRef = useRef<Camera | null>(null);
     const [photoInfo, setPhotoInfo] = useState<CameraCapturedPicture | null>();
 
@@ -49,6 +50,8 @@ export const useIdUpload = () => {
         DocumentPicker.getDocumentAsync().then((documentResult) => {
             setIsUploaded(false);
             setDocumentResult(documentResult);
+            if (documentResult.type === "success")
+                setDocumentUri(documentResult.uri);
         });
     };
 
@@ -159,5 +162,6 @@ export const useIdUpload = () => {
         takePicture,
         retakePicture,
         photoInfo,
+        documentUri,
     };
 };
