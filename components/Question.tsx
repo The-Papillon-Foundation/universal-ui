@@ -35,6 +35,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
             if (card.on_false != "exit") {
                 goNext(card.on_false);
             } else {
+                updateSession(card.id, { exit: response });
                 goIneligible({
                     message: `Because you answered no on the previous question: \n${
                         card.question!.prompt
@@ -48,6 +49,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
         updateSession(card.id, response);
         if (response == true) {
             if (card.on_true == "exit") {
+                updateSession(card.id, { exit: response });
                 goIneligible({
                     message: `Because you answered true on the previous question: \n${
                         card.question!.prompt
@@ -61,6 +63,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
             if (card.on_false != "exit") {
                 goNext(card.on_false);
             } else {
+                updateSession(card.id, { exit: response });
                 goIneligible({
                     message: `Because you answered false on the previous question: \n${
                         card.question!.prompt
@@ -98,6 +101,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
             card.question.pass != undefined &&
             !card.question!.pass.includes(value)
         ) {
+            updateSession(card.id, { exit: value });
             goIneligible({
                 message: `The only valid answers to this question are: ${card.question!.pass.join(
                     ", "
@@ -124,6 +128,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
             if (card.on_true != "exit") {
                 return goNext(card.on_true);
             } else {
+                updateSession(card.id, { exit: value });
                 return goIneligible({
                     message: `Because you answered ${value} on the previous question: \n${
                         card.question!.prompt
@@ -134,6 +139,7 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
             if (card.on_false != "exit") {
                 return goNext(card.on_false);
             } else {
+                updateSession(card.id, { exit: value });
                 return goIneligible({
                     message: `Because you answered ${value} on the previous question: \n${
                         card.question!.prompt
