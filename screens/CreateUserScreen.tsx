@@ -5,14 +5,15 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useCreateSession } from "../hooks/useCreateSession";
 import { customTheme } from "../hooks/useCachedResources";
 import {
-    Button,
     FormControl,
     Heading,
     Input,
     ScrollView,
     Spacer,
     Spinner,
+    Text,
     View,
+    VStack,
     WarningOutlineIcon,
 } from "native-base";
 import Navbar from "../components/Navbar";
@@ -24,7 +25,6 @@ import QuestionButton from "../components/QuestionButton";
 import { useIdUpload } from "../hooks/useIdUpload";
 import { Camera } from "expo-camera";
 import { Image } from "react-native";
-import InsetShadow from "react-native-inset-shadow";
 import CustomTextInput from "../components/CustomTextInput";
 import CustomDatePicker from "../components/CustomDatePicker";
 
@@ -56,6 +56,7 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
         retakePicture,
         cameraRef,
         photoInfo,
+        documentUri,
     } = useIdUpload();
 
     const handleChange = (value: string) => {
@@ -85,6 +86,8 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
         });
     };
 
+    const skipDocumentUpload = handleUserInfoSubmit;
+
     return (
         <View
             flex={1}
@@ -92,6 +95,7 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
                 base: customTheme.colors.mobile_question_screen_background,
                 md: customTheme.colors.large_question_screen_background,
             }}
+            justifyContent="space-around"
         >
             <Navbar />
             <View flex={1} justifyContent="center" alignItems="center">
@@ -138,172 +142,235 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
                             flex={1}
                             p={{ base: "15px", md: "55px" }}
                             borderRadius={"10px"}
-                            justifyContent="center"
+                            justifyContent="space-around"
                         >
                             {isLoading && <Spinner color="grey" size="large" />}
 
                             {!documentSelected && !cameraOpen && !photoInfo && (
                                 <>
-                                    <Heading textAlign={"center"} mb={15}>
-                                        Upload an id
-                                    </Heading>
-                                    <Button
-                                        onPress={openCamera}
-                                        style={{ marginBottom: 10 }}
-                                    >
-                                        Take a picture
-                                    </Button>
-                                    <Button onPress={openDocumentPicker}>
-                                        Select from library
-                                    </Button>
+                                    <VStack>
+                                        <QuestionPrompt>
+                                            Upload your State ID
+                                        </QuestionPrompt>
+                                        <Text
+                                            fontFamily={"sf-pro"}
+                                            color={"#A3A3A3"}
+                                            fontSize={"14px"}
+                                        >
+                                            Any photo ID that is issued by the
+                                            state, such as driver's license or
+                                            REAL ID. Your ID should be valid.
+                                            This cannot be a library, school, or
+                                            work ID.{" "}
+                                        </Text>
+                                    </VStack>
+                                    <VStack space={"10px"}>
+                                        <QuestionButton onPress={openCamera}>
+                                            Take a picture
+                                        </QuestionButton>
+                                        <QuestionButton
+                                            onPress={openDocumentPicker}
+                                        >
+                                            Select from library
+                                        </QuestionButton>
+                                        <QuestionButton
+                                            inverted
+                                            onPress={skipDocumentUpload}
+                                        >
+                                            I don't have this
+                                        </QuestionButton>
+                                    </VStack>
                                 </>
                             )}
-                            {cameraOpen && (
-                                <>
-                                    <Camera
+                            {(cameraOpen ||
+                                (!isUploaded &&
+                                    !isLoading &&
+                                    photoInfo != null)) && (
+                                <VStack>
+                                    <QuestionPrompt>
+                                        Upload your State ID
+                                    </QuestionPrompt>
+                                    <View
                                         style={{
-                                            transform: [{ scaleX: -1 }],
-                                            width: 400,
-                                            height: 400,
+                                            width: "100%",
+                                            height: undefined,
+                                            aspectRatio: 1.68,
                                             alignSelf: "center",
-                                            marginBottom: 15,
+                                            marginBottom: 25,
                                         }}
-                                        ref={cameraRef}
-                                    />
-
-                                    <Button onPress={takePicture}>
-                                        Capture Image
-                                    </Button>
-                                </>
-                            )}
-                            {!isUploaded && !isLoading && photoInfo != null && (
-                                <View
-                                    style={{
-                                        flex: 1,
-                                        justifyContent: "center",
-                                    }}
-                                >
-                                    <Image
-                                        source={{ uri: photoInfo.uri }}
-                                        style={{
-                                            width: undefined,
-                                            height: "85%",
-                                            aspectRatio: 1,
-                                            alignSelf: "center",
-                                            resizeMode: "contain",
-                                        }}
-                                    />
-
-                                    <Button
-                                        onPress={uploadDocument}
-                                        style={{ marginBottom: 10 }}
                                     >
-                                        Continue
-                                    </Button>
-                                    <Button
-                                        backgroundColor={"red.500"}
-                                        onPress={retakePicture}
-                                    >
-                                        Retake Photo
-                                    </Button>
-                                </View>
+                                        {cameraOpen ? (
+                                            <Camera ref={cameraRef} />
+                                        ) : (
+                                            <Image
+                                                source={{ uri: photoInfo?.uri }}
+                                                style={{
+                                                    flex: 1,
+                                                    resizeMode: "cover",
+                                                }}
+                                            />
+                                        )}
+                                    </View>
+                                    <VStack space={"10px"}>
+                                        {cameraOpen ? (
+                                            <QuestionButton
+                                                onPress={takePicture}
+                                            >
+                                                Capture
+                                            </QuestionButton>
+                                        ) : (
+                                            <QuestionButton
+                                                onPress={retakePicture}
+                                            >
+                                                Retake photo
+                                            </QuestionButton>
+                                        )}
+
+                                        <QuestionButton
+                                            inactive={cameraOpen}
+                                            onPress={uploadDocument}
+                                        >
+                                            Submit
+                                        </QuestionButton>
+                                    </VStack>
+                                </VStack>
                             )}
                             {!isUploaded &&
                                 documentSelected &&
                                 documentResult?.type == "success" && (
-                                    <>
-                                        <Heading>{documentResult.name}</Heading>
-                                        <Button onPress={uploadDocument}>
+                                    <VStack space={"10px"}>
+                                        <QuestionPrompt>
+                                            Upload your State ID
+                                        </QuestionPrompt>
+                                        <View
+                                            style={{
+                                                width: "100%",
+                                                height: undefined,
+                                                aspectRatio: 1.68,
+                                                alignSelf: "center",
+                                                marginBottom: 25,
+                                            }}
+                                        >
+                                            <Image
+                                                source={{ uri: documentUri }}
+                                                style={{
+                                                    flex: 1,
+                                                    resizeMode: "cover",
+                                                }}
+                                            />
+                                        </View>
+                                        <QuestionButton
+                                            onPress={openDocumentPicker}
+                                        >
+                                            Choose another file
+                                        </QuestionButton>
+                                        <QuestionButton
+                                            onPress={uploadDocument}
+                                        >
                                             Upload document
-                                        </Button>
-                                    </>
+                                        </QuestionButton>
+                                    </VStack>
                                 )}
 
                             {isUploaded && (
-                                <>
-                                    <Heading>Review your information</Heading>
-                                    <InsetShadow>
-                                        <ScrollView
-                                            persistentScrollbar={true}
-                                            style={{ flex: 1 }}
+                                <View flex={1} justifyContent={"center"}>
+                                    <View my={"10px"}>
+                                        <Heading
+                                            fontFamily={"sf-pro-medium"}
+                                            fontSize="14px"
+                                            letterSpacing={"2px"}
                                         >
-                                            <View style={{ padding: 10 }}>
-                                                <CustomTextInput
-                                                    value={userInfo.firstName}
-                                                    onChangeText={
-                                                        userInfo.setFirstName
-                                                    }
-                                                    placeholder={""}
-                                                    label="First Name"
-                                                />
+                                            Below is what we gathered based on
+                                            the files you uploaded. Take a look
+                                            to make sure they are correct. Tap
+                                            to edit them.
+                                        </Heading>
+                                    </View>
+                                    <ScrollView
+                                        // maxH={"50%"}
+                                        flexGrow={1}
+                                        backgroundColor={"trueGray.50"}
+                                    >
+                                        <View>
+                                            <CustomTextInput
+                                                value={userInfo.firstName}
+                                                onChangeText={
+                                                    userInfo.setFirstName
+                                                }
+                                                placeholder={""}
+                                                label="First Name"
+                                            />
 
-                                                <CustomTextInput
-                                                    value={userInfo.middleName}
-                                                    onChangeText={
-                                                        userInfo.setMiddleName
-                                                    }
-                                                    placeholder={""}
-                                                    label="Middle Name"
-                                                />
+                                            <CustomTextInput
+                                                value={userInfo.middleName}
+                                                onChangeText={
+                                                    userInfo.setMiddleName
+                                                }
+                                                placeholder={""}
+                                                label="Middle Name"
+                                            />
 
-                                                <CustomTextInput
-                                                    value={userInfo.lastName}
-                                                    onChangeText={
-                                                        userInfo.setLastName
-                                                    }
-                                                    placeholder={""}
-                                                    label="Last Name"
-                                                />
-                                                <CustomTextInput
-                                                    value={userInfo.address}
-                                                    onChangeText={
-                                                        userInfo.setAddress
-                                                    }
-                                                    placeholder={""}
-                                                    label="Address"
-                                                />
-                                                <CustomTextInput
-                                                    value={userInfo.city}
-                                                    onChangeText={
-                                                        userInfo.setCity
-                                                    }
-                                                    placeholder={""}
-                                                    label="City"
-                                                />
-                                                <CustomTextInput
-                                                    value={userInfo.zip}
-                                                    onChangeText={
-                                                        userInfo.setZip
-                                                    }
-                                                    placeholder={""}
-                                                    label="Zip code"
-                                                />
-                                                <CustomTextInput
-                                                    value={userInfo.usState}
-                                                    onChangeText={
-                                                        userInfo.setUsState
-                                                    }
-                                                    placeholder={""}
-                                                    label="State"
-                                                />
-                                                <CustomDatePicker
-                                                    value={userInfo.dateOfBirth}
-                                                    label={"Date of Birth"}
-                                                    onChange={
-                                                        userInfo.setDateOfBirth
-                                                    }
-                                                />
-                                            </View>
-                                        </ScrollView>
-                                    </InsetShadow>
-                                    <View h={"45px"} mt={"10px"}>
+                                            <CustomTextInput
+                                                value={userInfo.lastName}
+                                                onChangeText={
+                                                    userInfo.setLastName
+                                                }
+                                                placeholder={""}
+                                                label="Last Name"
+                                            />
+                                            <CustomTextInput
+                                                value={userInfo.address}
+                                                onChangeText={
+                                                    userInfo.setAddress
+                                                }
+                                                placeholder={""}
+                                                label="Address"
+                                            />
+                                            <CustomTextInput
+                                                value={userInfo.city}
+                                                onChangeText={userInfo.setCity}
+                                                placeholder={""}
+                                                label="City"
+                                            />
+                                            <CustomTextInput
+                                                value={userInfo.zip}
+                                                onChangeText={userInfo.setZip}
+                                                placeholder={""}
+                                                label="Zip code"
+                                            />
+                                            <CustomTextInput
+                                                value={userInfo.usState}
+                                                onChangeText={
+                                                    userInfo.setUsState
+                                                }
+                                                placeholder={""}
+                                                label="State"
+                                            />
+                                            <CustomDatePicker
+                                                value={userInfo.dateOfBirth}
+                                                label={"Date of Birth"}
+                                                onChange={
+                                                    userInfo.setDateOfBirth
+                                                }
+                                            />
+                                        </View>
+                                    </ScrollView>
+                                    <View mt={"10px"}>
+                                        <Text
+                                            color={"trueGray.500"}
+                                            textAlign="center"
+                                        >
+                                            Scroll down to view more
+                                        </Text>
+                                    </View>
+                                    <View mt={"15px"}>
                                         <QuestionButton
                                             onPress={handleUserInfoSubmit}
                                         >
-                                            Submit
+                                            I confirm all fields are correct
                                         </QuestionButton>
                                     </View>
-                                </>
+                                </View>
                             )}
                         </View>
                     )}
