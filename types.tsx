@@ -67,10 +67,11 @@ export type Question =
 
 export type QuestionCard = {
     id: string;
-    question?: Question;
-    text?: string;
-    title?: string;
-    next?: string;
+    question: Question;
+    text: string;
+    subtext: string;
+    button_text: string;
+    next: string;
     on_true: string | null;
     on_false: "exit";
 };

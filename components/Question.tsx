@@ -159,7 +159,8 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
             return (
                 <InfoCard
                     text={card.text}
-                    title={card.title}
+                    subtext={card.subtext}
+                    buttonText={card.button_text}
                     handleResponse={handleInfoCardResponse}
                 />
             );
