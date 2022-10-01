@@ -21,7 +21,6 @@ const linking: LinkingOptions<RootStackParamList> = {
             Login: "login",
             Process: "process",
             Home: "home",
-            Case: "case",
             Ineligible: "ineligible",
             Review: "review",
             Debug: "debug",

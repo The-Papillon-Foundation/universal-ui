@@ -26,14 +26,13 @@ export default function CaseCard({
             style={{
                 marginBottom: screenSize == "base" ? 15 : 0,
                 flex: 1,
-                padding: 16,
+                padding: 24,
             }}
             onPress={onPress}
         >
             <View
-                borderRadius={"32px"}
                 w={{ base: "100%", md: "350px" }}
-                h={"200px"}
+                h={"220px"}
                 backgroundColor={customTheme.colors.case_card_background}
                 padding={"15px"}
                 style={{
@@ -71,14 +70,12 @@ export default function CaseCard({
 
                 {/* title */}
                 <Text
-                    fontFamily={"poppins-bold"}
+                    fontFamily={"manrope-extrabold"}
                     style={{ width: "100%" }}
-                    fontSize={"xl"}
-                    color={
-                        Number(completion) != 0
-                            ? customTheme.colors.case_card_title
-                            : customTheme.colors.incomplete_status_bar
-                    }
+                    fontSize={"20px"}
+                    lineHeight={"25px"}
+                    color={"cyan.900"}
+                    opacity={Number(completion) === 0 ? 0.6 : 1}
                     adjustsFontSizeToFit={true}
                 >
                     {title}

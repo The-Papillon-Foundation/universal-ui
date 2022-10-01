@@ -1,6 +1,5 @@
 import { Text, View } from "native-base";
 import React from "react";
-import { customTheme } from "../hooks/useCachedResources";
 
 const percentageToStatus = (percentage: string) =>
     Number(percentage) == 1.0
@@ -13,22 +12,27 @@ const StatusCard = ({ percentage }: { percentage: string }) => (
     <View
         bgColor={
             Number(percentage) == 1.0
-                ? customTheme.colors.complete_status_background
+                ? "#A7F3D0"
                 : Number(percentage) > 0.0
-                ? customTheme.colors.in_progress_status_background
-                : customTheme.colors.not_started_status_background
+                ? "#BAE6FD"
+                : "coolGray.200"
         }
         alignSelf="flex-start"
-        padding="4px"
+        alignItems={"center"}
+        justifyContent="center"
+        height="16px"
+        width={"59px"}
         borderRadius={"2px"}
     >
         <Text
             fontFamily={"sf-pro-semibold"}
-            fontSize="xs"
+            fontSize="8px"
             color={
-                Number(percentage) == 100
-                    ? customTheme.colors.complete_status_text
-                    : customTheme.colors.incomplete_status_text
+                Number(percentage) == 1.0
+                    ? "#059669"
+                    : Number(percentage) > 0.0
+                    ? "#0284C7"
+                    : "coolGray.600"
             }
         >
             {percentageToStatus(percentage)}

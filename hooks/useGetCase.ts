@@ -1,24 +1,37 @@
+import { useContext } from "react";
 import { useQuery } from "react-query";
 import { url } from "../constants/Urls";
-import { WorkflowSession } from "../types";
+import { GlobalContext } from "../contexts/GlobalContext";
+import { User, WorkflowSession } from "../types";
 
-const fetchCase = async (sessionId: string) => {
-    if (sessionId === "") return;
+const fetchCases = async (userId: string) => {
+    if (userId === "") return;
+    // get user
+    const res = await fetch(`${url}/users/${userId}`);
+    const user: User = await res.json();
 
-    const res = await fetch(`${url}/workflow-sessions/${sessionId}`);
-    return res.json() as Promise<WorkflowSession>;
+    const workflowSessions: WorkflowSession[] = [];
+    // get workflow sessions
+    for (const workflowSession of user.workflowSessions) {
+        const res = await fetch(`${url}/workflow-sessions/${workflowSession}`);
+        const workflowSessionJson: WorkflowSession = await res.json();
+        workflowSessions.push(workflowSessionJson);
+    }
+    return workflowSessions;
 };
 
-const useGetCase = (sessionId: string) => {
+const useGetCase = () => {
+    const { userId } = useContext(GlobalContext);
     const { isLoading, error, data } = useQuery(
-        ["getCase", sessionId],
-        () => fetchCase(sessionId),
-        { enabled: sessionId !== "" }
+        ["getCases", userId],
+        () => fetchCases(userId),
+        { enabled: userId !== "" }
     );
+
     return {
         isLoading,
         error,
-        currentCase: data,
+        cases: data,
     };
 };
 

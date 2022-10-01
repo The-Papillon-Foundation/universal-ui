@@ -1,16 +1,13 @@
-import React, { useState } from "react";
-import { CardGroup, RootStackParamList } from "../types";
+import React, { useEffect, useState } from "react";
+import { CardGroup, RootStackParamList, WorkflowSession } from "../types";
 import { StackScreenProps } from "@react-navigation/stack";
 import HomeNavBar from "../components/HomeNavBar";
-import { findStateNameByAbbrev } from "./HomeScreen";
 import {
     Button,
     CheckCircleIcon,
-    Heading,
-    Modal,
+    CheckIcon,
     ScrollView,
-    Spacer,
-    Stack,
+    Select,
     Text,
     View,
 } from "native-base";
@@ -18,9 +15,6 @@ import { customTheme } from "../hooks/useCachedResources";
 import { ActivityIndicator, TouchableOpacity } from "react-native";
 import CaseCard from "../components/CaseCard";
 import useGetCase from "../hooks/useGetCase";
-import { useDocumentUpload } from "../hooks/useDocumentUpload";
-import { useDocumentDownload } from "../hooks/useDocumentDownload";
-import { ProgressBar } from "react-native-paper";
 import { CalendarTick, Folder2 } from "iconsax-react-native";
 
 type Props = StackScreenProps<RootStackParamList, "Case">;
@@ -31,27 +25,9 @@ enum CaseMode {
 }
 
 const CaseOverviewScreen = ({ navigation, route }: Props) => {
-    const { isLoading, currentCase } = useGetCase(route.params.sessionId);
+    const { isLoading, cases } = useGetCase();
+    const [currentCase, setCurrentCase] = useState<WorkflowSession | null>();
     const [mode, setMode] = useState<CaseMode>(CaseMode.timeline);
-    const {
-        openDocumentPicker,
-        isUploaded,
-        uploadDocument,
-        documentSelected,
-        documentResult,
-        clearUpload,
-    } = useDocumentUpload();
-    const {
-        isLoading: isDownloadLoading,
-        prepareDownload,
-        progress: downloadProgress,
-        downloadDocument,
-        documentLink,
-        clearDownload,
-    } = useDocumentDownload(route.params.sessionId);
-
-    const [openUploadModal, setOpenUploadModal] = useState(false);
-    const [openDownloadModal, setOpenDownloadModal] = useState(false);
 
     const goToCardGroup = (
         cg: CardGroup,
@@ -70,6 +46,12 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
         });
     };
 
+    useEffect(() => {
+        if (cases != null) {
+            setCurrentCase(cases[0]);
+        }
+    }, [cases]);
+
     return (
         <View
             flex={1}
@@ -80,371 +62,331 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
         >
             <HomeNavBar />
 
-            <View
-                mt={{ base: "25px", md: "42px" }}
-                mx={{ base: "15px", md: "50px" }}
-                flex={1}
-            >
-                {/* Top Bar with mode selection */}
-                <View
-                    flexDirection={{ base: "column", md: "row" }}
-                    justifyContent={{ md: "space-between" }}
-                >
-                    {/* Navigation and Case information */}
-                    <View>
-                        <Text
-                            textDecorationLine={"underline"}
-                            fontFamily="sf-pro-medium"
-                            fontSize="lg"
-                            color="trueGray.600"
-                            onPress={() => navigation.pop()}
-                        >
-                            Back to My Cases
-                        </Text>
-                        <View mb="25px">
-                            {currentCase != undefined && (
-                                <>
-                                    {" "}
-                                    <Text
-                                        fontFamily={"poppins-bold"}
-                                        fontSize="2xl"
-                                        color={
-                                            customTheme.colors.case_card_title
-                                        }
-                                    >
-                                        {findStateNameByAbbrev(
-                                            currentCase.workflowId
-                                        )}
-                                    </Text>
-                                    <Text
-                                        fontSize={"md"}
-                                        fontFamily="sf-pro-bold"
-                                        color={
-                                            customTheme.colors
-                                                .case_card_case_number
-                                        }
-                                    >
-                                        Case {currentCase.caseNumber}
-                                    </Text>
-                                </>
-                            )}
-                        </View>
-                    </View>
-                    {/* Mode selector */}
-                    <View alignSelf={{ base: "center", md: undefined }}>
+            {currentCase !== null && (
+                <>
+                    <View
+                        mt={{ base: "25px", md: "42px" }}
+                        mx={{ base: "15px", md: "50px" }}
+                        flex={1}
+                    >
+                        {/* Top Bar with mode selection */}
                         <View
-                            bgColor={
-                                customTheme.colors
-                                    .case_overview_screen_mobile_background
-                            }
-                            flexDirection="row"
-                            alignItems={"center"}
-                            padding="10px"
-                            borderRadius={"22px"}
+                            flexDirection={{ base: "column", md: "row" }}
+                            justifyContent={{ md: "space-between" }}
                         >
-                            <TouchableOpacity
-                                onPress={() => setMode(CaseMode.timeline)}
-                            >
-                                <View
-                                    bgColor={
-                                        mode == CaseMode.timeline
-                                            ? "white"
-                                            : undefined
-                                    }
-                                    shadow={
-                                        mode == CaseMode.timeline
-                                            ? 3
-                                            : undefined
-                                    }
-                                    style={{
-                                        shadowColor: "#526971",
-                                        shadowOpacity: 0.15,
-                                    }}
-                                    width="143px"
-                                    height="45px"
-                                    alignItems={"center"}
-                                    justifyContent="center"
-                                    marginRight="5px"
-                                    borderRadius={"15px"}
-                                    flexDirection="row"
-                                    opacity={
-                                        mode == CaseMode.timeline ? 1 : 0.5
-                                    }
+                            {/* Navigation and Case information */}
+                            <View>
+                                <Text
+                                    fontFamily="sf-pro-medium"
+                                    fontSize="14px"
+                                    color="cyan.800"
                                 >
-                                    <CalendarTick
-                                        color={
-                                            customTheme.colors.case_card_title
-                                        }
-                                        variant="Outline"
-                                        size={24}
-                                    />
-                                    <Text
-                                        ml="5px"
-                                        color={
-                                            customTheme.colors.case_card_title
-                                        }
-                                        fontFamily={"manrope-extrabold"}
-                                    >
-                                        Timeline
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={() => setMode(CaseMode.documents)}
-                            >
-                                <View
-                                    bgColor={
-                                        mode == CaseMode.documents
-                                            ? "white"
-                                            : undefined
-                                    }
-                                    shadow={
-                                        mode == CaseMode.documents
-                                            ? 3
-                                            : undefined
-                                    }
-                                    style={{
-                                        shadowColor: "#526971",
-                                        shadowOpacity: 0.15,
-                                    }}
-                                    width="143px"
-                                    height="45px"
-                                    alignItems={"center"}
-                                    justifyContent="center"
-                                    marginLeft="5px"
-                                    borderRadius={"15px"}
-                                    flexDirection="row"
-                                    opacity={
-                                        mode == CaseMode.documents ? 1 : 0.5
-                                    }
-                                >
-                                    <Folder2
-                                        color={
-                                            customTheme.colors.case_card_title
-                                        }
-                                        variant="Outline"
-                                        size={24}
-                                    />
-                                    <Text
-                                        ml="5px"
-                                        fontFamily={"manrope-extrabold"}
-                                        color={
-                                            customTheme.colors.case_card_title
-                                        }
-                                    >
-                                        Documents
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-                {isLoading && (
-                    <ActivityIndicator
-                        style={{ alignSelf: "center", marginTop: "25%" }}
-                    />
-                )}
-                {currentCase && (
-                    <View flex={1} mb={"15px"}>
-                        {mode == CaseMode.documents && (
-                            <View
-                                flex={1}
-                                backgroundColor={{
-                                    base: undefined,
-                                    md: customTheme.colors
-                                        .case_overview_screen_timeline_desktop_background,
-                                }}
-                                borderRadius="24px"
-                                flexDirection={{ base: "column", md: "row" }}
-                                overflow={"scroll"}
-                            >
-                                <View
-                                    flex={1}
-                                    borderRightWidth={{
-                                        base: undefined,
-                                        md: "2px",
-                                    }}
-                                    borderColor={"#FFF"}
-                                >
-                                    <View
-                                        p="20px"
-                                        borderBottomWidth="2px"
-                                        borderColor={"#FFF"}
-                                    >
-                                        <Text
-                                            ml="5px"
-                                            color={
-                                                customTheme.colors
-                                                    .case_card_title
-                                            }
+                                    Current Case
+                                </Text>
+                                <View mb="25px">
+                                    {cases !== undefined && cases.length > 0 && (
+                                        <Select
+                                            selectedValue={cases[0].sessionId}
+                                            w={{ base: "100%", md: "100%" }}
+                                            accessibilityLabel="Select one."
+                                            placeholder="Select one."
+                                            _selectedItem={{
+                                                bg: "teal.600",
+                                                endIcon: <CheckIcon size="5" />,
+                                            }}
+                                            color={"cyan.900"}
                                             fontFamily={"manrope-extrabold"}
-                                            fontSize="lg"
-                                        >
-                                            Identification
-                                        </Text>
-                                    </View>
-                                    <View
-                                        flex={1}
-                                        alignItems={"center"}
-                                        justifyContent="center"
-                                        p="20px"
-                                    ></View>
-                                </View>
-                                <View flex={3}>
-                                    <View
-                                        p="20px"
-                                        borderBottomWidth="2px"
-                                        borderColor={"#FFF"}
-                                    >
-                                        <Text
-                                            ml="5px"
-                                            color={
-                                                customTheme.colors
-                                                    .case_card_title
+                                            fontSize={"20px"}
+                                            mt={2}
+                                            onValueChange={(sessionId) =>
+                                                setCurrentCase(
+                                                    cases.find(
+                                                        (c) =>
+                                                            c.sessionId ==
+                                                            sessionId
+                                                    )
+                                                )
                                             }
-                                            fontFamily={"manrope-extrabold"}
-                                            fontSize="lg"
                                         >
-                                            Forms
-                                        </Text>
-                                    </View>
-                                    <View
-                                        flex={1}
-                                        alignItems={"center"}
-                                        justifyContent="center"
-                                        flexDirection={{
-                                            base: "column",
-                                            md: "row",
-                                        }}
-                                        p="20px"
-                                    ></View>
+                                            {cases.map((_case, index) => (
+                                                <Select.Item
+                                                    key={index}
+                                                    label={
+                                                        " Case " +
+                                                        unixToHumanReadableDate(
+                                                            _case.createdAt
+                                                        )
+                                                    }
+                                                    value={_case.sessionId}
+                                                />
+                                            ))}
+                                        </Select>
+                                    )}
                                 </View>
                             </View>
+                            {/* Mode selector */}
+                            <View alignSelf={{ base: "center", md: undefined }}>
+                                <View
+                                    bgColor={
+                                        customTheme.colors
+                                            .case_overview_screen_mobile_background
+                                    }
+                                    flexDirection="row"
+                                    alignItems={"center"}
+                                    padding="10px"
+                                    borderRadius={"22px"}
+                                >
+                                    <TouchableOpacity
+                                        onPress={() =>
+                                            setMode(CaseMode.timeline)
+                                        }
+                                    >
+                                        <View
+                                            bgColor={
+                                                mode == CaseMode.timeline
+                                                    ? "white"
+                                                    : undefined
+                                            }
+                                            shadow={
+                                                mode == CaseMode.timeline
+                                                    ? 3
+                                                    : undefined
+                                            }
+                                            style={{
+                                                shadowColor: "#526971",
+                                                shadowOpacity: 0.15,
+                                            }}
+                                            width="143px"
+                                            height="45px"
+                                            alignItems={"center"}
+                                            justifyContent="center"
+                                            marginRight="5px"
+                                            borderRadius={"15px"}
+                                            flexDirection="row"
+                                            opacity={
+                                                mode == CaseMode.timeline
+                                                    ? 1
+                                                    : 0.5
+                                            }
+                                        >
+                                            <CalendarTick
+                                                color={
+                                                    customTheme.colors
+                                                        .case_card_title
+                                                }
+                                                variant="Outline"
+                                                size={24}
+                                            />
+                                            <Text
+                                                ml="5px"
+                                                color={
+                                                    customTheme.colors
+                                                        .case_card_title
+                                                }
+                                                fontFamily={"manrope-extrabold"}
+                                            >
+                                                Timeline
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        onPress={() =>
+                                            setMode(CaseMode.documents)
+                                        }
+                                    >
+                                        <View
+                                            bgColor={
+                                                mode == CaseMode.documents
+                                                    ? "white"
+                                                    : undefined
+                                            }
+                                            shadow={
+                                                mode == CaseMode.documents
+                                                    ? 3
+                                                    : undefined
+                                            }
+                                            style={{
+                                                shadowColor: "#526971",
+                                                shadowOpacity: 0.15,
+                                            }}
+                                            width="143px"
+                                            height="45px"
+                                            alignItems={"center"}
+                                            justifyContent="center"
+                                            marginLeft="5px"
+                                            borderRadius={"15px"}
+                                            flexDirection="row"
+                                            opacity={
+                                                mode == CaseMode.documents
+                                                    ? 1
+                                                    : 0.5
+                                            }
+                                        >
+                                            <Folder2
+                                                color={
+                                                    customTheme.colors
+                                                        .case_card_title
+                                                }
+                                                variant="Outline"
+                                                size={24}
+                                            />
+                                            <Text
+                                                ml="5px"
+                                                fontFamily={"manrope-extrabold"}
+                                                color={
+                                                    customTheme.colors
+                                                        .case_card_title
+                                                }
+                                            >
+                                                Documents
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                        {isLoading && (
+                            <ActivityIndicator
+                                style={{
+                                    alignSelf: "center",
+                                    marginTop: "25%",
+                                }}
+                            />
                         )}
-                        {mode == CaseMode.timeline && (
-                            <ScrollView
-                                flex={1}
-                                showsVerticalScrollIndicator={false}
-                            >
-                                <View>
-                                    <Stack
-                                        justifyContent={{ md: "center" }}
+                        {currentCase && (
+                            <View flex={1} mb={"15px"}>
+                                {mode == CaseMode.documents && (
+                                    <View
                                         flex={1}
-                                        direction={{
-                                            base: "column",
-                                            md: "row",
-                                        }}
-                                        flexWrap={{ md: "wrap" }}
                                         backgroundColor={{
                                             base: undefined,
                                             md: customTheme.colors
                                                 .case_overview_screen_timeline_desktop_background,
                                         }}
                                         borderRadius="24px"
+                                        flexDirection={{
+                                            base: "column",
+                                            md: "row",
+                                        }}
+                                        overflow={"scroll"}
                                     >
-                                        {currentCase.sessionState.cardGroups
-                                            .filter(
-                                                (cg) =>
-                                                    cg.module !=
-                                                    "eligibility_module"
-                                            )
-                                            .map((cg, index, cgs) => (
-                                                <CaseCardGroup
-                                                    key={cg.name}
-                                                    cg={cg}
-                                                    cgs={cgs}
-                                                    index={index}
-                                                    onPress={() =>
-                                                        goToCardGroup(
-                                                            cg,
-                                                            index,
-                                                            currentCase.workflowId
-                                                        )
+                                        <View
+                                            flex={1}
+                                            borderRightWidth={{
+                                                base: undefined,
+                                                md: "2px",
+                                            }}
+                                            borderColor={"#FFF"}
+                                        >
+                                            <View
+                                                p="20px"
+                                                borderBottomWidth="2px"
+                                                borderColor={"#FFF"}
+                                            >
+                                                <Text
+                                                    ml="5px"
+                                                    color={
+                                                        customTheme.colors
+                                                            .case_card_title
                                                     }
-                                                />
-                                            ))}
-                                    </Stack>
-                                </View>
-                            </ScrollView>
+                                                    fontFamily={
+                                                        "manrope-extrabold"
+                                                    }
+                                                    fontSize="lg"
+                                                >
+                                                    Identification
+                                                </Text>
+                                            </View>
+                                            <View
+                                                flex={1}
+                                                alignItems={"center"}
+                                                justifyContent="center"
+                                                p="20px"
+                                            ></View>
+                                        </View>
+                                        <View flex={3}>
+                                            <View
+                                                p="20px"
+                                                borderBottomWidth="2px"
+                                                borderColor={"#FFF"}
+                                            >
+                                                <Text
+                                                    ml="5px"
+                                                    color={
+                                                        customTheme.colors
+                                                            .case_card_title
+                                                    }
+                                                    fontFamily={
+                                                        "manrope-extrabold"
+                                                    }
+                                                    fontSize="lg"
+                                                >
+                                                    Forms
+                                                </Text>
+                                            </View>
+                                            <View
+                                                flex={1}
+                                                alignItems={"center"}
+                                                justifyContent="center"
+                                                flexDirection={{
+                                                    base: "column",
+                                                    md: "row",
+                                                }}
+                                                p="20px"
+                                            ></View>
+                                        </View>
+                                    </View>
+                                )}
+                                {mode == CaseMode.timeline && (
+                                    <ScrollView
+                                        flex={1}
+                                        showsVerticalScrollIndicator={false}
+                                    >
+                                        <View
+                                            justifyContent={{ md: "center" }}
+                                            flex={1}
+                                            flexDirection={{
+                                                base: "column",
+                                                md: "row",
+                                            }}
+                                            flexWrap={{ md: "wrap" }}
+                                            backgroundColor={{
+                                                base: undefined,
+                                                md: customTheme.colors
+                                                    .case_overview_screen_timeline_desktop_background,
+                                            }}
+                                            borderWidth={{ base: 0, md: 1 }}
+                                            borderColor={"trueGray.200"}
+                                        >
+                                            {currentCase.sessionState.cardGroups
+                                                .filter(
+                                                    (cg) =>
+                                                        cg.module !=
+                                                        "eligibility_module"
+                                                )
+                                                .map((cg, index, cgs) => (
+                                                    <CaseCardGroup
+                                                        key={cg.name}
+                                                        cg={cg}
+                                                        cgs={cgs}
+                                                        index={index}
+                                                        onPress={() =>
+                                                            goToCardGroup(
+                                                                cg,
+                                                                index,
+                                                                currentCase.workflowId
+                                                            )
+                                                        }
+                                                    />
+                                                ))}
+                                        </View>
+                                    </ScrollView>
+                                )}
+                            </View>
                         )}
                     </View>
-                )}
-            </View>
-            <Modal
-                isOpen={openUploadModal}
-                onClose={() => {
-                    setOpenUploadModal(false);
-                    clearUpload();
-                }}
-            >
-                <View
-                    backgroundColor={"white"}
-                    p={"55px"}
-                    borderRadius={"10px"}
-                >
-                    <Heading>Upload a document</Heading>
-                    {isLoading && (
-                        <ActivityIndicator color="grey" size="large" />
-                    )}
-
-                    {!documentSelected && (
-                        <Button onPress={openDocumentPicker}>
-                            Pick document
-                        </Button>
-                    )}
-                    {documentSelected && documentResult?.type == "success" && (
-                        <>
-                            <Heading>{documentResult.name}</Heading>
-                            <Spacer my={1} />
-                            {!isUploaded && (
-                                <Button onPress={uploadDocument}>
-                                    Upload document
-                                </Button>
-                            )}
-                            {isUploaded && (
-                                <Text color="success.500" textAlign={"center"}>
-                                    Your document has been successfully
-                                    uploaded.
-                                </Text>
-                            )}
-                        </>
-                    )}
-                </View>
-            </Modal>
-            <Modal
-                isOpen={openDownloadModal}
-                onClose={() => {
-                    setOpenDownloadModal(false);
-                    clearDownload();
-                }}
-            >
-                <View
-                    backgroundColor={"white"}
-                    p={"55px"}
-                    borderRadius={"10px"}
-                >
-                    <Heading>Download your document</Heading>
-                    {documentLink == "" ? (
-                        <Button onPress={prepareDownload}>
-                            {isDownloadLoading ? (
-                                <ActivityIndicator color="white" />
-                            ) : (
-                                "Prepare Download"
-                            )}
-                            {downloadProgress > 0 && (
-                                <ProgressBar progress={downloadProgress} />
-                            )}
-                        </Button>
-                    ) : (
-                        <Button
-                            onPress={downloadDocument}
-                            bgColor={"success.600"}
-                        >
-                            Download pdf
-                        </Button>
-                    )}
-                </View>
-            </Modal>
+                </>
+            )}
         </View>
     );
 };
@@ -464,7 +406,7 @@ const CaseCardGroup = ({
         key={index}
         w={{
             base: "100%",
-            md: "375px",
+            md: "365px",
         }}
         alignItems={{
             md: "center",
@@ -475,9 +417,9 @@ const CaseCardGroup = ({
         }}
     >
         <View
-            my={{
+            mt={{
                 base: 0,
-                md: "24px",
+                md: "15px",
             }}
             pr={{
                 base: "10px",
@@ -572,24 +514,26 @@ const CaseCardGroup = ({
         </View>
 
         <CaseCard onPress={() => {}} completion={cg.completion} title={cg.name}>
-            <Text
-                fontFamily={"sf-pro-medium"}
-                fontSize="sm"
-                color="trueGray.400"
-            >
-                {cg.description}
-            </Text>
-            <View mt="12px">
+            <View flex={1} justifyContent={"space-between"} marginTop={"10px"}>
+                <View>
+                    <Text
+                        fontFamily={"sf-pro-medium"}
+                        fontSize="14"
+                        color="trueGray.400"
+                    >
+                        {cg.description}
+                    </Text>
+                </View>
+
                 <Button
                     onPress={onPress}
                     w="50%"
                     bgColor={
                         Number(cg.completion) == 1
-                            ? customTheme.colors.signup_button_surface
+                            ? "cyan.800"
                             : Number(cg.completion) > 0
-                            ? customTheme.colors
-                                  .mobile_question_screen_background
-                            : customTheme.colors.case_horizontal_divider
+                            ? "cyan.700"
+                            : "cyan.600"
                     }
                 >
                     {Number(cg.completion) == 1
@@ -602,5 +546,20 @@ const CaseCardGroup = ({
         </CaseCard>
     </View>
 );
+
+export const unixToHumanReadableDate = (unixTimestamp: number) => {
+    // replace the . with 0
+    let timestamp = 1000 * unixTimestamp;
+    let date = new Date(timestamp).toLocaleDateString();
+    return date;
+};
+
+import states from "../assets/data/states.json";
+export const findStateNameByAbbrev = (abbrev: string) => {
+    const stateName = Object.keys(states).find(
+        (stateName) => (states as any)[stateName] === abbrev
+    );
+    return stateName || "";
+};
 
 export default CaseOverviewScreen;
