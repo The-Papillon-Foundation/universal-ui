@@ -12,7 +12,6 @@ import CaseOverviewScreen from "../screens/CaseOverviewScreen";
 import CreateUserScreen from "../screens/CreateUserScreen";
 import DetermineWorkflow from "../screens/DetermineWorkflow";
 import EligibilityScreen from "../screens/EligibilityScreen";
-import HomeScreen from "../screens/HomeScreen";
 import { IneligibleScreen } from "../screens/IneligibleScreen";
 import LandingScreen from "../screens/LandingScreen";
 import Loading from "../screens/Loading";
@@ -59,8 +58,7 @@ function RootNavigator() {
             <Stack.Screen name="Loading" component={Loading} />
             <Stack.Screen name="Landing" component={LandingScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Case" component={CaseOverviewScreen} />
+            <Stack.Screen name="Home" component={CaseOverviewScreen} />
 
             <Stack.Screen
                 name="DetermineWorkflow"
