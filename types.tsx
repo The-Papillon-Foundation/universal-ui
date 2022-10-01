@@ -50,7 +50,13 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
 
 export type Question =
     | {
-          type: "TrueOrFalse" | "YesOrNo" | "Address" | "Date" | "PhoneNumber";
+          type:
+              | "TrueOrFalse"
+              | "YesOrNo"
+              | "Address"
+              | "Date"
+              | "PhoneNumber"
+              | "SocialSecurityNumber";
           prompt: string;
           help?: string;
           options: string[];
