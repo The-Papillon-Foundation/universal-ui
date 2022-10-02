@@ -27,7 +27,8 @@ const QuestionStack = ({ module, navigable, onFinish }: Props) => {
             navigation.setParams({
                 ...route.params,
                 groupIndex: groupIndex - 1,
-                questionIndex: module.card_groups[groupIndex].cards.length - 1,
+                questionIndex:
+                    module.card_groups[groupIndex - 1].cards.length - 1,
             });
         } else {
             navigation.setParams({
@@ -38,13 +39,23 @@ const QuestionStack = ({ module, navigable, onFinish }: Props) => {
     };
 
     const skipQuestion = () => {
-        if (questionIndex >= module.card_groups[groupIndex].cards.length - 1)
+        if (questionIndex >= module.card_groups[groupIndex].cards.length - 1) {
+            console.log(module.card_groups[Number(groupIndex) + 1]);
+            if (module.card_groups[Number(groupIndex) + 1]) {
+                return navigation.setParams({
+                    ...route.params,
+                    questionIndex: 0,
+                    groupIndex: Number(groupIndex) + 1,
+                });
+            }
+
             return;
-        else
+        } else {
             navigation.setParams({
                 ...route.params,
                 questionIndex: Number(questionIndex) + 1,
             });
+        }
     };
 
     const goNext = (id: string | null) => {
@@ -121,10 +132,6 @@ const QuestionStack = ({ module, navigable, onFinish }: Props) => {
                         borderRadius={"50%"}
                         bgColor={customTheme.colors.arrow_button}
                         onPress={skipQuestion}
-                        isDisabled={
-                            questionIndex >=
-                            module.card_groups[groupIndex].cards.length - 1
-                        }
                     >
                         <ArrowForwardIcon />
                     </Button>
