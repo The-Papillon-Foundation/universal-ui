@@ -10,6 +10,8 @@ import AddressQuestion, { AddressFieldObject } from "./AddressQuestion";
 import InfoCard from "./InfoCard";
 import TrueOrFalseQuestion from "./TrueOrFalseQuestion";
 import PhoneNumberQuestion from "./PhoneNumberQuestion";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorBoundaryScreen from "../screens/ErrorBoundaryScreen";
 
 interface Props {
     card: QuestionCard;
@@ -236,7 +238,11 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
             return null;
         }
     };
-    return <>{renderSwitch() || <Text>Error</Text>}</>;
+    return (
+        <ErrorBoundary FallbackComponent={ErrorBoundaryScreen}>
+            {renderSwitch() || <Text>Error</Text>}
+        </ErrorBoundary>
+    );
 };
 
 export default Question;
