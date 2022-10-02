@@ -46,7 +46,7 @@ const NavbarButton = ({
                         : customTheme.colors.navbar_button
                 }
                 fontFamily={"poppins-medium"}
-                fontSize={{ base: "sm", md: "md", lg: "lg" }}
+                fontSize={{ base: "sm", md: "18px" }}
             >
                 {children}
             </Text>
@@ -90,7 +90,7 @@ const Navbar = (props: Props) => {
                             <Heading
                                 color={customTheme.colors.org_name_heading}
                                 fontFamily={"poppins-bold"}
-                                fontSize={{ base: "sm", md: 30, lg: 38 }}
+                                fontSize={{ base: "sm", md: "30px" }}
                             >
                                 {customAssets.copy.organization_name}
                             </Heading>

@@ -11,6 +11,7 @@ import {
     ScrollView,
     Spacer,
     Spinner,
+    Stack,
     Text,
     View,
     VStack,
@@ -23,7 +24,7 @@ import { userCreationSchema } from "../validation/user-validation";
 import QuestionPrompt from "../components/QuestionPrompt";
 import QuestionButton from "../components/QuestionButton";
 import { useIdUpload } from "../hooks/useIdUpload";
-import { Camera } from "expo-camera";
+import { Camera, CameraType } from "expo-camera";
 import { Image } from "react-native";
 import CustomTextInput from "../components/CustomTextInput";
 import CustomDatePicker from "../components/CustomDatePicker";
@@ -41,7 +42,6 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
     const [isInvalid, setIsInvalid] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [error, setError] = useState("");
-
     const {
         documentSelected,
         isLoading,
@@ -140,7 +140,7 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
                         <View
                             backgroundColor={"white"}
                             flex={1}
-                            p={{ base: "15px", md: "55px" }}
+                            p={{ base: "15px", md: "25px" }}
                             borderRadius={"10px"}
                             justifyContent="space-around"
                         >
@@ -164,7 +164,13 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
                                             work ID.{" "}
                                         </Text>
                                     </VStack>
-                                    <VStack space={"10px"}>
+                                    <Stack
+                                        direction={{
+                                            base: "column",
+                                            md: "row",
+                                        }}
+                                        space={"10px"}
+                                    >
                                         <QuestionButton onPress={openCamera}>
                                             Take a picture
                                         </QuestionButton>
@@ -179,28 +185,42 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
                                         >
                                             I don't have this
                                         </QuestionButton>
-                                    </VStack>
+                                    </Stack>
                                 </>
                             )}
                             {(cameraOpen ||
                                 (!isUploaded &&
                                     !isLoading &&
                                     photoInfo != null)) && (
-                                <VStack>
+                                <View flex={1}>
                                     <QuestionPrompt>
                                         Upload your State ID
                                     </QuestionPrompt>
                                     <View
                                         style={{
-                                            width: "100%",
-                                            height: undefined,
+                                            flex: 1,
                                             aspectRatio: 1.68,
-                                            alignSelf: "center",
                                             marginBottom: 25,
                                         }}
                                     >
                                         {cameraOpen ? (
-                                            <Camera ref={cameraRef} />
+                                            <Camera
+                                                style={{
+                                                    transform: [
+                                                        {
+                                                            scaleX:
+                                                                cameraRef
+                                                                    .current
+                                                                    ?.props
+                                                                    .type ===
+                                                                CameraType.front
+                                                                    ? -1
+                                                                    : 1,
+                                                        },
+                                                    ],
+                                                }}
+                                                ref={cameraRef}
+                                            />
                                         ) : (
                                             <Image
                                                 source={{ uri: photoInfo?.uri }}
@@ -211,7 +231,13 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
                                             />
                                         )}
                                     </View>
-                                    <VStack space={"10px"}>
+                                    <Stack
+                                        direction={{
+                                            base: "column",
+                                            md: "row",
+                                        }}
+                                        space={"10px"}
+                                    >
                                         {cameraOpen ? (
                                             <QuestionButton
                                                 onPress={takePicture}
@@ -232,8 +258,8 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
                                         >
                                             Submit
                                         </QuestionButton>
-                                    </VStack>
-                                </VStack>
+                                    </Stack>
+                                </View>
                             )}
                             {!isUploaded &&
                                 documentSelected &&
