@@ -62,9 +62,6 @@ export const useIdUpload = () => {
     };
 
     const openCamera = async () => {
-        const cameraTypes =
-            await cameraRef.current?.getAvailablePictureSizesAsync();
-        console.log(cameraTypes);
         setCameraOpen(true);
     };
 
