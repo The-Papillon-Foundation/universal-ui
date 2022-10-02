@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CardGroup, RootStackParamList, WorkflowSession } from "../types";
 import { StackScreenProps } from "@react-navigation/stack";
 import HomeNavBar from "../components/HomeNavBar";
@@ -26,7 +26,6 @@ enum CaseMode {
 
 const CaseOverviewScreen = ({ navigation, route }: Props) => {
     const { isLoading, cases } = useGetCase();
-    const { userId } = useContext(GlobalContext);
     const [currentCase, setCurrentCase] = useState<WorkflowSession | null>();
     const [mode, setMode] = useState<CaseMode>(CaseMode.timeline);
 
@@ -52,10 +51,6 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
             setCurrentCase(cases[0]);
         }
     }, [cases]);
-
-    useFocusEffect(() => {
-        if (!userId) navigation.navigate("Landing");
-    });
 
     return (
         <View
@@ -560,8 +555,6 @@ export const unixToHumanReadableDate = (unixTimestamp: number) => {
 };
 
 import states from "../assets/data/states.json";
-import { GlobalContext } from "../contexts/GlobalContext";
-import { useFocusEffect } from "@react-navigation/native";
 export const findStateNameByAbbrev = (abbrev: string) => {
     const stateName = Object.keys(states).find(
         (stateName) => (states as any)[stateName] === abbrev
