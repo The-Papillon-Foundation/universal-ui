@@ -77,6 +77,7 @@ export default function CaseCard({
                     color={"cyan.900"}
                     opacity={Number(completion) === 0 ? 0.6 : 1}
                     adjustsFontSizeToFit={true}
+                    minH={"50px"}
                 >
                     {title}
                 </Text>
