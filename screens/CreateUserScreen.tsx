@@ -203,6 +203,28 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
                                             marginBottom: 25,
                                         }}
                                     >
+                                        <View
+                                            style={{
+                                                position: "absolute",
+                                                width: "100%",
+                                                height: "100%",
+                                                zIndex: 9,
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                padding: 10,
+                                            }}
+                                        >
+                                            <Image
+                                                source={require("../assets/images/id-frame.png")}
+                                                style={{
+                                                    flex: 1,
+                                                    width: "100%",
+                                                    height: undefined,
+                                                    aspectRatio: 338 / 212,
+                                                    resizeMode: "center",
+                                                }}
+                                            />
+                                        </View>
                                         {cameraOpen ? (
                                             <Camera
                                                 style={{
