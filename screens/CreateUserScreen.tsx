@@ -38,7 +38,7 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
     // creates a session and stores it in global context
     useCreateSession(route.params.stateName!);
     const [username, setUsername] = useState("");
-    const { login } = useLogin();
+    const { createAccount } = useLogin();
     const [isInvalid, setIsInvalid] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [error, setError] = useState("");
@@ -69,7 +69,7 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
         userCreationSchema
             .validate({ username })
             .then(() => {
-                login(username);
+                createAccount(username);
                 setIsLoggedIn(true);
             })
             .catch((err) => {
