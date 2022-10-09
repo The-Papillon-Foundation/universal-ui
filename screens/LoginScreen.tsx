@@ -24,9 +24,8 @@ type Props = {
 
 const LoginScreen = ({ route, navigation }: Props) => {
     const [username, setUsername] = useState("");
-    const { isLoading, login } = useLogin();
+    const { isLoading, login, error } = useLogin(navigation);
     const [isInvalid, setIsInvalid] = useState(false);
-    const [error, setError] = useState("");
 
     const handleChange = (value: string) => {
         setUsername(value);
@@ -34,17 +33,13 @@ const LoginScreen = ({ route, navigation }: Props) => {
 
     const handleLogin = () => {
         setIsInvalid(false);
-        setError("");
         userCreationSchema
             .validate({ username })
             .then(() => {
                 login(username);
-
-                navigation.navigate("Home");
             })
             .catch((err) => {
                 setIsInvalid(true);
-                setError(err.errors);
             });
     };
     return (
@@ -62,7 +57,13 @@ const LoginScreen = ({ route, navigation }: Props) => {
                         <View>
                             <QuestionPrompt>Log in</QuestionPrompt>
                             <Spacer my={2} />
-                            <FormControl isInvalid={isInvalid}>
+                            <FormControl isInvalid={typeof error == "string"}>
+                                <FormControl.ErrorMessage
+                                    alignItems={"flex-start"}
+                                    leftIcon={<WarningOutlineIcon size="xs" />}
+                                >
+                                    {error}
+                                </FormControl.ErrorMessage>
                                 <Input
                                     value={username}
                                     variant="underlined"
@@ -79,12 +80,6 @@ const LoginScreen = ({ route, navigation }: Props) => {
                                     editable={!isLoading}
                                     w={{ base: "100%", md: "55%" }}
                                 />
-                                <FormControl.ErrorMessage
-                                    alignItems={"flex-start"}
-                                    leftIcon={<WarningOutlineIcon size="xs" />}
-                                >
-                                    {error}
-                                </FormControl.ErrorMessage>
                             </FormControl>
                             <Spacer my={"15px"} />
                             <QuestionButton

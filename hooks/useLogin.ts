@@ -1,9 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { useContext, useState } from "react";
 import { Platform } from "react-native";
 import { userIdKey } from "../constants/LocalStorage";
 import { url } from "../constants/Urls";
 import { GlobalContext } from "../contexts/GlobalContext";
+import { RootStackParamList } from "../types";
 
 // add pendo to window namespace
 declare global {
@@ -41,9 +43,12 @@ const initializePendo = (username: string) => {
     });
 };
 
-export const useLogin = () => {
+export const useLogin = (
+    navigation?: StackNavigationProp<RootStackParamList, "Login">
+) => {
     const [isLoading, setIsLoading] = useState(false);
     const { setUserId, sessionId, setSessionId } = useContext(GlobalContext);
+    const [error, setError] = useState<string | null>();
 
     const logout = () => {
         setUserId("");
@@ -51,7 +56,7 @@ export const useLogin = () => {
         AsyncStorage.clear();
     };
 
-    const login = async (userId: string) => {
+    const createAccount = async (userId: string) => {
         setIsLoading(true);
         setUserId(userId);
         AsyncStorage.setItem(userIdKey, userId);
@@ -90,5 +95,33 @@ export const useLogin = () => {
         setIsLoading(false);
     };
 
-    return { login, logout, isLoading };
+    const login = async (userId: string) => {
+        try {
+            setIsLoading(true);
+            setError(null);
+            // get user
+            const res = await fetch(`${url}/users/${userId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const resjson = await res.json();
+            if (resjson.userId == userId) {
+                // attach user to sessionId
+
+                setUserId(userId);
+                AsyncStorage.setItem(userIdKey, userId);
+                if (Platform.OS == "web") initializePendo(userId);
+                navigation?.navigate("Home");
+            } else {
+                setError("This user id does not exist. Please try again.");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+        setIsLoading(false);
+    };
+
+    return { login, logout, isLoading, error, createAccount };
 };
