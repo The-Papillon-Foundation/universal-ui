@@ -1,16 +1,19 @@
-import { Text, View } from "native-base";
+import { View } from "native-base";
 import React from "react";
 import { Image } from "react-native";
 import HelpText from "../components/HelpText";
 import QuestionPrompt from "../components/QuestionPrompt";
 
-type Props = {};
+type Props = {
+    title?: string;
+    message?: string;
+};
 
-const ErrorBoundaryScreen = (props: Props) => {
+const ErrorBoundaryScreen = ({ title, message }: Props) => {
     return (
         <View flex={1} justifyContent={"center"} alignItems="center">
-            <QuestionPrompt>We're sorry</QuestionPrompt>
-            <HelpText>An error has occurred</HelpText>
+            <QuestionPrompt>{title || "We're sorry"}</QuestionPrompt>
+            <HelpText>{message || "An error has occurred"}</HelpText>
             <View
                 style={{
                     width: 200,
