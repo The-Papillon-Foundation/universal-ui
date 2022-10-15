@@ -102,9 +102,9 @@ export const useIdUpload = () => {
                 method: "POST",
                 body: JSON.stringify(body),
             });
+            const resjson = await res.json();
+            console.log(resjson);
             if (res.status == 201) {
-                const resjson = await res.json();
-                console.log(resjson);
                 const userInfo: { [key: string]: string } = resjson.userInfo;
 
                 setFirstName(userInfo.FIRST_NAME || "");

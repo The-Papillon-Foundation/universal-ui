@@ -17,7 +17,7 @@ const fetchCases = async (userId: string) => {
         const workflowSessionJson: WorkflowSession = await res.json();
         workflowSessions.push(workflowSessionJson);
     }
-    return workflowSessions;
+    return { documents: user.documents, workflowSessions };
 };
 
 const useGetCase = () => {
@@ -31,7 +31,8 @@ const useGetCase = () => {
     return {
         isLoading,
         error,
-        cases: data,
+        cases: data?.workflowSessions,
+        documents: data?.documents,
     };
 };
 

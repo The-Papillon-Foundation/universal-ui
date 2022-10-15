@@ -12,7 +12,7 @@ import {
     View,
 } from "native-base";
 import { customTheme } from "../hooks/useCachedResources";
-import { ActivityIndicator, TouchableOpacity } from "react-native";
+import { ActivityIndicator, Image, TouchableOpacity } from "react-native";
 import CaseCard from "../components/CaseCard";
 import useGetCase from "../hooks/useGetCase";
 import { CalendarTick, Folder2 } from "iconsax-react-native";
@@ -25,7 +25,7 @@ enum CaseMode {
 }
 
 const CaseOverviewScreen = ({ navigation, route }: Props) => {
-    const { isLoading, cases } = useGetCase();
+    const { isLoading, cases, documents } = useGetCase();
     const [currentCase, setCurrentCase] = useState<WorkflowSession | null>();
     const [mode, setMode] = useState<CaseMode>(CaseMode.timeline);
 
@@ -271,7 +271,6 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                         overflow={"scroll"}
                                     >
                                         <View
-                                            flex={1}
                                             borderRightWidth={{
                                                 base: undefined,
                                                 md: "2px",
@@ -302,7 +301,20 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                                 alignItems={"center"}
                                                 justifyContent="center"
                                                 p="20px"
-                                            ></View>
+                                            >
+                                                {documents &&
+                                                    documents.length > 0 && (
+                                                        <Image
+                                                            source={{
+                                                                uri: `data:image/jpeg;base64,${documents[0].base64ImageString}`,
+                                                            }}
+                                                            style={{
+                                                                width: 200,
+                                                                height: 100,
+                                                            }}
+                                                        />
+                                                    )}
+                                            </View>
                                         </View>
                                         <View flex={3}>
                                             <View
