@@ -107,6 +107,7 @@ export const useLogin = (
                 },
             });
             const resjson = await res.json();
+            console.log(resjson);
             if (resjson.userId == userId) {
                 // attach user to sessionId
 

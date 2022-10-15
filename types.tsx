@@ -207,8 +207,14 @@ export interface UserInfo {
     addressCity: string | undefined;
 }
 
+export interface UserDocument {
+    base64ImageString: string;
+    fileId: string;
+    fileName: string;
+}
+
 export interface User {
-    documents: string[];
+    documents: UserDocument[];
     workflowSessions: string[];
     userId: string;
     userInfo: UserInfo;
