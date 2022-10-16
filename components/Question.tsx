@@ -12,6 +12,7 @@ import TrueOrFalseQuestion from "./TrueOrFalseQuestion";
 import PhoneNumberQuestion from "./PhoneNumberQuestion";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import ErrorBoundaryScreen from "../screens/ErrorBoundaryScreen";
+import DollarAmountQuestion from "./DollarAmountQuestion";
 
 interface Props {
     card: QuestionCard;
@@ -114,6 +115,12 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
         goNext(card.on_true);
     };
 
+    const handleDollarAmountResponse = (value: string) => {
+        if (value == "") return;
+        updateSession(card.id, value);
+        goNext(card.on_true);
+    };
+
     const handleMultipleChoiceResponse = (value: string) => {
         if (
             value == "" ||
@@ -199,6 +206,14 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                             prompt={card.question.prompt}
                             help={card.question.help}
                             handleResponse={handleTextInputResponse}
+                        />
+                    );
+                case "DollarAmount":
+                    return (
+                        <DollarAmountQuestion
+                            prompt={card.question.prompt}
+                            help={card.question.help}
+                            handleResponse={handleDollarAmountResponse}
                         />
                     );
                 case "PhoneNumber":
