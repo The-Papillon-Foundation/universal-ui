@@ -6,6 +6,7 @@ import {
     Button,
     CheckCircleIcon,
     CheckIcon,
+    Heading,
     ScrollView,
     Select,
     Text,
@@ -28,6 +29,13 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
     const { isLoading, cases, documents } = useGetCase();
     const [currentCase, setCurrentCase] = useState<WorkflowSession | null>();
     const [mode, setMode] = useState<CaseMode>(CaseMode.timeline);
+    const {
+        isLoading: isDownloadLoading,
+        downloadDocument,
+        prepareDownload,
+        progress: downloadProgress,
+        documentLink,
+    } = useDocumentDownload();
 
     const goToCardGroup = (
         cg: CardGroup,
@@ -345,7 +353,40 @@ const CaseOverviewScreen = ({ navigation, route }: Props) => {
                                                     md: "row",
                                                 }}
                                                 p="20px"
-                                            ></View>
+                                            >
+                                                <View alignItems={"center"}>
+                                                    <QuestionHeader prompt="Download your document" />
+                                                    {documentLink == "" ? (
+                                                        <QuestionButton
+                                                            onPress={
+                                                                prepareDownload
+                                                            }
+                                                        >
+                                                            {isDownloadLoading ? (
+                                                                <ActivityIndicator color="white" />
+                                                            ) : (
+                                                                "Prepare Download"
+                                                            )}
+                                                            {downloadProgress >
+                                                                0 && (
+                                                                <ProgressBar
+                                                                    progress={
+                                                                        downloadProgress
+                                                                    }
+                                                                />
+                                                            )}
+                                                        </QuestionButton>
+                                                    ) : (
+                                                        <QuestionButton
+                                                            onPress={
+                                                                downloadDocument
+                                                            }
+                                                        >
+                                                            Download pdf
+                                                        </QuestionButton>
+                                                    )}
+                                                </View>
+                                            </View>
                                         </View>
                                     </View>
                                 )}
@@ -567,6 +608,11 @@ export const unixToHumanReadableDate = (unixTimestamp: number) => {
 };
 
 import states from "../assets/data/states.json";
+import { useDocumentDownload } from "../hooks/useDocumentDownload";
+import { ProgressBar } from "react-native-paper";
+import Question from "../components/Question";
+import QuestionButton from "../components/QuestionButton";
+import QuestionHeader from "../components/QuestionHeader";
 export const findStateNameByAbbrev = (abbrev: string) => {
     const stateName = Object.keys(states).find(
         (stateName) => (states as any)[stateName] === abbrev

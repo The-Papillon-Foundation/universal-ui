@@ -5,7 +5,8 @@ import { Platform } from "react-native";
 import { url } from "../constants/Urls";
 import { GlobalContext } from "../contexts/GlobalContext";
 
-export const useDocumentDownload = (sessionId: string) => {
+export const useDocumentDownload = () => {
+    const { sessionId } = useContext(GlobalContext);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
