@@ -31,7 +31,7 @@ const TextInputQuestion = ({ prompt, help, handleResponse }: Props) => {
                 <CustomTextInput
                     innerRef={inputElement}
                     value={value}
-                    placeholder={prompt}
+                    placeholder={""}
                     onChangeText={handleChange}
                     onSubmitEditing={() => {
                         setValue("");
