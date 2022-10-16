@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useContext, useState } from "react";
 import { Platform } from "react-native";
-import { userIdKey } from "../constants/LocalStorage";
+import { sessionIdKey, userIdKey } from "../constants/LocalStorage";
 import { url } from "../constants/Urls";
 import { GlobalContext } from "../contexts/GlobalContext";
 import { RootStackParamList } from "../types";
@@ -113,6 +113,14 @@ export const useLogin = (
 
                 setUserId(userId);
                 AsyncStorage.setItem(userIdKey, userId);
+                if (
+                    resjson.workflowSessions &&
+                    resjson.workflowSessions.length > 0
+                ) {
+                    let sessionId = resjson.workflowSessions[0];
+                    setSessionId(sessionId);
+                    AsyncStorage.setItem(sessionIdKey, sessionId);
+                }
                 if (Platform.OS == "web") initializePendo(userId);
                 navigation?.navigate("Home");
             } else {
