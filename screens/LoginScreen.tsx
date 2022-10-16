@@ -7,6 +7,7 @@ import {
     FormControl,
     Input,
     Spacer,
+    Stack,
     View,
     WarningOutlineIcon,
 } from "native-base";
@@ -81,13 +82,28 @@ const LoginScreen = ({ route, navigation }: Props) => {
                                     w={{ base: "100%", md: "55%" }}
                                 />
                             </FormControl>
-                            <Spacer my={"15px"} />
-                            <QuestionButton
-                                onPress={handleLogin}
-                                isLoading={isLoading}
+                            <Stack
+                                direction={"column"}
+                                w={"100%"}
+                                justifyContent={"space-between"}
+                                space={"8px"}
+                                mt="15px"
                             >
-                                Login
-                            </QuestionButton>
+                                <QuestionButton
+                                    onPress={handleLogin}
+                                    isLoading={isLoading}
+                                >
+                                    Log in
+                                </QuestionButton>
+                                <QuestionButton
+                                    inverted
+                                    onPress={() =>
+                                        navigation.navigate("DetermineWorkflow")
+                                    }
+                                >
+                                    Create an account
+                                </QuestionButton>
+                            </Stack>
                         </View>
                     </View>
                 </QuestionContainer>
