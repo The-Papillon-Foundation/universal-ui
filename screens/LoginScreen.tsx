@@ -26,21 +26,21 @@ type Props = {
 const LoginScreen = ({ route, navigation }: Props) => {
     const [username, setUsername] = useState("");
     const { isLoading, login, error } = useLogin(navigation);
-    const [isInvalid, setIsInvalid] = useState(false);
+    const [validationError, setValidationError] = useState("");
 
     const handleChange = (value: string) => {
         setUsername(value);
     };
 
     const handleLogin = () => {
-        setIsInvalid(false);
+        setValidationError("");
         userCreationSchema
             .validate({ username })
             .then(() => {
                 login(username);
             })
             .catch((err) => {
-                setIsInvalid(true);
+                setValidationError(err.errors);
             });
     };
     return (
@@ -58,12 +58,19 @@ const LoginScreen = ({ route, navigation }: Props) => {
                         <View>
                             <QuestionPrompt>Log in</QuestionPrompt>
                             <Spacer my={2} />
-                            <FormControl isInvalid={typeof error == "string"}>
+                            <FormControl
+                                isInvalid={
+                                    typeof error == "string" ||
+                                    validationError !== ""
+                                }
+                            >
                                 <FormControl.ErrorMessage
                                     alignItems={"flex-start"}
                                     leftIcon={<WarningOutlineIcon size="xs" />}
                                 >
-                                    {error}
+                                    {typeof error == "string"
+                                        ? error
+                                        : validationError}
                                 </FormControl.ErrorMessage>
                                 <Input
                                     value={username}
