@@ -7,6 +7,7 @@ import {
     FormControl,
     Input,
     Spacer,
+    Stack,
     View,
     WarningOutlineIcon,
 } from "native-base";
@@ -25,21 +26,21 @@ type Props = {
 const LoginScreen = ({ route, navigation }: Props) => {
     const [username, setUsername] = useState("");
     const { isLoading, login, error } = useLogin(navigation);
-    const [isInvalid, setIsInvalid] = useState(false);
+    const [validationError, setValidationError] = useState("");
 
     const handleChange = (value: string) => {
         setUsername(value);
     };
 
     const handleLogin = () => {
-        setIsInvalid(false);
+        setValidationError("");
         userCreationSchema
             .validate({ username })
             .then(() => {
                 login(username);
             })
             .catch((err) => {
-                setIsInvalid(true);
+                setValidationError(err.errors);
             });
     };
     return (
@@ -57,12 +58,19 @@ const LoginScreen = ({ route, navigation }: Props) => {
                         <View>
                             <QuestionPrompt>Log in</QuestionPrompt>
                             <Spacer my={2} />
-                            <FormControl isInvalid={typeof error == "string"}>
+                            <FormControl
+                                isInvalid={
+                                    typeof error == "string" ||
+                                    validationError !== ""
+                                }
+                            >
                                 <FormControl.ErrorMessage
                                     alignItems={"flex-start"}
                                     leftIcon={<WarningOutlineIcon size="xs" />}
                                 >
-                                    {error}
+                                    {typeof error == "string"
+                                        ? error
+                                        : validationError}
                                 </FormControl.ErrorMessage>
                                 <Input
                                     value={username}
@@ -81,13 +89,28 @@ const LoginScreen = ({ route, navigation }: Props) => {
                                     w={{ base: "100%", md: "55%" }}
                                 />
                             </FormControl>
-                            <Spacer my={"15px"} />
-                            <QuestionButton
-                                onPress={handleLogin}
-                                isLoading={isLoading}
+                            <Stack
+                                direction={"column"}
+                                w={"100%"}
+                                justifyContent={"space-between"}
+                                space={"8px"}
+                                mt="15px"
                             >
-                                Login
-                            </QuestionButton>
+                                <QuestionButton
+                                    onPress={handleLogin}
+                                    isLoading={isLoading}
+                                >
+                                    Log in
+                                </QuestionButton>
+                                <QuestionButton
+                                    inverted
+                                    onPress={() =>
+                                        navigation.navigate("DetermineWorkflow")
+                                    }
+                                >
+                                    Create an account
+                                </QuestionButton>
+                            </Stack>
                         </View>
                     </View>
                 </QuestionContainer>
