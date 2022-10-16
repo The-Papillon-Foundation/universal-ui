@@ -40,7 +40,6 @@ const CustomTextInput = ({
                     customTheme.colors.placeholder_question_text
                 }
                 p={"10px"}
-                textTransform={"capitalize"}
                 onSubmitEditing={onSubmitEditing}
                 w={{ base: "100%", md: "55%" }}
                 autoFocus

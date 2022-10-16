@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { ErrorBoundary } from "react-error-boundary";
+import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import useCachedResources, {
     customPaperTheme,
     customTheme,
@@ -12,6 +12,7 @@ import { NativeBaseProvider } from "native-base";
 import { Provider as PaperProvider } from "react-native-paper";
 import { QueryClient, QueryClientProvider } from "react-query";
 import ErrorBoundaryScreen from "./screens/ErrorBoundaryScreen";
+import { ComponentType } from "react";
 
 export default function App() {
     const isLoadingComplete = useCachedResources();
@@ -25,7 +26,11 @@ export default function App() {
             <QueryClientProvider client={queryClient}>
                 <NativeBaseProvider theme={customTheme}>
                     <PaperProvider theme={customPaperTheme}>
-                        <ErrorBoundary FallbackComponent={ErrorBoundaryScreen}>
+                        <ErrorBoundary
+                            FallbackComponent={
+                                ErrorBoundaryScreen as ComponentType<FallbackProps>
+                            }
+                        >
                             <SafeAreaProvider>
                                 <Navigation colorScheme={colorScheme} />
                                 <StatusBar />
