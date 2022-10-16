@@ -1,5 +1,5 @@
 import { Text } from "react-native";
-import React from "react";
+import React, { ComponentType } from "react";
 import YesOrNoQuestion from "./YesOrNoQuestion";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 import TextInputQuestion from "./TextInputQuestion";
@@ -10,7 +10,7 @@ import AddressQuestion, { AddressFieldObject } from "./AddressQuestion";
 import InfoCard from "./InfoCard";
 import TrueOrFalseQuestion from "./TrueOrFalseQuestion";
 import PhoneNumberQuestion from "./PhoneNumberQuestion";
-import { ErrorBoundary } from "react-error-boundary";
+import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import ErrorBoundaryScreen from "../screens/ErrorBoundaryScreen";
 
 interface Props {
@@ -239,7 +239,11 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
         }
     };
     return (
-        <ErrorBoundary FallbackComponent={ErrorBoundaryScreen}>
+        <ErrorBoundary
+            FallbackComponent={
+                ErrorBoundaryScreen as ComponentType<FallbackProps>
+            }
+        >
             {renderSwitch() || <Text>Error</Text>}
         </ErrorBoundary>
     );
