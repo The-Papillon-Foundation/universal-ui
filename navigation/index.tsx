@@ -24,7 +24,7 @@ import ReviewScreen from "../screens/ReviewScreen";
 import { RootStackParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 
-// import DebugScreen from "../screens/DebugScreen";
+import DebugScreen from "../screens/DebugScreen";
 
 export default function Navigation({
     colorScheme,
@@ -86,9 +86,9 @@ function RootNavigator() {
                 component={NotFoundScreen}
                 options={{ title: "Oops!", headerTitleAlign: "center" }}
             />
-            {/* {process.env.NODE_ENV === "development" && (
+            {process.env.NODE_ENV === "development" && (
                 <Stack.Screen name="Debug" component={DebugScreen} />
-            )} */}
+            )}
             <Stack.Group screenOptions={{ presentation: "modal" }}>
                 <Stack.Screen name="Modal" component={ModalScreen} />
             </Stack.Group>

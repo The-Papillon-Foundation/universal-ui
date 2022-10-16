@@ -56,7 +56,8 @@ export type Question =
               | "Address"
               | "Date"
               | "PhoneNumber"
-              | "SocialSecurityNumber";
+              | "SocialSecurityNumber"
+              | "DollarAmount";
           prompt: string;
           help?: string;
           options: string[];
