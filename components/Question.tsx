@@ -13,6 +13,7 @@ import PhoneNumberQuestion from "./PhoneNumberQuestion";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import ErrorBoundaryScreen from "../screens/ErrorBoundaryScreen";
 import DollarAmountQuestion from "./DollarAmountQuestion";
+import SocialSecurityNumberQuestion from "./SocialSecurityNumberQuestion";
 
 interface Props {
     card: QuestionCard;
@@ -89,6 +90,11 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
     };
 
     const handleDateSubmissionResponse = (value: Date) => {
+        updateSession(card.id, value);
+        goNext(card.on_true);
+    };
+
+    const handleSocialSecurityNumberQuestion = (value: string) => {
         updateSession(card.id, value);
         goNext(card.on_true);
     };
@@ -239,6 +245,14 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
                             help={card.question.help}
                             options={card.question.options}
                             handleResponse={handleMultipleChoiceResponse}
+                        />
+                    );
+                case "SocialSecurityNumber":
+                    return (
+                        <SocialSecurityNumberQuestion
+                            prompt={card.question.prompt}
+                            help={card.question.help}
+                            handleResponse={handleSocialSecurityNumberQuestion}
                         />
                     );
                 default:
