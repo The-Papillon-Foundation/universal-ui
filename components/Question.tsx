@@ -106,9 +106,10 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
 
         // There are passing arguments and the value doesn't pass
         if (
-            typeof value != "object" &&
-            card.question.pass != undefined &&
-            !card.question!.pass.includes(value)
+            (typeof value != "object" &&
+                card.question.pass != undefined &&
+                !card.question!.pass.includes(value)) ||
+            card.on_true == "exit"
         ) {
             updateSession(card.id, { exit: value });
             goIneligible({
