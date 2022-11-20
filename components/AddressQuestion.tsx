@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import {
     CheckIcon,
     FormControl,
-    Heading,
     Input,
     Select,
     Stack,
@@ -17,7 +16,6 @@ import {
 import * as yup from "yup";
 import states from "../assets/data/states.json";
 import QuestionButton from "./QuestionButton";
-import { customTheme } from "../hooks/useCachedResources";
 import QuestionHeader from "./QuestionHeader";
 
 type Props = {
@@ -68,6 +66,7 @@ const AddressQuestion = ({ prompt, help, handleResponse }: Props) => {
 
     const handleChange = (text: string, key: string) => {
         setFields({ ...fields, [key]: text });
+        if (key === "address1") getAutoComplete(text);
     };
 
     const validateAddress = () => {
@@ -89,6 +88,7 @@ const AddressQuestion = ({ prompt, help, handleResponse }: Props) => {
     };
 
     const autoPopulate = (feature: AddressAutocompleteFeature) => {
+        setSuggestions([]);
         const props = feature.properties;
         setFields({
             address1: props.address_line1,
@@ -105,6 +105,8 @@ const AddressQuestion = ({ prompt, help, handleResponse }: Props) => {
     };
 
     const checkIfAddressExists = async () => {
+        setValidatingAddress(false);
+        return true;
         const text = `${fields.address1} ${fields.address2} ${fields.city} ${fields.zip} ${fields.state}`;
         try {
             setValidatingAddress(true);
@@ -114,7 +116,7 @@ const AddressQuestion = ({ prompt, help, handleResponse }: Props) => {
                 )}&apiKey=${process.env.GEOAPIFY_API_KEY}&filter=countrycode:us`
             );
             const result = await response.json();
-            if (result.features[0].properties.rank.confidence < 1) {
+            if (result.features[0].properties.rank.confidence < 0.5) {
                 alert(
                     "We couldn't confirm the existence of this address. Please ensure you have typed in the correct information."
                 );
@@ -129,13 +131,12 @@ const AddressQuestion = ({ prompt, help, handleResponse }: Props) => {
         }
     };
 
-    const getAutoComplete = async () => {
-        const text = `${fields.address1} ${fields.address2} ${fields.city} ${fields.zip} ${fields.state}`;
+    const getAutoComplete = async (text: string) => {
         setLoadingSuggestions(true);
         await fetch(
             `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURI(
                 text
-            )}&apiKey=${process.env.GEOAPIFY_API_KEY}&filter=countrycode:us`
+            )}t&apiKey=${process.env.GEOAPIFY_API_KEY}&filter=countrycode:us`
         )
             .then((response) => response.json())
             .then((result: AddressAutocompleteResponse) => {
@@ -162,6 +163,9 @@ const AddressQuestion = ({ prompt, help, handleResponse }: Props) => {
                     <FormControl
                         key={field_key}
                         isInvalid={errors[field_key] != undefined}
+                        style={{
+                            zIndex: field_key === "address1" ? 2 : 0,
+                        }}
                     >
                         <FormControl.Label
                             _text={{
@@ -200,15 +204,72 @@ const AddressQuestion = ({ prompt, help, handleResponse }: Props) => {
                                 )}
                             </Select>
                         ) : (
-                            <Input
-                                ref={index === 0 ? inputElement : undefined}
-                                value={fields[field_key as AddressField]}
-                                onChangeText={(value) =>
-                                    handleChange(value, field_key)
-                                }
-                                placeholder=""
-                                autoFocus={index === 0}
-                            />
+                            <>
+                                <Input
+                                    ref={index === 0 ? inputElement : undefined}
+                                    value={fields[field_key as AddressField]}
+                                    onChangeText={(value) =>
+                                        handleChange(value, field_key)
+                                    }
+                                    // onKeyPress={(e) => {
+                                    //     console.log();
+                                    //     getAutoComplete();
+                                    // }}
+                                    placeholder=""
+                                    autoFocus={index === 0}
+                                />
+                                {field_key === "address1" &&
+                                    (loadingSuggestions ||
+                                        suggestions.length > 0) && (
+                                        <View
+                                            borderColor={"#d4d4d4"}
+                                            borderWidth={1}
+                                            borderRadius={5}
+                                            width={"100%"}
+                                            minHeight={"50px"}
+                                            justifyContent={"center"}
+                                            style={{
+                                                position: "absolute",
+                                                flex: 1,
+                                                top: "65px",
+
+                                                backgroundColor: "white",
+                                                zIndex: 2,
+                                            }}
+                                        >
+                                            {loadingSuggestions && (
+                                                <ActivityIndicator
+                                                    style={{
+                                                        alignSelf: "center",
+                                                    }}
+                                                />
+                                            )}
+
+                                            {suggestions.map(
+                                                (suggestion, index) => (
+                                                    <TouchableOpacity
+                                                        onPress={() =>
+                                                            autoPopulate(
+                                                                suggestion
+                                                            )
+                                                        }
+                                                        key={index}
+                                                    >
+                                                        <View my={2} p={2}>
+                                                            <Text>
+                                                                {
+                                                                    suggestion
+                                                                        .properties
+                                                                        .formatted
+                                                                }
+                                                            </Text>
+                                                        </View>
+                                                    </TouchableOpacity>
+                                                )
+                                            )}
+                                        </View>
+                                    )}
+                            </>
                         )}
                         <FormControl.ErrorMessage
                             _text={{
@@ -220,43 +281,11 @@ const AddressQuestion = ({ prompt, help, handleResponse }: Props) => {
                     </FormControl>
                 ))}
                 <QuestionButton
-                    onPress={() => {
-                        getAutoComplete();
-                    }}
-                >
-                    Search for address
-                </QuestionButton>
-                <QuestionButton
                     onPress={validateAddress}
                     isLoading={validatingAddress}
                 >
                     Submit
                 </QuestionButton>
-                <View>
-                    {loadingSuggestions && <ActivityIndicator />}
-                    {suggestions.length > 0 && (
-                        <>
-                            <Heading>Suggestions</Heading>
-                            <Text>Click to autopopulate</Text>
-                        </>
-                    )}
-                    {suggestions.map((suggestion, index) => (
-                        <TouchableOpacity
-                            onPress={() => autoPopulate(suggestion)}
-                            key={index}
-                        >
-                            <View
-                                borderColor={customTheme.colors.button_surface}
-                                borderWidth={1}
-                                borderRadius={5}
-                                my={2}
-                                p={2}
-                            >
-                                <Text>{suggestion.properties.formatted}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    ))}
-                </View>
             </Stack>
         </ScrollView>
     );
