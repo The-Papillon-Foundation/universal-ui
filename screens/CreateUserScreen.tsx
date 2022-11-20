@@ -102,7 +102,10 @@ const CreateUserScreen = ({ route, navigation }: Props) => {
                 <QuestionContainer>
                     {!isLoggedIn ? (
                         <View>
-                            <QuestionPrompt>Create Account</QuestionPrompt>
+                            <QuestionPrompt>
+                                You are eligible to continue!
+                            </QuestionPrompt>
+                            <QuestionPrompt>Create an account</QuestionPrompt>
                             <Spacer my={2} />
                             <FormControl isInvalid={isInvalid}>
                                 <Input

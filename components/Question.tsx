@@ -118,6 +118,11 @@ const Question = ({ card, group, goNext, goIneligible, onFinish }: Props) => {
             });
             return;
         }
+
+        if (card.on_true == "exit") {
+            updateSession(card.id, { exit: value });
+            goIneligible({ message: "Thanks for trying us out." });
+        }
         goNext(card.on_true);
     };
 
