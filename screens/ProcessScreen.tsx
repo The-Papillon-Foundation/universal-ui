@@ -24,7 +24,7 @@ const ProcessScreen = ({ route, navigation }: Props) => {
     useCreateSession(route.params.stateName!);
 
     const onFinish = () => {
-        navigation.navigate("Review");
+        navigation.navigate("Home");
     };
 
     return (
