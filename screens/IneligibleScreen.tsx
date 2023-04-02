@@ -1,6 +1,6 @@
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { Center, Container, Heading, Text } from "native-base";
+import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "../types";
+import ErrorBoundaryScreen from "./ErrorBoundaryScreen";
 
 interface Props {
     route: RouteProp<RootStackParamList, "Ineligible">;
@@ -8,11 +8,12 @@ interface Props {
 
 export const IneligibleScreen = ({ route }: Props) => {
     return (
-        <Center flex={1} justifyContent="center">
-            <Container centerContent>
-                <Heading>You are ineligible for expungment</Heading>
-                {route.params.message && <Text>{route.params.message}</Text>}
-            </Container>
-        </Center>
+        <ErrorBoundaryScreen
+            title="You are ineligible for expungment"
+            message={
+                route.params.message ||
+                "Based on your answers we cannot assist you at this moment."
+            }
+        />
     );
 };

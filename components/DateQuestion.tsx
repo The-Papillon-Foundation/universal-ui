@@ -1,64 +1,55 @@
-import { GestureResponderEvent, StyleSheet } from "react-native";
 import React from "react";
-import { Button, Heading, Stack, Text, View } from "native-base";
-import { DatePickerInput } from "react-native-paper-dates";
-import { customTheme } from "../papillon-design-system/custom-theme";
-import QuestionContainer from "./QuestionContainer";
+import { Stack, useBreakpointValue, View } from "native-base";
+import QuestionButton from "./QuestionButton";
+import CustomDatePicker from "./CustomDatePicker";
+import QuestionHeader from "./QuestionHeader";
 
 type Props = {
     prompt: string;
-    handleResponse: (value: string | Date) => void;
+    help?: string;
+    handleResponse: (value: Date) => void;
 };
 
-const DateQuestion = ({ prompt, handleResponse }: Props) => {
-    const [inputDate, setInputDate] = React.useState<Date | undefined>(
-        undefined
+const DateQuestion = ({ prompt, help, handleResponse }: Props) => {
+    const [date, setDate] = React.useState<Date>(new Date());
+    const [open, setOpen] = React.useState(false);
+
+    const onDismissSingle = React.useCallback(() => {
+        setOpen(false);
+    }, [setOpen]);
+
+    const onConfirmSingle = React.useCallback(
+        (params) => {
+            setOpen(false);
+            setDate(params.date);
+        },
+        [setOpen, setDate]
     );
+    const dateFontSize = useBreakpointValue({
+        base: 18,
+        md: 20,
+    });
+
+    const submitDate = () => {
+        date && handleResponse(date);
+        setDate(new Date());
+    };
     return (
         <>
-            <Text textAlign={"center"} w={"300"}>
-                {prompt}
-            </Text>
-            <Stack direction={"row"} space="2.5" mt="2" px="8">
-                {/* <View bg="green.100" height={"30%"}> */}
-                <DatePickerInput
-                    locale="en"
-                    value={inputDate}
-                    onChange={(d) => setInputDate(d)}
-                    inputMode="start"
-                    withModal={false}
-                    withDateFormatInLabel={false}
-                    style={{
-                        backgroundColor: "transparent",
-                        borderBottomColor: "yellow",
-                        textAlign: "center",
-                        color: "blue",
-                        height: 40,
-                        justifyContent: "center",
-                    }}
-                    mode="outlined" //(see react-native-paper docs)
-                    underlineColor={
-                        customTheme.colors["date-field-outline-inactive"]
-                    }
-                    activeUnderlineColor={
-                        customTheme.colors["date-field-outline-active"]
-                    }
-                />
-                {/* </View> */}
-                <Button
-                    bgColor={customTheme.colors["button-surface"]}
-                    onPress={() => {
-                        console.log("firing");
-                        if (inputDate != undefined) handleResponse(inputDate);
-                    }}
-                >
-                    Submit
-                </Button>
+            <QuestionHeader prompt={prompt} help={help} />
+            <Stack space="2.5" mt="2">
+                <View w={{ base: "90%", md: "55%" }} flexDirection="row">
+                    <CustomDatePicker
+                        value={date}
+                        onChange={(d: Date | undefined) => d && setDate(d)}
+                        onSubmitEditing={submitDate}
+                    />
+                </View>
+
+                <QuestionButton onPress={submitDate}>Submit</QuestionButton>
             </Stack>
         </>
     );
 };
 
 export default DateQuestion;
-
-const styles = StyleSheet.create({});

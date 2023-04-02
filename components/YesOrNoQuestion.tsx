@@ -1,39 +1,34 @@
-import { StyleSheet } from "react-native";
 import React from "react";
-import { Button, Stack, Text } from "native-base";
-import { customTheme } from "../papillon-design-system/custom-theme";
+import { Stack } from "native-base";
+import QuestionButton from "./QuestionButton";
+import QuestionHeader from "./QuestionHeader";
 
 type Props = {
     prompt: string;
-    handleResponse: (response: "yes" | "no") => void;
+    help?: string;
+    handleResponse: (response: boolean) => void;
 };
 
-const YesOrNoQuestion = ({ prompt, handleResponse }: Props) => {
+const YesOrNoQuestion = ({ prompt, help, handleResponse }: Props) => {
     return (
         <>
-            <Text textAlign={"center"} w={"300"}>
-                {prompt}
-            </Text>
-            <Stack direction={"row"} space="2.5" mt="2" px="8">
-                <Button
-                    bgColor={customTheme.colors["button-surface"]}
-                    color={customTheme.colors["on-button-surface"]}
-                    onPress={() => handleResponse("yes")}
-                >
+            <QuestionHeader prompt={prompt} help={help} />
+            <Stack
+                direction={{ base: "column", md: "row" }}
+                w={{ base: "100%", md: "40%" }}
+                justifyContent={"space-between"}
+                space={{ base: "8px", md: "16px" }}
+                mt="15px"
+            >
+                <QuestionButton onPress={() => handleResponse(true)}>
                     Yes
-                </Button>
-                <Button
-                    bgColor={customTheme.colors["button-surface"]}
-                    color={customTheme.colors["on-button-surface"]}
-                    onPress={() => handleResponse("no")}
-                >
+                </QuestionButton>
+                <QuestionButton onPress={() => handleResponse(false)}>
                     No
-                </Button>
+                </QuestionButton>
             </Stack>
         </>
     );
 };
 
 export default YesOrNoQuestion;
-
-const styles = StyleSheet.create({});

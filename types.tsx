@@ -4,10 +4,7 @@
  */
 
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import {
-    CompositeScreenProps,
-    NavigatorScreenParams,
-} from "@react-navigation/native";
+import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 declare global {
@@ -20,12 +17,21 @@ export type RootStackParamList = {
     Loading: undefined;
     Landing: undefined;
     Home: undefined;
+    Login: undefined;
+    Case: { sessionId: string };
     DetermineWorkflow: undefined;
-    Workflow: { stateName: string };
+    Eligibility: {
+        stateName: string;
+        groupIndex: number;
+        questionIndex: number;
+    };
+    CreateUser: { stateName: string };
+    Process: { stateName: string; groupIndex: number; questionIndex: number };
     Review: undefined;
     Modal: undefined;
     NotFound: undefined;
     Ineligible: { message?: string };
+    Debug: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -42,17 +48,37 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
         NativeStackScreenProps<RootStackParamList>
     >;
 
-export interface Question {
-    type: "TrueOrFalse" | "Address" | "MultipleChoice" | "Text" | "Date";
-    prompt: string;
-    pass: string[];
-    options: string[];
-    fail: null;
-}
+export type Question =
+    | {
+          type:
+              | "TrueOrFalse"
+              | "YesOrNo"
+              | "Address"
+              | "Date"
+              | "PhoneNumber"
+              | "SocialSecurityNumber"
+              | "DollarAmount";
+          prompt: string;
+          help?: string;
+          options: string[];
+          fail: null;
+      }
+    | {
+          type: "MultipleChoice" | "Text";
+          pass: string[];
+          prompt: string;
+          help?: string;
+          options: string[];
+          fail: null;
+      };
 
 export type QuestionCard = {
     id: string;
     question: Question;
+    text: string;
+    subtext: string;
+    button_text: string;
+    next: string;
     on_true: string | null;
     on_false: "exit";
 };
@@ -85,4 +111,138 @@ export interface Session {
     sessionId: string;
     sessionState: SessionState;
     userId: string;
+}
+
+/* Styles JSON */
+export interface StylesJson {
+    colors: Colors;
+    fonts: Fonts;
+    image_urls: ImageUrls;
+}
+
+export interface ImageUrls {
+    logo: string;
+    logo_small: string;
+    logo_xsmall: string;
+}
+
+export interface Colors {
+    [key: string]: string;
+}
+
+export interface OnSurface {
+    heading: string;
+    text: string;
+}
+
+export interface Fonts {
+    default: string;
+    "question-heading": string;
+    "question-text": string;
+}
+
+// Geoapify Types
+export interface AddressAutocompleteResponse {
+    features: AddressAutocompleteFeature[];
+}
+
+export interface AddressAutocompleteFeature {
+    type: string;
+    properties: Properties;
+    geometry: Geometry;
+    bbox: number[];
+}
+
+export interface Properties {
+    datasource: Datasource;
+    housenumber?: string;
+    street: string;
+    suburb?: string;
+    county: string;
+    state: string;
+    postcode?: string;
+    country: string;
+    country_code: string;
+    lon: number;
+    lat: number;
+    state_code: string;
+    formatted: string;
+    address_line1: string;
+    address_line2: string;
+    category?: string;
+    result_type: string;
+    rank: Rank;
+    place_id: string;
+    name?: string;
+    city?: string;
+}
+
+export interface Datasource {
+    sourcename: string;
+    attribution: string;
+    license: string;
+    url: string;
+}
+
+export interface Rank {
+    importance: number;
+    confidence: number;
+    match_type: string;
+}
+
+export interface Geometry {
+    type: string;
+    coordinates: number[];
+}
+
+// User types
+export interface UserInfo {
+    addressZip: string | undefined;
+    addressStreet: string | undefined;
+    userNameLast: string | undefined;
+    addressState: string | undefined;
+    userNameFirst: string | undefined;
+    userNameMiddle: string | undefined;
+    cellPhone: string | undefined;
+    email: string | undefined;
+    addressCity: string | undefined;
+}
+
+export interface UserDocument {
+    base64ImageString: string;
+    fileId: string;
+    fileName: string;
+}
+
+export interface User {
+    documents: UserDocument[];
+    workflowSessions: string[];
+    userId: string;
+    userInfo: UserInfo;
+}
+
+// Workflow Session Types
+export type QuestionAnswer = { id: string; answers: { user: any } };
+
+export interface CardGroup {
+    completion: string;
+    description: string;
+    module: string;
+    name: string;
+    questions: QuestionAnswer[];
+}
+
+export interface SessionState {
+    cardGroups: CardGroup[];
+    completion: string;
+}
+
+export interface WorkflowSession {
+    caseNumber: any;
+    createdAt: number;
+    sessionId: string;
+    sessionState: SessionState;
+    updatedAt: number;
+    userId: string;
+    workflowId: string;
 }

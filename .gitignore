@@ -9,6 +9,10 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+# screen meant for dev only
+screens/DebugScreen.tsx
 
 # macOS
 .DS_Store
+
+.env

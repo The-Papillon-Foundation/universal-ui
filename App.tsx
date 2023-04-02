@@ -1,13 +1,18 @@
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
-import useCachedResources from "./hooks/useCachedResources";
+import { ErrorBoundary, FallbackProps } from "react-error-boundary";
+import useCachedResources, {
+    customPaperTheme,
+    customTheme,
+} from "./hooks/useCachedResources";
 import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
 
 import { NativeBaseProvider } from "native-base";
-import { customTheme } from "./papillon-design-system/custom-theme";
+import { Provider as PaperProvider } from "react-native-paper";
 import { QueryClient, QueryClientProvider } from "react-query";
+import ErrorBoundaryScreen from "./screens/ErrorBoundaryScreen";
+import { ComponentType } from "react";
 
 export default function App() {
     const isLoadingComplete = useCachedResources();
@@ -20,10 +25,18 @@ export default function App() {
         return (
             <QueryClientProvider client={queryClient}>
                 <NativeBaseProvider theme={customTheme}>
-                    <SafeAreaProvider>
-                        <Navigation colorScheme={colorScheme} />
-                        <StatusBar />
-                    </SafeAreaProvider>
+                    <PaperProvider theme={customPaperTheme}>
+                        <ErrorBoundary
+                            FallbackComponent={
+                                ErrorBoundaryScreen as ComponentType<FallbackProps>
+                            }
+                        >
+                            <SafeAreaProvider>
+                                <Navigation colorScheme={colorScheme} />
+                                <StatusBar />
+                            </SafeAreaProvider>
+                        </ErrorBoundary>
+                    </PaperProvider>
                 </NativeBaseProvider>
             </QueryClientProvider>
         );

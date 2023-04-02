@@ -1,53 +1,54 @@
-import { StyleSheet } from "react-native";
-import React, { useState } from "react";
-import { Button, Input, Stack, Text } from "native-base";
-import { customTheme } from "../papillon-design-system/custom-theme";
+import React, { useEffect, useRef, useState } from "react";
+import { Stack } from "native-base";
+import QuestionButton from "./QuestionButton";
+import CustomTextInput from "./CustomTextInput";
+import QuestionHeader from "./QuestionHeader";
 
 type Props = {
     prompt: string;
+    help?: string;
     handleResponse: (value: string) => void;
 };
 
-const TextInputQuestion = ({ prompt, handleResponse }: Props) => {
+const TextInputQuestion = ({ prompt, help, handleResponse }: Props) => {
     const [value, setValue] = useState("");
+    const inputElement = useRef<{ focus: () => void }>(null);
 
     const handleChange = (text: string) => {
         setValue(text);
     };
 
+    useEffect(() => {
+        if (inputElement.current) {
+            inputElement.current.focus();
+        }
+    }, [prompt]);
+
     return (
         <>
-            <Text textAlign={"center"} w={"300"}>
-                {prompt}
-            </Text>
-            <Stack direction={"row"} space="2.5" mt="2" px="8">
-                <Input
+            <QuestionHeader prompt={prompt} help={help} />
+            <Stack direction={"column"} space="24px" mt="2">
+                <CustomTextInput
+                    innerRef={inputElement}
                     value={value}
-                    w="75%"
-                    maxW="300px"
+                    placeholder={""}
                     onChangeText={handleChange}
-                    placeholder="Value Controlled Input"
                     onSubmitEditing={() => {
                         setValue("");
                         handleResponse(value);
                     }}
-                    isFocused={true}
                 />
-                <Button
-                    bgColor={customTheme.colors["button-surface"]}
-                    color={customTheme.colors["on-button-surface"]}
+                <QuestionButton
                     onPress={() => {
                         setValue("");
                         handleResponse(value);
                     }}
                 >
                     Submit
-                </Button>
+                </QuestionButton>
             </Stack>
         </>
     );
 };
 
 export default TextInputQuestion;
-
-const styles = StyleSheet.create({});

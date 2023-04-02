@@ -7,23 +7,24 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
-import {
-    GlobalContext,
-    GlobalContextProvider,
-} from "../contexts/GlobalContext";
+import { GlobalContextProvider } from "../contexts/GlobalContext";
+import CaseOverviewScreen from "../screens/CaseOverviewScreen";
+import CreateUserScreen from "../screens/CreateUserScreen";
 import DetermineWorkflow from "../screens/DetermineWorkflow";
-import HomeScreen from "../screens/HomeScreen";
+import EligibilityScreen from "../screens/EligibilityScreen";
 import { IneligibleScreen } from "../screens/IneligibleScreen";
 import LandingScreen from "../screens/LandingScreen";
 import Loading from "../screens/Loading";
+import LoginScreen from "../screens/LoginScreen";
 
 import ModalScreen from "../screens/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
+import ProcessScreen from "../screens/ProcessScreen";
 import ReviewScreen from "../screens/ReviewScreen";
-import WorkflowScreen from "../screens/WorkflowScreen";
 import { RootStackParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
+
+// import DebugScreen from "../screens/DebugScreen";
 
 export default function Navigation({
     colorScheme,
@@ -49,50 +50,45 @@ export default function Navigation({
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-    const { checkingForSession } = React.useContext(GlobalContext);
     return (
-        <Stack.Navigator initialRouteName="Loading">
-            <Stack.Screen
-                name="Loading"
-                component={Loading}
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
-                name="Landing"
-                component={LandingScreen}
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen
-                name="Home"
-                component={HomeScreen}
-                options={{ headerShown: false }}
-            />
+        <Stack.Navigator
+            initialRouteName="Loading"
+            screenOptions={{ headerShown: false }}
+        >
+            <Stack.Screen name="Loading" component={Loading} />
+            <Stack.Screen name="Landing" component={LandingScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Home" component={CaseOverviewScreen} />
 
             <Stack.Screen
                 name="DetermineWorkflow"
                 component={DetermineWorkflow}
-                options={{ headerShown: false }}
             />
             <Stack.Screen
-                name="Workflow"
-                component={WorkflowScreen}
-                options={{ headerShown: false }}
+                name="Eligibility"
+                component={EligibilityScreen}
+                initialParams={{ questionIndex: 0, groupIndex: 0 }}
             />
+            <Stack.Screen name="CreateUser" component={CreateUserScreen} />
             <Stack.Screen
-                name="Review"
-                component={ReviewScreen}
-                options={{ headerShown: false }}
+                name="Process"
+                component={ProcessScreen}
+                initialParams={{ questionIndex: 0, groupIndex: 0 }}
             />
+            <Stack.Screen name="Review" component={ReviewScreen} />
             <Stack.Screen
                 name="Ineligible"
                 component={IneligibleScreen}
-                options={{ headerShown: false }}
+                options={{ headerShown: true }}
             />
             <Stack.Screen
                 name="NotFound"
                 component={NotFoundScreen}
                 options={{ title: "Oops!", headerTitleAlign: "center" }}
             />
+            {/* {process.env.NODE_ENV === "development" && (
+                <Stack.Screen name="Debug" component={DebugScreen} />
+            )} */}
             <Stack.Group screenOptions={{ presentation: "modal" }}>
                 <Stack.Screen name="Modal" component={ModalScreen} />
             </Stack.Group>

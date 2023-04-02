@@ -1,77 +1,44 @@
-import { GestureResponderEvent, StyleSheet, View } from "react-native";
 import React from "react";
-import {
-    Button,
-    Center,
-    Checkbox,
-    Container,
-    Heading,
-    Radio,
-    Stack,
-    Text,
-} from "native-base";
+import { Checkbox } from "native-base";
 import QuestionContainer from "./QuestionContainer";
-import { customTheme } from "../papillon-design-system/custom-theme";
+import QuestionButton from "./QuestionButton";
+import QuestionHeader from "./QuestionHeader";
 
 type Props = {
-    place: number;
     prompt: string;
+    help: string;
     options: string[];
-    handleResponse: (event: GestureResponderEvent) => void;
+    handleResponse: () => void;
 };
 
 const MultiSelectQuestion = ({
-    place,
     prompt,
+    help,
     options,
     handleResponse,
 }: Props) => {
-    const [inputDate, setInputDate] = React.useState<Date | undefined>(
-        undefined
-    );
     return (
         <QuestionContainer>
-            <Heading
-                color={customTheme.colors["on-surface"].heading}
-                fontFamily={"question-heading"}
-            >
-                Question {place + 1}
-            </Heading>
-            <Text
-                color={customTheme.colors["on-surface"].text}
-                fontFamily={"question-text"}
-                textAlign={"center"}
-                w={"300"}
-            >
-                {prompt}
-            </Text>
-            <Checkbox.Group
-                accessibilityLabel="multi-select"
-                color={customTheme.colors["on-surface"].text}
-            >
+            <QuestionHeader prompt={prompt} help={help} />
+
+            <Checkbox.Group accessibilityLabel="multi-select">
                 {options.map((option) => (
                     <Checkbox
                         colorScheme={"multi-select-active"}
                         m={2}
                         key={option}
                         value={option}
-                        _text={{ color: customTheme.colors["on-surface"].text }}
+                        _text={{ color: "black" }}
                     >
                         {option}
                     </Checkbox>
                 ))}
             </Checkbox.Group>
-            <Button
-                bgColor={customTheme.colors["button-surface"]}
-                color={customTheme.colors["on-button-surface"]}
-                onPress={handleResponse}
-            >
+            <QuestionButton onPress={() => handleResponse()}>
                 Submit
-            </Button>
+            </QuestionButton>
         </QuestionContainer>
     );
 };
 
 export default MultiSelectQuestion;
-
-const styles = StyleSheet.create({});

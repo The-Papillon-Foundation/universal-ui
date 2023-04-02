@@ -1,45 +1,83 @@
-import React, { useState } from "react";
+import React, { MutableRefObject, useRef } from "react";
 import { Module, RootStackParamList } from "../types";
-import { Button, View } from "native-base";
+import { ArrowForwardIcon, Button, View } from "native-base";
 import Question from "./Question";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { customTheme } from "../hooks/useCachedResources";
 
 type Props = {
     module: Module;
-    currentIndex?: number;
+    navigable: boolean;
+    onFinish: () => void;
 };
 
-const QuestionStack = ({ module }: Props) => {
-    const [groupIndex, setGroupIndex] = useState(0);
-    const [questionIndex, setQuestionIndex] = useState(0);
+const QuestionStack = ({ module, navigable, onFinish }: Props) => {
     const navigation =
-        useNavigation<StackNavigationProp<RootStackParamList, "Workflow">>();
+        useNavigation<
+            StackNavigationProp<RootStackParamList, "Process" | "Eligibility">
+        >();
+    const route = useRoute<RouteProp<RootStackParamList, "Process">>();
+    const { questionIndex, groupIndex } = route.params;
+    const containerRef = useRef<MutableRefObject<typeof View>>(null);
 
     const goBack = () => {
-        if (questionIndex == 0) return;
-        else setQuestionIndex((questionIndex) => questionIndex - 1);
+        if (questionIndex == 0 && groupIndex == 0) return;
+        if (questionIndex == 0 && groupIndex > 0) {
+            navigation.setParams({
+                ...route.params,
+                groupIndex: groupIndex - 1,
+                questionIndex:
+                    module.card_groups[groupIndex - 1].cards.length - 1,
+            });
+        } else {
+            navigation.setParams({
+                ...route.params,
+                questionIndex: Number(questionIndex) - 1,
+            });
+        }
     };
 
     const skipQuestion = () => {
-        if (questionIndex >= module.card_groups[groupIndex].cards.length - 1)
+        if (questionIndex >= module.card_groups[groupIndex].cards.length - 1) {
+            console.log(module.card_groups[Number(groupIndex) + 1]);
+            if (module.card_groups[Number(groupIndex) + 1]) {
+                return navigation.setParams({
+                    ...route.params,
+                    questionIndex: 0,
+                    groupIndex: Number(groupIndex) + 1,
+                });
+            }
+
             return;
-        else setQuestionIndex((questionIndex) => questionIndex + 1);
+        } else {
+            navigation.setParams({
+                ...route.params,
+                questionIndex: Number(questionIndex) + 1,
+            });
+        }
     };
 
     const goNext = (id: string | null) => {
         if (id == null) {
             if (groupIndex >= module.card_groups.length - 1) {
-                // All groups answer
+                // All groups answered
+                onFinish();
             } else {
-                setQuestionIndex(0);
-                setGroupIndex((groupIndex) => groupIndex + 1);
+                navigation.setParams({
+                    ...route.params,
+                    questionIndex: 0,
+                    groupIndex: Number(groupIndex) + 1,
+                });
             }
         } else {
             const questionIndex = module.card_groups[
                 groupIndex
             ].cards.findIndex((c) => c.id == id);
-            setQuestionIndex(questionIndex);
+            navigation.setParams({
+                ...route.params,
+                questionIndex,
+            });
         }
     };
 
@@ -48,33 +86,57 @@ const QuestionStack = ({ module }: Props) => {
     };
 
     return (
-        <View alignItems={"center"}>
+        <View flex={1} ref={containerRef}>
+            <View flex={10} justifyContent={"center"}>
+                <Question
+                    card={module.card_groups[groupIndex].cards[questionIndex]}
+                    group={module.card_groups[groupIndex]}
+                    goNext={goNext}
+                    goIneligible={goIneligible}
+                    onFinish={onFinish}
+                />
+            </View>
+
             <View
-                px={10}
+                flex={1}
+                px={"10px"}
                 style={{
                     flexDirection: "row",
                     justifyContent: "space-between",
                     width: "100%",
                 }}
             >
-                <Button onPress={goBack}>Back</Button>
-                <Button
-                    onPress={skipQuestion}
-                    isDisabled={
-                        questionIndex >=
-                        module.card_groups[groupIndex].cards.length - 1
-                    }
-                >
-                    Skip
-                </Button>
+                {navigable && (
+                    <Button
+                        position={{ base: undefined, md: "absolute" }}
+                        left={{ md: -100 }}
+                        top={{ md: -200 }}
+                        w="56px"
+                        h="56px"
+                        borderRadius={"50%"}
+                        bgColor={customTheme.colors.arrow_button}
+                        onPress={goBack}
+                    >
+                        <ArrowForwardIcon
+                            style={{ transform: [{ rotateY: "180deg" }] }}
+                        />
+                    </Button>
+                )}
+                {navigable && (
+                    <Button
+                        position={{ base: undefined, md: "absolute" }}
+                        right={{ md: -100 }}
+                        top={{ md: -200 }}
+                        w="56px"
+                        h="56px"
+                        borderRadius={"50%"}
+                        bgColor={customTheme.colors.arrow_button}
+                        onPress={skipQuestion}
+                    >
+                        <ArrowForwardIcon />
+                    </Button>
+                )}
             </View>
-            <View my={5} />
-            <Question
-                card={module.card_groups[groupIndex].cards[questionIndex]}
-                group={module.card_groups[groupIndex]}
-                goNext={goNext}
-                goIneligible={goIneligible}
-            />
         </View>
     );
 };
